@@ -7,12 +7,12 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           {/* Logo/Brand Column */}
           <div className="col-span-1 md:col-span-1">
-            <span className="text-2xl font-black text-white tracking-tighter block mb-4">Webiox QR Studio</span>
+            <span className="text-2xl font-bold text-white tracking-tighter block mb-4">Webiox QR Studio</span>
             <p className="text-sm text-gray-500 leading-relaxed">
               The professional standard for generating beautiful, trackable, and high-quality QR codes for your agency and business.
             </p>
           </div>
-          
+
           {/* Links Columns */}
           <div className="col-span-1">
             <h3 className="text-white font-bold mb-4 tracking-wider uppercase text-sm">Products</h3>
@@ -21,7 +21,7 @@ export default function Footer() {
               <li><Link href="#" className="text-sm hover:text-white transition-colors">QR Code API</Link></li>
             </ul>
           </div>
-          
+
           <div className="col-span-1">
             <h3 className="text-white font-bold mb-4 tracking-wider uppercase text-sm">Company</h3>
             <ul className="space-y-3">
