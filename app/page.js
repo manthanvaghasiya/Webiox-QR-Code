@@ -6,8 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Download, QrCode, Upload, Link2, Type, Mail, Phone, MessageSquare, Contact,
   Wifi, FileImage, FileCode, Palette, ImagePlus, Sliders, Maximize, ChevronDown,
-  Sparkles, MapPin, Facebook, Twitter, Youtube, Calendar, Bitcoin, Music, Video,
-  FileText, Share2, Smartphone, Images, Star, MessageCircle, CreditCard, Loader2
+  Sparkles, MapPin, Globe, MessageCircle, Video, Calendar, Bitcoin, Music, FileText, Share2, Smartphone, Images, Star, CreditCard, Loader2
 } from "lucide-react";
 import ContentForms from "@/components/ContentForms";
 import formatQrData from "@/lib/formatQrData";
@@ -68,9 +67,9 @@ const TABS = [
   { id: "vcard", icon: Contact, label: "vCard" },
   { id: "mecard", icon: CreditCard, label: "meCard" },
   { id: "location", icon: MapPin, label: "Location" },
-  { id: "facebook", icon: Facebook, label: "Facebook" },
-  { id: "twitter", icon: Twitter, label: "Twitter" },
-  { id: "youtube", icon: Youtube, label: "YouTube" },
+  { id: "facebook", icon: Globe, label: "Facebook" },
+  { id: "twitter", icon: MessageCircle, label: "Twitter" },
+  { id: "youtube", icon: Video, label: "YouTube" },
   { id: "wifi", icon: Wifi, label: "WiFi" },
   { id: "event", icon: Calendar, label: "Event" },
   { id: "bitcoin", icon: Bitcoin, label: "Bitcoin" },
