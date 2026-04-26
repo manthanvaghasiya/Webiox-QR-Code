@@ -9,11 +9,11 @@ export default function AdminDashboard() {
   useEffect(() => {
     fetch("/api/qrcodes")
       .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data)) {
-          setQrCodes(data);
+      .then((payload) => {
+        if (payload?.success && Array.isArray(payload.data)) {
+          setQrCodes(payload.data);
         } else {
-          console.error("API did not return an array:", data);
+          console.error("API did not return expected envelope:", payload);
           setQrCodes([]);
         }
       })
@@ -53,7 +53,7 @@ export default function AdminDashboard() {
                 Foreground Color
               </th>
               <th className="px-6 py-4 text-sm font-semibold text-gray-600">
-                Image Link
+                Has Logo
               </th>
             </tr>
           </thead>
@@ -67,7 +67,7 @@ export default function AdminDashboard() {
                   {new Date(item.createdAt).toLocaleDateString()}
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-700 max-w-xs truncate">
-                  {item.content}
+                  {item.text}
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-700">
                   <span className="inline-flex items-center gap-2">
@@ -78,18 +78,8 @@ export default function AdminDashboard() {
                     {item.fgColor}
                   </span>
                 </td>
-                <td className="px-6 py-4 text-sm">
-                  {item.imageUrl ? (
-                    <a
-                      href={item.imageUrl}
-                      target="_blank"
-                      className="text-blue-500 underline"
-                    >
-                      View Image
-                    </a>
-                  ) : (
-                    <span className="text-gray-400">No Image</span>
-                  )}
+                <td className="px-6 py-4 text-sm text-gray-700">
+                  {item.hasLogo ? "Yes" : "No"}
                 </td>
               </tr>
             ))}
