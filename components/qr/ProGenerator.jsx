@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Calendar, Bitcoin, Music, Contact, CreditCard, Video, FileText,
@@ -125,7 +125,9 @@ function ShapeBtn({ label, value, active, onClick, preview }) {
 }
 
 export default function ProGenerator() {
-  const qr = useQrGenerator();
+  const qrContainerRef = useRef(null);
+  const qrInstanceRef = useRef(null);
+  const qr = useQrGenerator(qrContainerRef, qrInstanceRef);
   const [chosenType, setChosenType] = useState(null);
   const [openModal, setOpenModal] = useState(null);
 
@@ -305,7 +307,7 @@ export default function ProGenerator() {
                       Pro
                     </span>
                     <div className="w-full aspect-square bg-white/80 border-2 border-dashed border-gray-200/60 rounded-2xl flex items-center justify-center overflow-hidden mb-6 shadow-sm p-6 backdrop-blur-sm">
-                      <div ref={qr.qrCodeRef} className={`flex items-center justify-center [&_canvas]:!max-w-full [&_canvas]:!h-auto ${!qr.qrCodeUrl ? "hidden" : ""}`} />
+                      <div ref={qrContainerRef} className={`flex items-center justify-center [&_canvas]:!max-w-full [&_canvas]:!h-auto ${!qr.qrCodeUrl ? "hidden" : ""}`} />
                       {!qr.qrCodeUrl && (
                         <div className="flex flex-col items-center text-gray-400">
                           <div className="w-20 h-20 bg-gray-100/80 rounded-2xl flex items-center justify-center mb-4">
