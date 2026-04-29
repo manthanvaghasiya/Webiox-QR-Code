@@ -1,22 +1,31 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import ModeToggle from "@/components/qr/ModeToggle";
 import SimpleGenerator from "@/components/qr/SimpleGenerator";
 import ProGenerator from "@/components/qr/ProGenerator";
+import useQrGenerator from "@/hooks/useQrGenerator";
 
 function GeneratorInner() {
   const params = useSearchParams();
   const mode = params.get("mode") === "pro" ? "pro" : "basic";
+
+  const qrCodeRef = useRef(null);
+  const qrCodeInstanceRef = useRef(null);
+  const qr = useQrGenerator(qrCodeRef, qrCodeInstanceRef);
 
   return (
     <div className="animate-gradient-mesh flex-grow flex flex-col items-center py-10 px-4 sm:px-8 w-full min-h-screen">
       <div className="mb-8">
         <ModeToggle mode={mode} />
       </div>
-      {mode === "pro" ? <ProGenerator /> : <SimpleGenerator />}
+      {mode === "pro" ? (
+        <ProGenerator qr={qr} qrContainerRef={qrCodeRef} />
+      ) : (
+        <SimpleGenerator qr={qr} qrContainerRef={qrCodeRef} />
+      )}
     </div>
   );
 }
