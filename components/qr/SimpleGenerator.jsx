@@ -6,7 +6,7 @@ import {
   Link2, Palette, ImagePlus, Sliders, Maximize, QrCode,
   Sparkles, Copy, RotateCcw, Frame,
 } from "lucide-react";
-import { QR_TABS } from "@/lib/qrTabs";
+import { QR_TABS, SIMPLE_TAB_IDS } from "@/lib/qrTabs";
 import ContentForms from "@/components/ContentForms";
 import SocialLinksForm from "@/components/qr/SocialLinksForm";
 import AccordionSection from "./AccordionSection";
@@ -66,7 +66,7 @@ export default function SimpleGenerator({ qr, qrContainerRef }) {
       {/* Tab bar: all 22 tabs */}
       <div className="max-w-7xl w-full mb-4">
         <div className="flex overflow-x-auto gap-2 pb-2 scrollbar-hide">
-          {QR_TABS.map((tab) => (
+          {QR_TABS.filter((tab) => SIMPLE_TAB_IDS.includes(tab.id)).map((tab) => (
             <button
               key={tab.id}
               onClick={() => qr.setActiveTab(tab.id)}

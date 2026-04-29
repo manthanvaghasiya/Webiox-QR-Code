@@ -68,9 +68,15 @@ export default function ContentForms({ activeTab, s, set }) {
 
   if (activeTab === "location") return (
     <div className="space-y-3">
+      <input type="url" className={C} placeholder="Google Maps Link (e.g. https://maps.app.goo.gl/...)" value={s.locUrl || ""} onChange={(e) => set({ locUrl: e.target.value })} />
+      <div className="flex items-center gap-2 py-1">
+        <div className="h-px bg-gray-200/60 flex-1"></div>
+        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">OR COORDINATES</span>
+        <div className="h-px bg-gray-200/60 flex-1"></div>
+      </div>
       <div className="grid grid-cols-2 gap-3">
-        <input type="number" step="any" className={C} placeholder="Latitude (e.g. 40.7128)" value={s.lat} onChange={(e) => set({ lat: e.target.value })} />
-        <input type="number" step="any" className={C} placeholder="Longitude (e.g. -74.0060)" value={s.lng} onChange={(e) => set({ lng: e.target.value })} />
+        <input type="number" step="any" className={C} placeholder="Latitude (e.g. 40.71)" value={s.lat} onChange={(e) => set({ lat: e.target.value })} />
+        <input type="number" step="any" className={C} placeholder="Longitude (e.g. -74.00)" value={s.lng} onChange={(e) => set({ lng: e.target.value })} />
       </div>
     </div>
   );

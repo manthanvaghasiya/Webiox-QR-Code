@@ -6,7 +6,7 @@ import {
   ChevronLeft, ArrowRight, Sparkles, Palette, ImagePlus,
   Sliders, Maximize, QrCode, Copy, RotateCcw, Search, Frame,
 } from "lucide-react";
-import { QR_TABS, CATEGORIES } from "@/lib/qrTabs";
+import { QR_TABS, CATEGORIES, SIMPLE_TAB_IDS } from "@/lib/qrTabs";
 import ContentForms from "@/components/ContentForms";
 import SocialLinksForm from "@/components/qr/SocialLinksForm";
 import AccordionSection from "./AccordionSection";
@@ -43,9 +43,10 @@ export default function ProGenerator({ qr, qrContainerRef }) {
 
   // Filter tabs by search
   const filteredTabs = useMemo(() => {
-    if (!searchQuery.trim()) return QR_TABS;
+    const proTabs = QR_TABS.filter(t => !SIMPLE_TAB_IDS.includes(t.id));
+    if (!searchQuery.trim()) return proTabs;
     const q = searchQuery.toLowerCase();
-    return QR_TABS.filter(
+    return proTabs.filter(
       (t) => t.label.toLowerCase().includes(q) || t.description.toLowerCase().includes(q)
     );
   }, [searchQuery]);
@@ -92,7 +93,7 @@ export default function ProGenerator({ qr, qrContainerRef }) {
                 </span>?
               </h1>
               <p className="text-lg text-gray-600 font-medium mb-6">
-                22 content types — pick one to start.
+                {QR_TABS.length - SIMPLE_TAB_IDS.length} advanced types — pick one to start.
               </p>
 
               {/* Search */}

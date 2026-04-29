@@ -9,7 +9,7 @@ const INITIAL_FIELDS = {
   phone: "", smsPhone: "", smsMessage: "",
   vcFirstName: "", vcLastName: "", vcPhone: "", vcEmail: "", vcCompany: "", vcTitle: "", vcAddress: "", vcWebsite: "",
   mcName: "", mcReading: "", mcPhone: "", mcEmail: "", mcAddress: "", mcUrl: "",
-  lat: "", lng: "",
+  lat: "", lng: "", locUrl: "",
   wifiSsid: "", wifiPassword: "", wifiEncryption: "WPA",
   evTitle: "", evStart: "", evEnd: "", evLocation: "", evDescription: "",
   btcAddress: "", btcAmount: "", btcMessage: "",
@@ -104,7 +104,7 @@ export default function useQrGenerator(qrCodeRef, qrCodeInstanceRef) {
       case "sms": return !!s.smsPhone.trim();
       case "vcard": return !!(s.vcFirstName.trim() || s.vcLastName.trim());
       case "mecard": return !!s.mcName.trim();
-      case "location": return !!(s.lat && s.lng);
+      case "location": return !!(s.locUrl?.trim() || (s.lat && s.lng));
       case "wifi": return !!s.wifiSsid.trim();
       case "event": return !!(s.evTitle.trim() && s.evStart);
       case "bitcoin": return !!s.btcAddress.trim();
