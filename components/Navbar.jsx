@@ -10,7 +10,8 @@ import Logo from "@/components/Logo";
 const NAV_LINKS = [
   { href: "/",          label: "Home" },
   { href: "/generator", label: "QR Studio" },
-  { href: "/api-docs",  label: "Developers API" },
+  { href: "/business-profile", label: "Business Profile" },
+  { href: "/nfc-card",  label: "NFC Cards" },
   { href: "/pricing",   label: "Pricing" },
 ];
 

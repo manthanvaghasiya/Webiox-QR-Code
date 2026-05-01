@@ -17,6 +17,21 @@ export async function GET(_request, { params }) {
       return new NextResponse(null, { status: 404 });
     }
 
+    if (qr.isPaused) {
+      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || new URL(_request.url).origin;
+      return NextResponse.redirect(`${baseUrl}/r/paused`, { status: 302 });
+    }
+
+    const now = new Date();
+    if (qr.campaignStart && now < new Date(qr.campaignStart)) {
+      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || new URL(_request.url).origin;
+      return NextResponse.redirect(`${baseUrl}/r/not-started`, { status: 302 });
+    }
+    if (qr.campaignEnd && now > new Date(qr.campaignEnd)) {
+      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || new URL(_request.url).origin;
+      return NextResponse.redirect(`${baseUrl}/r/expired`, { status: 302 });
+    }
+
     const headersList = await headers();
     const ip =
       headersList.get('x-forwarded-for')?.split(',')[0].trim() ??

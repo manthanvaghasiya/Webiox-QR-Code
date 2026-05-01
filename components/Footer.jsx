@@ -24,7 +24,8 @@ export default function Footer() {
             <h3 className="text-white font-bold mb-4 tracking-wider uppercase text-sm">Products</h3>
             <ul className="space-y-3">
               <li><Link href="/generator" className="text-sm hover:text-white transition-colors">QR Generator</Link></li>
-              <li><Link href="/api-docs" className="text-sm hover:text-white transition-colors">QR Code API</Link></li>
+              <li><Link href="/business-profile" className="text-sm hover:text-white transition-colors">Business Profile</Link></li>
+              <li><Link href="/nfc-card" className="text-sm hover:text-white transition-colors">NFC Cards</Link></li>
             </ul>
           </div>
 

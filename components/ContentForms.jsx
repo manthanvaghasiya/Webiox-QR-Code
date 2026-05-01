@@ -64,8 +64,32 @@ export default function ContentForms({ activeTab, s, set }) {
   // ── vCard Plus (QRCG-style rich form) ──
   if (activeTab === "vcard") return (
     <div className="space-y-4">
-      {/* Profile Image */}
-      <FormSection title="Profile Image" icon={Image} defaultOpen={false}>
+      {/* Business & Identity */}
+      <FormSection title="Business & Identity" icon={Building}>
+        <div className="grid grid-cols-2 gap-3 mb-3">
+          <div className="space-y-1">
+            <FieldLabel>Business Name</FieldLabel>
+            <input className={C} placeholder="Acme Store" value={s.vcCompany} onChange={(e) => set({ vcCompany: e.target.value })} />
+          </div>
+          <div className="space-y-1">
+            <FieldLabel>Tagline / Industry</FieldLabel>
+            <input className={C} placeholder="Electronics & Mobile" value={s.vcTitle} onChange={(e) => set({ vcTitle: e.target.value })} />
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-1">
+            <FieldLabel>Owner Name</FieldLabel>
+            <input className={C} placeholder="John" value={s.vcFirstName} onChange={(e) => set({ vcFirstName: e.target.value })} />
+          </div>
+          <div className="space-y-1">
+            <FieldLabel>Owner Surname</FieldLabel>
+            <input className={C} placeholder="Doe" value={s.vcLastName} onChange={(e) => set({ vcLastName: e.target.value })} />
+          </div>
+        </div>
+      </FormSection>
+
+      {/* Business Logo / Profile Image */}
+      <FormSection title="Business Logo / Profile Image" icon={Image} defaultOpen={false}>
         <div className="flex items-center gap-4">
           <div className="w-20 h-20 rounded-2xl bg-gray-100/80 border-2 border-dashed border-gray-300/60 flex items-center justify-center overflow-hidden flex-shrink-0">
             {s.vcImage ? (
@@ -92,20 +116,6 @@ export default function ContentForms({ activeTab, s, set }) {
         </div>
       </FormSection>
 
-      {/* Personal Information */}
-      <FormSection title="Personal Information" icon={User}>
-        <div className="grid grid-cols-2 gap-3">
-          <div className="space-y-1">
-            <FieldLabel>First Name</FieldLabel>
-            <input className={C} placeholder="Jane" value={s.vcFirstName} onChange={(e) => set({ vcFirstName: e.target.value })} />
-          </div>
-          <div className="space-y-1">
-            <FieldLabel>Last Name</FieldLabel>
-            <input className={C} placeholder="Doe" value={s.vcLastName} onChange={(e) => set({ vcLastName: e.target.value })} />
-          </div>
-        </div>
-      </FormSection>
-
       {/* Phone Numbers */}
       <FormSection title="Phone Numbers" icon={Phone}>
         <div className="space-y-1">
@@ -126,21 +136,7 @@ export default function ContentForms({ activeTab, s, set }) {
 
       {/* Email */}
       <FormSection title="Email" icon={Mail}>
-        <input type="email" className={C} placeholder="jane@example.com" value={s.vcEmail} onChange={(e) => set({ vcEmail: e.target.value })} />
-      </FormSection>
-
-      {/* Company */}
-      <FormSection title="Company" icon={Building}>
-        <div className="grid grid-cols-2 gap-3">
-          <div className="space-y-1">
-            <FieldLabel>Company</FieldLabel>
-            <input className={C} placeholder="Acme Inc." value={s.vcCompany} onChange={(e) => set({ vcCompany: e.target.value })} />
-          </div>
-          <div className="space-y-1">
-            <FieldLabel>Job Title</FieldLabel>
-            <input className={C} placeholder="Designer" value={s.vcTitle} onChange={(e) => set({ vcTitle: e.target.value })} />
-          </div>
-        </div>
+        <input type="email" className={C} placeholder="hello@acmestore.com" value={s.vcEmail} onChange={(e) => set({ vcEmail: e.target.value })} />
       </FormSection>
 
       {/* Address */}
