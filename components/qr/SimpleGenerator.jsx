@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import {
   Link2, Palette, ImagePlus, Sliders, Maximize, QrCode,
@@ -17,6 +17,8 @@ import LogoSection from "./LogoSection";
 import FrameSection from "./FrameSection";
 import DownloadMenu from "./DownloadMenu";
 import TemplateGallery from "./TemplateGallery";
+import PageCreatedPanel from "./PageCreatedPanel";
+import QrFrameWrapper from "./QrFrameWrapper";
 
 export default function SimpleGenerator({ qr, qrContainerRef }) {
   const [openSections, setOpenSections] = useState({
@@ -125,14 +127,23 @@ export default function SimpleGenerator({ qr, qrContainerRef }) {
             <div className="absolute top-0 right-0 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 animate-float" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 animate-float-delayed" />
             <div className="relative z-10 flex flex-col items-center gap-4">
-              <div className={`w-full aspect-square rounded-2xl flex items-center justify-center overflow-hidden shadow-sm p-4 backdrop-blur-sm ${
+              <div className={`w-full rounded-2xl flex items-center justify-center overflow-hidden shadow-sm p-4 backdrop-blur-sm ${
                 qr.transparentBg && qr.qrCodeUrl
                   ? "bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%3E%3Crect%20width%3D%2210%22%20height%3D%2210%22%20fill%3D%22%23f0f0f0%22%2F%3E%3Crect%20x%3D%2210%22%20y%3D%2210%22%20width%3D%2210%22%20height%3D%2210%22%20fill%3D%22%23f0f0f0%22%2F%3E%3C%2Fsvg%3E')] bg-repeat bg-[length:20px_20px]"
                   : "bg-white/80 border-2 border-dashed border-gray-200/60"
               }`}>
-                <div ref={qrContainerRef} className={`flex items-center justify-center [&_canvas]:!max-w-full [&_canvas]:!h-auto ${!qr.qrCodeUrl ? "hidden" : ""}`} />
-                {!qr.qrCodeUrl && (
-                  <div className="flex flex-col items-center text-gray-400">
+                {qr.qrCodeUrl ? (
+                  <QrFrameWrapper
+                    frameStyle={qr.frameStyle}
+                    frameText={qr.frameText}
+                    frameTextColor={qr.frameTextColor}
+                    frameFillColor={qr.frameFillColor}
+                    frameBorderColor={qr.frameBorderColor}
+                  >
+                    <div ref={qrContainerRef} className="flex items-center justify-center [&_canvas]:!max-w-full [&_canvas]:!h-auto" />
+                  </QrFrameWrapper>
+                ) : (
+                  <div className="flex flex-col items-center text-gray-400 py-16">
                     <div className="w-20 h-20 bg-gray-100/80 rounded-2xl flex items-center justify-center mb-4">
                       <QrCode className="w-10 h-10 opacity-40" />
                     </div>
@@ -158,6 +169,17 @@ export default function SimpleGenerator({ qr, qrContainerRef }) {
                   <RotateCcw className="w-4 h-4" /> Reset
                 </button>
               </div>
+
+              {/* Hosted page created panel (desktop) */}
+              {qr.lastCreatedPage && (
+                <div className="w-full mt-2">
+                  <PageCreatedPanel
+                    pageUrl={qr.lastCreatedPage.pageUrl}
+                    editUrl={qr.lastCreatedPage.editUrl}
+                    shortId={qr.lastCreatedPage.shortId}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -166,19 +188,30 @@ export default function SimpleGenerator({ qr, qrContainerRef }) {
         <div className="lg:hidden">
           <div className="rounded-2xl border border-white/30 bg-white/70 backdrop-blur-xl shadow-lg p-6 relative overflow-hidden">
             <div className="relative z-10 flex flex-col items-center gap-4">
-              <div className={`w-full max-w-[280px] aspect-square rounded-2xl flex items-center justify-center overflow-hidden shadow-sm p-4 ${
+              <div className={`w-full max-w-[280px] rounded-2xl flex items-center justify-center overflow-hidden shadow-sm p-4 ${
                 qr.transparentBg && qr.qrCodeUrl
                   ? "bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%3E%3Crect%20width%3D%2210%22%20height%3D%2210%22%20fill%3D%22%23f0f0f0%22%2F%3E%3Crect%20x%3D%2210%22%20y%3D%2210%22%20width%3D%2210%22%20height%3D%2210%22%20fill%3D%22%23f0f0f0%22%2F%3E%3C%2Fsvg%3E')]"
                   : "bg-white/80 border-2 border-dashed border-gray-200/60"
               }`}>
                 {!qr.qrCodeUrl && (
-                  <div className="flex flex-col items-center text-gray-400">
+                  <div className="flex flex-col items-center text-gray-400 py-16">
                     <QrCode className="w-10 h-10 opacity-40 mb-2" />
                     <p className="text-xs font-medium">Start typing to preview</p>
                   </div>
                 )}
               </div>
               <DownloadMenu onDownload={qr.downloadQR} disabled={!qr.qrCodeUrl} lastFormat={qr.lastFormat} />
+
+              {/* Hosted page created panel (mobile) */}
+              {qr.lastCreatedPage && (
+                <div className="w-full mt-2">
+                  <PageCreatedPanel
+                    pageUrl={qr.lastCreatedPage.pageUrl}
+                    editUrl={qr.lastCreatedPage.editUrl}
+                    shortId={qr.lastCreatedPage.shortId}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>

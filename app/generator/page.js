@@ -32,7 +32,7 @@ function GeneratorInner() {
   }, [mode, qr.activeTab, qr.setActiveTab]);
 
   return (
-    <div className="animate-gradient-mesh flex-grow flex flex-col items-center py-10 px-4 sm:px-8 w-full min-h-screen">
+    <div className="animate-gradient-mesh flex-grow flex flex-col items-center pt-28 pb-10 px-4 sm:px-8 w-full min-h-screen">
       <div className="mb-8">
         <ModeToggle mode={mode} />
       </div>
@@ -47,7 +47,7 @@ function GeneratorInner() {
 
 function Fallback() {
   return (
-    <div className="animate-gradient-mesh flex-grow flex items-center justify-center py-20 w-full min-h-screen">
+    <div className="animate-gradient-mesh flex-grow flex items-center justify-center pt-28 pb-20 w-full min-h-screen">
       <div className="flex flex-col items-center gap-3 text-gray-500">
         <Loader2 className="w-8 h-8 animate-spin" />
         <p className="text-sm font-semibold">Loading generator...</p>

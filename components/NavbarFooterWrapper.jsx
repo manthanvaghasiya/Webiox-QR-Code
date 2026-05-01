@@ -5,12 +5,17 @@ import Footer from "./Footer";
 
 export default function NavbarFooterWrapper({ children }) {
   const pathname = usePathname();
-  const isPublicPage = pathname.startsWith("/p/");
+  const hideChrome =
+    pathname.startsWith("/p/") ||
+    pathname.startsWith("/r/") ||
+    pathname.startsWith("/edit/") ||
+    pathname.startsWith("/dashboard") ||
+    pathname.startsWith("/admin");
   return (
     <>
-      {!isPublicPage && <Navbar />}
+      {!hideChrome && <Navbar />}
       <main className="flex-grow flex flex-col">{children}</main>
-      {!isPublicPage && <Footer />}
+      {!hideChrome && <Footer />}
     </>
   );
 }

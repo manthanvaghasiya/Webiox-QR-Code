@@ -17,6 +17,7 @@ export const metadata = {
 };
 
 import NavbarFooterWrapper from "@/components/NavbarFooterWrapper";
+import SessionProviderWrapper from "@/components/SessionProviderWrapper";
 
 export default function RootLayout({ children }) {
   return (
@@ -25,7 +26,9 @@ export default function RootLayout({ children }) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-gray-100">
-        <NavbarFooterWrapper>{children}</NavbarFooterWrapper>
+        <SessionProviderWrapper>
+          <NavbarFooterWrapper>{children}</NavbarFooterWrapper>
+        </SessionProviderWrapper>
       </body>
     </html>
   );

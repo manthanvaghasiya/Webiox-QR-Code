@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
+import { auth } from '@/auth';
+import { createQrCode, findQrCodesByUser, COLLECTION } from '@/lib/models/qrCodes';
 
 export async function POST(request) {
   try {
@@ -7,38 +9,55 @@ export async function POST(request) {
     const client = await clientPromise;
     const db = client.db();
 
-    // Dynamic hosted page (Social Media tab)
-    if (body.isDynamic && body.pageConfig) {
-      const shortId = crypto.randomUUID().split('-')[0];
-      await db.collection('dynamic_pages').insertOne({
-        shortId,
-        title: body.pageConfig.title,
-        description: body.pageConfig.description ?? '',
-        links: body.pageConfig.links,
-        fgColor: body.fgColor,
-        bgColor: body.bgColor,
-        createdAt: new Date(),
-      });
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-      return NextResponse.json(
-        { success: true, dynamicUrl: `${baseUrl}/p/${shortId}` },
-        { status: 201 }
-      );
-    }
-
-    // Standard QR code log
-    const { text, fgColor, bgColor, hasLogo } = body;
+    // Hosted-page creation (Social, etc.) lives at POST /api/pages now.
+    // Standard or dynamic QR code
+    const { text, fgColor, bgColor, type, design, name, folderId, isDynamic } = body;
     if (!text) {
       return NextResponse.json({ error: 'Text content is required' }, { status: 400 });
     }
-    const result = await db.collection('generated_codes').insertOne({
-      text,
-      fgColor,
-      bgColor,
-      hasLogo: !!hasLogo,
-      createdAt: new Date(),
+
+    const session = await auth();
+    const userId = session?.user?.id ?? null;
+
+    // Dynamic QR codes require an authenticated user (destination can be changed later)
+    if (isDynamic && !userId) {
+      return NextResponse.json(
+        { error: 'Sign in to create dynamic QR codes.' },
+        { status: 401 }
+      );
+    }
+
+    // Accept a full design object from newer clients, or build one from legacy fields
+    const resolvedDesign = design ?? {
+      fgColor: fgColor ?? '#000000',
+      bgColor: bgColor ?? '#ffffff',
+    };
+
+    // Generate a shortId for dynamic codes; static codes leave it null
+    const shortId = isDynamic
+      ? crypto.randomUUID().replace(/-/g, '').slice(0, 8)
+      : null;
+
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    // Dynamic QR encodes the redirect URL, not the final destination directly
+    const encodedContent = isDynamic ? `${baseUrl}/r/${shortId}` : text;
+
+    const qr = await createQrCode(db, {
+      userId,
+      type: type ?? 'url',
+      isDynamic: !!isDynamic,
+      shortId,
+      staticContent: isDynamic ? null : text,
+      destination: text,
+      design: resolvedDesign,
+      name: name ?? null,
+      folderId: folderId ?? null,
     });
-    return NextResponse.json({ success: true, id: result.insertedId }, { status: 201 });
+
+    return NextResponse.json(
+      { success: true, id: qr._id, shortId, encodedContent },
+      { status: 201 }
+    );
   } catch (error) {
     console.error('Error saving QR code to database:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
@@ -47,13 +66,26 @@ export async function POST(request) {
 
 export async function GET() {
   try {
+    const session = await auth();
+
+    if (!session?.user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const client = await clientPromise;
     const db = client.db();
-    const codes = await db
-      .collection('generated_codes')
-      .find({})
-      .sort({ createdAt: -1 })
-      .toArray();
+
+    let codes;
+    if (session.user.role === 'admin') {
+      codes = await db
+        .collection(COLLECTION)
+        .find({})
+        .sort({ createdAt: -1 })
+        .toArray();
+    } else {
+      codes = await findQrCodesByUser(db, session.user.id);
+    }
+
     return NextResponse.json({ success: true, data: codes }, { status: 200 });
   } catch (error) {
     console.error('Error fetching QR codes from database:', error);

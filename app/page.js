@@ -8,24 +8,24 @@ import {
 } from "lucide-react";
 
 const FEATURES = [
-  { icon: Sparkles,    title: "Free Forever",        desc: "Every feature, every type, every export. No paywall hiding the basics." },
-  { icon: Palette,     title: "Logos & Colors",      desc: "Solid, gradient, or per-element colors plus your logo right in the middle." },
-  { icon: Layers,      title: "22+ QR Types",        desc: "URL, vCard, WiFi, payments, events, file uploads, hosted social pages, more." },
-  { icon: Maximize,    title: "High Resolution",     desc: "Export up to 2000×2000 px — print-ready PNG, SVG, and WebP." },
-  { icon: ShieldCheck, title: "No Watermark",        desc: "Your design, your QR. Nothing of ours appears on it. Use it commercially." },
-  { icon: UserX,       title: "No Sign-up Required", desc: "Open the generator and ship. No accounts, no email, no friction." },
+  { icon: Sparkles, title: "Free Forever", desc: "Every feature, every type, every export. No paywall hiding the basics." },
+  { icon: Palette, title: "Logos & Colors", desc: "Solid, gradient, or per-element colors plus your logo right in the middle." },
+  { icon: Layers, title: "22+ QR Types", desc: "URL, vCard, WiFi, payments, events, file uploads, hosted social pages, more." },
+  { icon: Maximize, title: "High Resolution", desc: "Export up to 2000×2000 px — print-ready PNG, SVG, and WebP." },
+  { icon: ShieldCheck, title: "No Watermark", desc: "Your design, your QR. Nothing of ours appears on it. Use it commercially." },
+  { icon: UserX, title: "No Sign-up Required", desc: "Open the generator and ship. No accounts, no email, no friction." },
 ];
 
 const STEPS = [
-  { icon: MousePointerClick, title: "Pick your type",    desc: "Start with URL, WiFi, vCard, or any of 22+ supported content types." },
-  { icon: Wand2,             title: "Style it",          desc: "Add a logo, pick colors or a gradient, choose dot patterns and eye shapes." },
-  { icon: Download,          title: "Download & share",  desc: "Export PNG, SVG, or WebP at print quality. Drop it into anything." },
+  { icon: MousePointerClick, title: "Pick your type", desc: "Start with URL, WiFi, vCard, or any of 22+ supported content types." },
+  { icon: Wand2, title: "Style it", desc: "Add a logo, pick colors or a gradient, choose dot patterns and eye shapes." },
+  { icon: Download, title: "Download & share", desc: "Export PNG, SVG, or WebP at print quality. Drop it into anything." },
 ];
 
 const TESTIMONIALS = [
-  { name: "Priya R.",   role: "Café owner",     quote: "Used it for our menu QR and the design options blew my mind. Free, no ads — felt suspicious until I downloaded the file." },
-  { name: "Marco D.",   role: "Freelance dev",  quote: "I've been pasting curl into qr-code generators for years. This one finally makes pretty ones I can hand to clients." },
-  { name: "Aanya S.",   role: "Wedding planner", quote: "Made vCards for the entire vendor list in an evening. The contact-card output is exactly what guests need." },
+  { name: "Priya R.", role: "Café owner", quote: "Used it for our menu QR and the design options blew my mind. Free, no ads — felt suspicious until I downloaded the file." },
+  { name: "Marco D.", role: "Freelance dev", quote: "I've been pasting curl into qr-code generators for years. This one finally makes pretty ones I can hand to clients." },
+  { name: "Aanya S.", role: "Wedding planner", quote: "Made vCards for the entire vendor list in an evening. The contact-card output is exactly what guests need." },
 ];
 
 function MockQR({ palette }) {
@@ -75,9 +75,9 @@ function MockQR({ palette }) {
 }
 
 const SAMPLES = [
-  { id: "indigo",  bg: "#ffffff", c1: "#2563eb", c2: "#7c3aed", rounded: true,  seed: 7,  label: "Gradient" },
-  { id: "rose",    bg: "#fff7ed", c1: "#e11d48", c2: "#f97316", rounded: false, seed: 11, label: "Brand" },
-  { id: "emerald", bg: "#ecfdf5", c1: "#059669", c2: "#0ea5e9", rounded: true,  seed: 13, label: "Soft" },
+  { id: "indigo", bg: "#ffffff", c1: "#2563eb", c2: "#7c3aed", rounded: true, seed: 7, label: "Gradient" },
+  { id: "rose", bg: "#fff7ed", c1: "#e11d48", c2: "#f97316", rounded: false, seed: 11, label: "Brand" },
+  { id: "emerald", bg: "#ecfdf5", c1: "#059669", c2: "#0ea5e9", rounded: true, seed: 13, label: "Soft" },
 ];
 
 export default function Home() {

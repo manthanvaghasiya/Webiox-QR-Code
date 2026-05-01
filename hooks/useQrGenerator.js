@@ -7,7 +7,11 @@ import formatQrData from "@/lib/formatQrData";
 const INITIAL_FIELDS = {
   content: "", emailAddress: "", emailSubject: "", emailMessage: "",
   phone: "", smsPhone: "", smsMessage: "",
-  vcFirstName: "", vcLastName: "", vcPhone: "", vcEmail: "", vcCompany: "", vcTitle: "", vcAddress: "", vcWebsite: "",
+  vcFirstName: "", vcLastName: "", vcPhone: "", vcWorkPhone: "", vcFax: "",
+  vcEmail: "", vcCompany: "", vcTitle: "",
+  vcStreet: "", vcCity: "", vcState: "", vcZip: "", vcCountry: "",
+  vcAddress: "", vcWebsite: "", vcSummary: "", vcImage: null,
+  vcLinkedin: "", vcInstagram: "", vcTwitter: "", vcFacebook: "", vcYoutube: "",
   mcName: "", mcReading: "", mcPhone: "", mcEmail: "", mcAddress: "", mcUrl: "",
   lat: "", lng: "", locUrl: "",
   wifiSsid: "", wifiPassword: "", wifiEncryption: "WPA",
@@ -22,11 +26,20 @@ const INITIAL_FIELDS = {
  */
 export default function useQrGenerator(qrCodeRef, qrCodeInstanceRef) {
   // ── Active tab ──
-  const [activeTab, setActiveTab] = useState("url");
+  const [activeTab, _setActiveTab] = useState("url");
 
   // ── Generating / preview state ──
   const [isGenerating, setIsGenerating] = useState(false);
   const [qrCodeUrl, setQrCodeUrl] = useState("");
+
+  // ── Last created hosted page (for showing edit link panel) ──
+  const [lastCreatedPage, setLastCreatedPage] = useState(null);
+
+  // Wrap setActiveTab to clear the success panel on tab switch
+  const setActiveTab = useCallback((tab) => {
+    _setActiveTab(tab);
+    setLastCreatedPage(null);
+  }, []);
 
   // ── Social links (for "social" tab) ──
   const [socialLinks, setSocialLinks] = useState([{ platform: "Instagram", url: "" }]);
@@ -117,7 +130,9 @@ export default function useQrGenerator(qrCodeRef, qrCodeInstanceRef) {
 
   // ── Build QRCodeStyling options ──
   const buildQrOptions = useCallback((data, overrideBg) => {
-    const dotsOpts = { type: dotPattern };
+    // Map custom pattern names to qr-code-styling supported types
+    const mappedDotPattern = dotPattern === "diamond" ? "classy" : dotPattern;
+    const dotsOpts = { type: mappedDotPattern };
     if (useGradient) {
       dotsOpts.gradient = {
         type: gradientType, rotation: 0,
@@ -162,7 +177,7 @@ export default function useQrGenerator(qrCodeRef, qrCodeInstanceRef) {
       backgroundOptions: { color: overrideBg ?? bgColor },
       cornersSquareOptions: cornersOpts,
       cornersDotOptions: cornersDotOpts,
-      imageOptions: { crossOrigin: "anonymous", margin: 5, imageSize: 0.4, hideBackgroundDots },
+      imageOptions: { crossOrigin: "anonymous", margin: 5, imageSize: 0.3, hideBackgroundDots },
     };
   }, [dotPattern, useGradient, gradientType, gradientColor1, gradientColor2,
     fgColor, cornerStyle, useCustomEyeColor, eyeFrameColor, eyeBallStyle,
@@ -178,22 +193,29 @@ export default function useQrGenerator(qrCodeRef, qrCodeInstanceRef) {
       let finalContent;
 
       if (currentTab === "social") {
-        const res = await fetch("/api/qrcodes", {
+        const res = await fetch("/api/pages", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            isDynamic: true,
-            pageConfig: {
-              title: socialPageTitle,
-              description: socialPageDescription,
+            type: "social",
+            config: {
+              pageTitle: socialPageTitle,
+              pageDescription: socialPageDescription,
               links: socialLinks.filter((l) => l.url.trim()),
             },
-            fgColor, bgColor, hasLogo: !!logo,
+            theme: { bgColor, textColor: fgColor },
+            meta: { title: socialPageTitle, description: socialPageDescription },
           }),
         });
         const data = await res.json();
-        if (!data.dynamicUrl) { setIsGenerating(false); return; }
-        finalContent = data.dynamicUrl;
+        if (!data.pageUrl) { setIsGenerating(false); return; }
+        finalContent = data.pageUrl;
+        setLastCreatedPage({
+          shortId: data.shortId,
+          editToken: data.editToken,
+          pageUrl: data.pageUrl,
+          editUrl: data.editUrl,
+        });
       } else {
         finalContent = await formatQrData(currentTab, fields);
         if (!finalContent) { setIsGenerating(false); return; }
@@ -212,10 +234,15 @@ export default function useQrGenerator(qrCodeRef, qrCodeInstanceRef) {
         const hash = finalContent + fgColor + bgColor + (logo ? "logo" : "");
         if (!savedHashesRef.current.has(hash)) {
           savedHashesRef.current.add(hash);
+          const designPayload = {
+            fgColor, bgColor, useGradient, gradientColor1, gradientColor2, gradientType,
+            useCustomEyeColor, eyeFrameColor, eyeBallColor, dotPattern, cornerStyle, eyeBallStyle,
+            logo, errorCorrectionLevel, frameStyle, frameText, frameTextColor, frameFillColor
+          };
           fetch("/api/qrcodes", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ text: finalContent, fgColor, bgColor, hasLogo: !!logo }),
+            body: JSON.stringify({ text: finalContent, type: currentTab, design: designPayload }),
           }).catch(() => {});
         }
       }
@@ -257,20 +284,75 @@ export default function useQrGenerator(qrCodeRef, qrCodeInstanceRef) {
           const hash = finalContent + fgColor + bgColor + (logo ? "logo" : "");
           if (!savedHashesRef.current.has(hash)) {
             savedHashesRef.current.add(hash);
+            const designPayload = {
+              fgColor, bgColor, useGradient, gradientColor1, gradientColor2, gradientType,
+              useCustomEyeColor, eyeFrameColor, eyeBallColor, dotPattern, cornerStyle, eyeBallStyle,
+              logo, errorCorrectionLevel, frameStyle, frameText, frameTextColor, frameFillColor
+            };
             fetch("/api/qrcodes", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ text: finalContent, fgColor, bgColor, hasLogo: !!logo }),
+              body: JSON.stringify({ text: finalContent, type: activeTab, design: designPayload }),
             }).catch(() => {});
           }
         }
       } catch { /* ignore */ }
     }
 
+    // ── When a frame is active, capture QR+frame via html2canvas ──
+    if (frameStyle && frameStyle !== "none" && qrCodeRef.current) {
+      try {
+        const html2canvas = (await import("html2canvas")).default;
+        // The frame wrapper is the parent of the qr container div
+        const frameEl = qrCodeRef.current.closest("[data-frame-wrapper]") || qrCodeRef.current.parentElement;
+        const canvas = await html2canvas(frameEl, {
+          backgroundColor: null,
+          scale: 3, // high-res
+          useCORS: true,
+          logging: false,
+        });
+
+        if (ext === "pdf") {
+          const { jsPDF } = await import("jspdf");
+          const imgData = canvas.toDataURL("image/png");
+          const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+          const pageW = pdf.internal.pageSize.getWidth();
+          const pageH = pdf.internal.pageSize.getHeight();
+          const ratio = canvas.width / canvas.height;
+          let qrW = Math.min(pageW - 40, 120);
+          let qrH = qrW / ratio;
+          if (qrH > pageH - 40) { qrH = pageH - 40; qrW = qrH * ratio; }
+          const x = (pageW - qrW) / 2;
+          const y = (pageH - qrH) / 2 - 10;
+          pdf.addImage(imgData, "PNG", x, y, qrW, qrH);
+          pdf.save("webiox-qr.pdf");
+          return;
+        }
+
+        if (ext === "svg") {
+          // SVG not supported for framed export, fallback to PNG
+          const link = document.createElement("a");
+          link.download = "webiox-qr.png";
+          link.href = canvas.toDataURL("image/png");
+          link.click();
+          return;
+        }
+
+        const mimeType = ext === "jpg" ? "image/jpeg" : ext === "webp" ? "image/webp" : "image/png";
+        const link = document.createElement("a");
+        link.download = `webiox-qr.${ext}`;
+        link.href = canvas.toDataURL(mimeType, 0.95);
+        link.click();
+        return;
+      } catch (err) {
+        console.error("Frame export error, falling back:", err);
+        // Fallback to non-frame export below
+      }
+    }
+
     if (ext === "pdf") {
       try {
         const { jsPDF } = await import("jspdf");
-        // Get QR as PNG data URL from the instance
         const blob = await qrCodeInstanceRef.current.getRawData("png");
         const reader = new FileReader();
         reader.onload = () => {
@@ -278,7 +360,7 @@ export default function useQrGenerator(qrCodeRef, qrCodeInstanceRef) {
           const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
           const pageW = pdf.internal.pageSize.getWidth();
           const pageH = pdf.internal.pageSize.getHeight();
-          const qrMm = Math.min(pageW - 40, 120); // max 120mm QR
+          const qrMm = Math.min(pageW - 40, 120);
           const x = (pageW - qrMm) / 2;
           const y = (pageH - qrMm) / 2 - 10;
           pdf.addImage(imgData, "PNG", x, y, qrMm, qrMm);
@@ -293,7 +375,6 @@ export default function useQrGenerator(qrCodeRef, qrCodeInstanceRef) {
 
     // For transparent bg export
     if (transparentBg && ["png", "webp", "svg"].includes(ext)) {
-      // Re-render with transparent bg then download
       try {
         const finalContent = await formatQrData(activeTab, fields);
         if (!finalContent) return;
@@ -307,8 +388,8 @@ export default function useQrGenerator(qrCodeRef, qrCodeInstanceRef) {
 
     const extension = ext === "jpg" ? "jpeg" : ext;
     qrCodeInstanceRef.current.download({ name: "webiox-qr", extension });
-  }, [qrCodeInstanceRef, activeTab, fields, fgColor, bgColor, logo,
-    transparentBg, buildQrOptions]);
+  }, [qrCodeInstanceRef, qrCodeRef, activeTab, fields, fgColor, bgColor, logo,
+    transparentBg, buildQrOptions, frameStyle]);
 
   // ── Logo upload ──
   const handleLogoUpload = (e) => {
@@ -362,6 +443,7 @@ export default function useQrGenerator(qrCodeRef, qrCodeInstanceRef) {
     setFrameBorderColor("transparent");
     setTransparentBg(false);
     setQrCodeUrl("");
+    setLastCreatedPage(null);
     setSocialLinks([{ platform: "Instagram", url: "" }]);
     setSocialPageTitle("");
     setSocialPageDescription("");
@@ -374,6 +456,7 @@ export default function useQrGenerator(qrCodeRef, qrCodeInstanceRef) {
     // Generating
     isGenerating, qrCodeUrl,
     isValid, isValidCurrent, generateQR, downloadQR,
+    lastCreatedPage, setLastCreatedPage,
     // Social
     socialLinks, addSocialLink, removeSocialLink, updateSocialLink,
     socialPageTitle, setSocialPageTitle,
