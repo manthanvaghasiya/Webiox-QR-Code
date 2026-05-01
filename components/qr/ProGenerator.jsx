@@ -90,34 +90,169 @@ function StepIndicator({ current, total, onStepClick }) {
 
 // ── Mini Phone Preview for Step 2 ──
 function PhonePreview({ tab, fields }) {
-  const isVcard = tab === "vcard" || tab === "mecard";
+  const isVcard = tab === "vcard";
+  const isMecard = tab === "mecard";
+  const isAppstore = tab === "appstore";
   const isPdf = tab === "pdf";
   const isEvent = tab === "event";
-  const isUrl = ["url","facebook","twitter","youtube","appstore","rating","feedback"].includes(tab);
+  const isUrl = ["url","facebook","twitter","youtube","rating","feedback"].includes(tab);
 
   if (isVcard) {
-    const name = `${fields.vcFirstName || ""} ${fields.vcLastName || ""}`.trim() || "Your Name";
+    const name = fields.vcCompany || `${fields.vcFirstName || ""} ${fields.vcLastName || ""}`.trim() || "Your Name";
+    const avatarChar = name.charAt(0).toUpperCase();
+
     return (
-      <div className="bg-white rounded-2xl shadow-inner overflow-hidden h-full">
-        <div className="h-24 bg-gradient-to-br from-brand-500 to-purple-600 relative">
-          <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center border-2 border-white">
-            <User className="w-8 h-8 text-gray-300" />
+      <div className="bg-[#101415] rounded-2xl shadow-inner overflow-hidden h-full relative font-sans border border-gray-800">
+        <div className="absolute top-[-10%] left-[-20%] w-32 h-32 bg-emerald-500/20 rounded-full blur-2xl pointer-events-none" />
+        <div className="absolute bottom-[-10%] right-[-20%] w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none" />
+        
+        <div className="pt-6 px-4 pb-4 text-center relative z-10 flex flex-col items-center">
+          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center border-2 border-[#101415] shadow-lg text-white font-bold text-xl mb-3 shrink-0">
+            {avatarChar}
+          </div>
+          
+          <h4 className="text-[13px] font-bold text-white leading-tight truncate w-full">{name}</h4>
+          <p className="text-[8px] text-emerald-400 font-bold uppercase tracking-wider mt-1 truncate w-full">
+            {fields.vcTitle || "Job Title"}
+          </p>
+          
+          <div className="w-full flex flex-col gap-2 mt-4">
+            {/* Mini Link Pill 1 */}
+            <div className="w-full h-10 rounded-xl bg-white/[0.03] backdrop-blur-md border border-white/10 flex items-center px-2.5 gap-2.5 shrink-0">
+               <div className="w-6 h-6 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0">
+                 <Phone className="w-3 h-3 text-emerald-400" />
+               </div>
+               <div className="text-left overflow-hidden">
+                 <div className="text-[9px] font-semibold text-white">Call Us</div>
+                 <div className="text-[8px] text-gray-400 truncate w-24">{fields.vcPhone || "123-456-7890"}</div>
+               </div>
+            </div>
+            {/* Mini Link Pill 2 */}
+            <div className="w-full h-10 rounded-xl bg-white/[0.03] backdrop-blur-md border border-white/10 flex items-center px-2.5 gap-2.5 shrink-0">
+               <div className="w-6 h-6 rounded-full bg-indigo-500/10 flex items-center justify-center shrink-0">
+                 <Mail className="w-3 h-3 text-indigo-400" />
+               </div>
+               <div className="text-left overflow-hidden">
+                 <div className="text-[9px] font-semibold text-white">Email</div>
+                 <div className="text-[8px] text-gray-400 truncate w-24">{fields.vcEmail || "email@example.com"}</div>
+               </div>
+            </div>
+            {/* Mini Link Pill 3 */}
+            <div className="w-full h-10 rounded-xl bg-white/[0.03] backdrop-blur-md border border-white/10 flex items-center px-2.5 gap-2.5 shrink-0">
+               <div className="w-6 h-6 rounded-full bg-pink-500/10 flex items-center justify-center shrink-0">
+                 <Globe className="w-3 h-3 text-pink-400" />
+               </div>
+               <div className="text-left overflow-hidden">
+                 <div className="text-[9px] font-semibold text-white">Website</div>
+                 <div className="text-[8px] text-gray-400 truncate w-24">{fields.vcWebsite ? fields.vcWebsite.replace(/^https?:\/\//i, '') : "website.com"}</div>
+               </div>
+            </div>
+          </div>
+
+          {/* Social Row Mini */}
+          <div className="flex gap-2 justify-center mt-5 w-full">
+            <div className="w-6 h-6 rounded-full bg-white/[0.05] border border-white/10 flex items-center justify-center"><div className="w-3 h-3 bg-white/20 rounded-sm" /></div>
+            <div className="w-6 h-6 rounded-full bg-white/[0.05] border border-white/10 flex items-center justify-center"><div className="w-3 h-3 bg-white/20 rounded-sm" /></div>
+            <div className="w-6 h-6 rounded-full bg-white/[0.05] border border-white/10 flex items-center justify-center"><div className="w-3 h-3 bg-white/20 rounded-sm" /></div>
           </div>
         </div>
-        <div className="pt-10 px-4 pb-4 text-center">
-          <h4 className="text-sm font-bold text-gray-900">{name}</h4>
-          <p className="text-[10px] text-gray-500 mt-0.5">{fields.vcTitle || "Job Title"} · {fields.vcCompany || "Company"}</p>
-          <div className="flex justify-center gap-3 mt-3">
-            {[Phone, Mail, MapPin].map((Icon, i) => (
-              <div key={i} className="w-8 h-8 rounded-full bg-brand-50 flex items-center justify-center">
-                <Icon className="w-3.5 h-3.5 text-brand-600" />
-              </div>
-            ))}
+      </div>
+    );
+  }
+
+  if (isMecard) {
+    const name = fields.mcName || "Your Name";
+    const avatarChar = name.charAt(0).toUpperCase();
+
+    return (
+      <div className="bg-[#101415] rounded-2xl shadow-inner overflow-hidden h-full relative font-sans border border-gray-800">
+        <div className="absolute top-[-10%] left-[-20%] w-32 h-32 bg-purple-500/20 rounded-full blur-2xl pointer-events-none" />
+        <div className="absolute bottom-[-10%] right-[-20%] w-32 h-32 bg-pink-500/10 rounded-full blur-2xl pointer-events-none" />
+        
+        <div className="pt-6 px-4 pb-4 text-center relative z-10 flex flex-col items-center">
+          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-400 to-pink-600 flex items-center justify-center border-2 border-[#101415] shadow-lg text-white font-bold text-2xl mb-3 shrink-0">
+            {avatarChar}
           </div>
-          <div className="mt-3 space-y-1.5 text-left">
-            {fields.vcPhone && <p className="text-[10px] text-gray-600 flex items-center gap-1.5"><Phone className="w-3 h-3 text-gray-400" />{fields.vcPhone}</p>}
-            {fields.vcEmail && <p className="text-[10px] text-gray-600 flex items-center gap-1.5"><Mail className="w-3 h-3 text-gray-400" />{fields.vcEmail}</p>}
-            {fields.vcWebsite && <p className="text-[10px] text-gray-600 flex items-center gap-1.5"><Globe className="w-3 h-3 text-gray-400" />{fields.vcWebsite}</p>}
+          
+          <h4 className="text-[14px] font-bold text-white leading-tight truncate w-full">{name}</h4>
+          {fields.mcBio ? (
+            <p className="text-[8px] text-purple-200 mt-2 line-clamp-2 w-full px-2 leading-relaxed opacity-80">
+              {fields.mcBio}
+            </p>
+          ) : (
+            <p className="text-[8px] text-purple-200 mt-2 line-clamp-2 w-full px-2 leading-relaxed opacity-50">
+              Your personal bio goes here.
+            </p>
+          )}
+          
+          <div className="w-full flex flex-col gap-2 mt-4">
+            {/* Mini Link Pill 1 */}
+            <div className="w-full h-10 rounded-xl bg-white/[0.03] backdrop-blur-md border border-white/10 flex items-center px-2.5 gap-2.5 shrink-0">
+               <div className="w-6 h-6 rounded-full bg-purple-500/20 flex items-center justify-center shrink-0">
+                 <Phone className="w-3 h-3 text-purple-400" />
+               </div>
+               <div className="text-left overflow-hidden">
+                 <div className="text-[9px] font-semibold text-white">Call Me</div>
+                 <div className="text-[8px] text-gray-400 truncate w-24">{fields.mcPhone || "123-456-7890"}</div>
+               </div>
+            </div>
+            {/* Mini Link Pill 2 */}
+            <div className="w-full h-10 rounded-xl bg-white/[0.03] backdrop-blur-md border border-white/10 flex items-center px-2.5 gap-2.5 shrink-0">
+               <div className="w-6 h-6 rounded-full bg-pink-500/20 flex items-center justify-center shrink-0">
+                 <Mail className="w-3 h-3 text-pink-400" />
+               </div>
+               <div className="text-left overflow-hidden">
+                 <div className="text-[9px] font-semibold text-white">Email</div>
+                 <div className="text-[8px] text-gray-400 truncate w-24">{fields.mcEmail || "hello@example.com"}</div>
+               </div>
+            </div>
+            {/* Mini Link Pill 3 */}
+            <div className="w-full h-10 rounded-xl bg-white/[0.03] backdrop-blur-md border border-white/10 flex items-center px-2.5 gap-2.5 shrink-0">
+               <div className="w-6 h-6 rounded-full bg-indigo-500/20 flex items-center justify-center shrink-0">
+                 <MapPin className="w-3 h-3 text-indigo-400" />
+               </div>
+               <div className="text-left overflow-hidden">
+                 <div className="text-[9px] font-semibold text-white">Location</div>
+                 <div className="text-[8px] text-gray-400 truncate w-24">{fields.mcCity || "New York, NY"}</div>
+               </div>
+            </div>
+          </div>
+
+          {/* Social Row Mini */}
+          <div className="flex gap-2 justify-center mt-5 w-full">
+            <div className="w-6 h-6 rounded-full bg-white/[0.05] border border-white/10 flex items-center justify-center"><div className="w-3 h-3 bg-white/20 rounded-sm" /></div>
+            <div className="w-6 h-6 rounded-full bg-white/[0.05] border border-white/10 flex items-center justify-center"><div className="w-3 h-3 bg-white/20 rounded-sm" /></div>
+            <div className="w-6 h-6 rounded-full bg-white/[0.05] border border-white/10 flex items-center justify-center"><div className="w-3 h-3 bg-white/20 rounded-sm" /></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (isAppstore) {
+    const appName = fields.asName || "Your App Name";
+    const avatarChar = appName.charAt(0).toUpperCase();
+    return (
+      <div className="bg-[#101415] rounded-2xl shadow-inner overflow-hidden h-full relative font-sans border border-gray-800 flex flex-col justify-between">
+        <div className="absolute top-[-20%] left-[-20%] w-40 h-40 bg-blue-500/20 rounded-full blur-2xl pointer-events-none" />
+        
+        <div className="pt-8 px-4 pb-4 text-center relative z-10 flex flex-col items-center flex-1 w-full h-full">
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-400 to-indigo-600 flex items-center justify-center border-2 border-[#101415] shadow-lg text-white font-bold text-3xl mb-4 shrink-0">
+             {avatarChar}
+          </div>
+          
+          <h4 className="text-[14px] font-bold text-white leading-tight truncate w-full">{appName}</h4>
+          <p className="text-[9px] text-gray-400 mt-2 line-clamp-3 w-full px-2 leading-relaxed">
+            {fields.asDesc || "Download the ultimate app today. Available on iOS and Android."}
+          </p>
+          
+          <div className="w-full flex flex-col gap-2 mt-auto pt-6">
+             <div className="w-full h-10 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center px-2.5 gap-2 shrink-0 backdrop-blur-md">
+               <div className="text-[10px] font-semibold text-white">App Store</div>
+             </div>
+             <div className="w-full h-10 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center px-2.5 gap-2 shrink-0 backdrop-blur-md">
+               <div className="text-[10px] font-semibold text-white">Google Play</div>
+             </div>
           </div>
         </div>
       </div>
@@ -438,17 +573,26 @@ export default function ProGenerator({ qr, qrContainerRef }) {
                 <ChevronLeft className="w-4 h-4" /> Back
               </button>
               <motion.button
-                onClick={() => goTo(3)}
-                disabled={!valid}
-                whileHover={{ scale: valid ? 1.03 : 1 }}
-                whileTap={{ scale: valid ? 0.97 : 1 }}
+                onClick={async () => {
+                  if (qr.activeTab === "social" || qr.activeTab === "vcard") {
+                    await qr.generateQR({ skipSave: false });
+                  }
+                  goTo(3);
+                }}
+                disabled={!valid || qr.isGenerating}
+                whileHover={{ scale: (valid && !qr.isGenerating) ? 1.03 : 1 }}
+                whileTap={{ scale: (valid && !qr.isGenerating) ? 0.97 : 1 }}
                 className={`py-3.5 px-8 font-bold text-sm rounded-2xl transition-all flex items-center gap-3 cursor-pointer ${
-                  valid
+                  (valid && !qr.isGenerating)
                     ? "bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white shadow-xl shadow-blue-600/25"
                     : "bg-gray-200 text-gray-400 cursor-not-allowed"
                 }`}
               >
-                Customize Design <ArrowRight className="w-4 h-4" />
+                {qr.isGenerating ? (
+                  <>Generating... <div className="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" /></>
+                ) : (
+                  <>Customize Design <ArrowRight className="w-4 h-4" /></>
+                )}
               </motion.button>
             </div>
           </motion.div>

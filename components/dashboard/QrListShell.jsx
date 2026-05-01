@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   Search, Filter, LayoutGrid, List, ArrowUpDown, X,
-  Plus, Trash2, FolderInput, Pause, Play, ChevronDown, QrCode,
+  Plus, Trash2, Pause, Play, ChevronDown, QrCode,
 } from "lucide-react";
 import QrCodeCard from "./QrCodeCard";
 import EditContentModal from "./modals/EditContentModal";
@@ -88,7 +88,6 @@ export default function QrListShell({ initialQrs, initialFolders, initialSummary
   const [showMoveFolder, setShowMoveFolder] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [showCreateFolder, setShowCreateFolder] = useState(false);
-  const [bulkAction, setBulkAction] = useState(null);
 
   // Re-fetch when filters change
   useEffect(() => {
@@ -204,7 +203,7 @@ export default function QrListShell({ initialQrs, initialFolders, initialSummary
   const allSelected = qrs.length > 0 && qrs.every((q) => selected.has(q._id));
 
   return (
-    <div className="flex h-full">
+    <div className="flex">
       <QrSidebarPanel
         folders={folders}
         folderFilter={folderFilter}
@@ -214,7 +213,7 @@ export default function QrListShell({ initialQrs, initialFolders, initialSummary
         qrCount={qrs.length}
       />
 
-      <div className="flex-1 min-w-0 overflow-y-auto">
+      <div className="flex-1 min-w-0">
         <div className="max-w-6xl mx-auto px-6 py-8">
           {/* Header */}
           <div className="flex items-center justify-between mb-6 flex-wrap gap-3">

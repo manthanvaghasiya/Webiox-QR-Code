@@ -221,14 +221,89 @@ export default function ContentForms({ activeTab, s, set }) {
 
   if (activeTab === "mecard") return (
     <div className="space-y-3">
-      <div className="grid grid-cols-2 gap-3">
-        <input className={C} placeholder="First Name" value={s.mcName} onChange={(e) => set({ mcName: e.target.value })} />
-        <input className={C} placeholder="Reading (Kana)" value={s.mcReading} onChange={(e) => set({ mcReading: e.target.value })} />
-      </div>
-      <input type="tel" className={C} placeholder="Phone" value={s.mcPhone} onChange={(e) => set({ mcPhone: e.target.value })} />
-      <input type="email" className={C} placeholder="Email" value={s.mcEmail} onChange={(e) => set({ mcEmail: e.target.value })} />
-      <input className={C} placeholder="Address" value={s.mcAddress} onChange={(e) => set({ mcAddress: e.target.value })} />
-      <input type="url" className={C} placeholder="Website" value={s.mcUrl} onChange={(e) => set({ mcUrl: e.target.value })} />
+      {/* Personal Details */}
+      <FormSection title="Personal Details" icon={Contact} defaultOpen={true}>
+        <div className="space-y-3">
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1">
+              <FieldLabel>First Name <span className="text-red-500">*</span></FieldLabel>
+              <input className={C} placeholder="John" value={s.mcName || ""} onChange={(e) => set({ mcName: e.target.value })} />
+            </div>
+            <div className="space-y-1">
+              <FieldLabel>Reading (Kana)</FieldLabel>
+              <input className={C} placeholder="Optional" value={s.mcReading || ""} onChange={(e) => set({ mcReading: e.target.value })} />
+            </div>
+          </div>
+          <div className="space-y-1">
+            <FieldLabel>Bio / About Me</FieldLabel>
+            <textarea
+              rows={3}
+              className={C + " resize-none"}
+              placeholder="A little bit about yourself..."
+              maxLength={250}
+              value={s.mcBio || ""}
+              onChange={(e) => set({ mcBio: e.target.value })}
+            />
+            <p className="text-[10px] text-gray-400 text-right font-medium">{(s.mcBio || "").length}/250</p>
+          </div>
+        </div>
+      </FormSection>
+
+      {/* Contact Info */}
+      <FormSection title="Contact Info" icon={Phone} defaultOpen={false}>
+        <div className="space-y-3">
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1">
+              <FieldLabel>Phone</FieldLabel>
+              <input type="tel" className={C} placeholder="+1 234 567 8900" value={s.mcPhone || ""} onChange={(e) => set({ mcPhone: e.target.value })} />
+            </div>
+            <div className="space-y-1">
+              <FieldLabel>Personal Email</FieldLabel>
+              <input type="email" className={C} placeholder="john@example.com" value={s.mcEmail || ""} onChange={(e) => set({ mcEmail: e.target.value })} />
+            </div>
+          </div>
+          <div className="space-y-1">
+            <FieldLabel>Street Address</FieldLabel>
+            <input className={C} placeholder="123 Personal St" value={s.mcAddress || ""} onChange={(e) => set({ mcAddress: e.target.value })} />
+          </div>
+          <div className="space-y-1">
+            <FieldLabel>City / Location</FieldLabel>
+            <input className={C} placeholder="New York, NY" value={s.mcCity || ""} onChange={(e) => set({ mcCity: e.target.value })} />
+          </div>
+        </div>
+      </FormSection>
+
+      {/* Social Media & Website */}
+      <FormSection title="Digital Presence" icon={Share2} defaultOpen={false}>
+        <div className="space-y-3">
+          <div className="space-y-1">
+            <FieldLabel>Personal Website</FieldLabel>
+            <input type="url" className={C} placeholder="https://www.yourname.com" value={s.mcUrl || ""} onChange={(e) => set({ mcUrl: e.target.value })} />
+          </div>
+          <div className="space-y-1">
+            <FieldLabel>LinkedIn</FieldLabel>
+            <input type="url" className={C} placeholder="https://linkedin.com/in/yourname" value={s.mcLinkedin || ""} onChange={(e) => set({ mcLinkedin: e.target.value })} />
+          </div>
+          <div className="space-y-1">
+            <FieldLabel>Instagram</FieldLabel>
+            <input type="url" className={C} placeholder="https://instagram.com/yourhandle" value={s.mcInstagram || ""} onChange={(e) => set({ mcInstagram: e.target.value })} />
+          </div>
+          <div className="space-y-1">
+            <FieldLabel>Twitter / X</FieldLabel>
+            <input type="url" className={C} placeholder="https://x.com/yourhandle" value={s.mcTwitter || ""} onChange={(e) => set({ mcTwitter: e.target.value })} />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1">
+              <FieldLabel>Facebook</FieldLabel>
+              <input type="url" className={C} placeholder="facebook.com/..." value={s.mcFacebook || ""} onChange={(e) => set({ mcFacebook: e.target.value })} />
+            </div>
+            <div className="space-y-1">
+              <FieldLabel>YouTube</FieldLabel>
+              <input type="url" className={C} placeholder="youtube.com/..." value={s.mcYoutube || ""} onChange={(e) => set({ mcYoutube: e.target.value })} />
+            </div>
+          </div>
+        </div>
+      </FormSection>
     </div>
   );
 
@@ -281,7 +356,45 @@ export default function ContentForms({ activeTab, s, set }) {
   if (activeTab === "twitter") return <input type="url" className={C} placeholder="https://twitter.com/yourhandle" value={s.content} onChange={(e) => set({ content: e.target.value })} />;
   if (activeTab === "youtube") return <input type="url" className={C} placeholder="https://youtube.com/watch?v=..." value={s.content} onChange={(e) => set({ content: e.target.value })} />;
   if (activeTab === "social") return <input type="url" className={C} placeholder="https://instagram.com/yourprofile" value={s.content} onChange={(e) => set({ content: e.target.value })} />;
-  if (activeTab === "appstore") return <input type="url" className={C} placeholder="App Store or Play Store URL" value={s.content} onChange={(e) => set({ content: e.target.value })} />;
+  if (activeTab === "appstore") return (
+    <div className="space-y-3">
+      <FormSection title="App Details" defaultOpen={true}>
+        <div className="space-y-3">
+          <div className="space-y-1">
+            <FieldLabel>App Name <span className="text-red-500">*</span></FieldLabel>
+            <input className={C} placeholder="e.g., Flappy Bird" value={s.asName || ""} onChange={(e) => set({ asName: e.target.value })} />
+          </div>
+          <div className="space-y-1">
+            <FieldLabel>App Description</FieldLabel>
+            <textarea
+              rows={2}
+              className={C + " resize-none"}
+              placeholder="What does your app do?"
+              maxLength={100}
+              value={s.asDesc || ""}
+              onChange={(e) => set({ asDesc: e.target.value })}
+            />
+          </div>
+        </div>
+      </FormSection>
+      <FormSection title="Store Links" defaultOpen={true}>
+        <div className="space-y-3">
+          <div className="space-y-1">
+            <FieldLabel>Apple App Store URL</FieldLabel>
+            <input type="url" className={C} placeholder="https://apps.apple.com/..." value={s.asIos || ""} onChange={(e) => set({ asIos: e.target.value })} />
+          </div>
+          <div className="space-y-1">
+            <FieldLabel>Google Play Store URL</FieldLabel>
+            <input type="url" className={C} placeholder="https://play.google.com/..." value={s.asAndroid || ""} onChange={(e) => set({ asAndroid: e.target.value })} />
+          </div>
+          <div className="space-y-1">
+            <FieldLabel>Website Fallback URL</FieldLabel>
+            <input type="url" className={C} placeholder="https://yourwebsite.com" value={s.asWeb || ""} onChange={(e) => set({ asWeb: e.target.value })} />
+          </div>
+        </div>
+      </FormSection>
+    </div>
+  );
   if (activeTab === "rating") return <input type="url" className={C} placeholder="Google Maps or Review Page URL" value={s.content} onChange={(e) => set({ content: e.target.value })} />;
   if (activeTab === "feedback") return <input type="url" className={C} placeholder="Feedback Form URL (Google Forms, Typeform, etc.)" value={s.content} onChange={(e) => set({ content: e.target.value })} />;
 

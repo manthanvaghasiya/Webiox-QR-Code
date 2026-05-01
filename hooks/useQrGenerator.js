@@ -12,11 +12,13 @@ const INITIAL_FIELDS = {
   vcStreet: "", vcCity: "", vcState: "", vcZip: "", vcCountry: "",
   vcAddress: "", vcWebsite: "", vcSummary: "", vcImage: null,
   vcLinkedin: "", vcInstagram: "", vcTwitter: "", vcFacebook: "", vcYoutube: "",
-  mcName: "", mcReading: "", mcPhone: "", mcEmail: "", mcAddress: "", mcUrl: "",
+  mcName: "", mcReading: "", mcPhone: "", mcEmail: "", mcAddress: "", mcCity: "", mcUrl: "", mcBio: "",
+  mcLinkedin: "", mcInstagram: "", mcTwitter: "", mcFacebook: "", mcYoutube: "",
   lat: "", lng: "", locUrl: "",
   wifiSsid: "", wifiPassword: "", wifiEncryption: "WPA",
   evTitle: "", evStart: "", evEnd: "", evLocation: "", evDescription: "",
   btcAddress: "", btcAmount: "", btcMessage: "",
+  asName: "", asDesc: "", asIos: "", asAndroid: "", asWeb: "",
   uploadFile: null,
 };
 
@@ -110,12 +112,13 @@ export default function useQrGenerator(qrCodeRef, qrCodeInstanceRef) {
     const s = fields;
     switch (tab) {
       case "url": case "text": case "facebook": case "twitter": case "youtube":
-      case "appstore": case "rating": case "feedback": return !!s.content.trim();
+      case "rating": case "feedback": return !!s.content.trim();
+      case "appstore": return !!s.asName.trim() && !!(s.asIos.trim() || s.asAndroid.trim() || s.asWeb.trim());
       case "social": return !!(socialPageTitle.trim() && socialLinks.some((l) => l.url.trim()));
       case "email": return !!s.emailAddress.trim();
       case "phone": return !!s.phone.trim();
       case "sms": return !!s.smsPhone.trim();
-      case "vcard": return !!(s.vcFirstName.trim() || s.vcLastName.trim());
+      case "vcard": return !!(s.vcCompany.trim() || s.vcFirstName.trim() || s.vcLastName.trim());
       case "mecard": return !!s.mcName.trim();
       case "location": return !!(s.locUrl?.trim() || (s.lat && s.lng));
       case "wifi": return !!s.wifiSsid.trim();
@@ -192,30 +195,43 @@ export default function useQrGenerator(qrCodeRef, qrCodeInstanceRef) {
     try {
       let finalContent;
 
-      if (currentTab === "social") {
-        const res = await fetch("/api/pages", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            type: "social",
-            config: {
+      if (currentTab === "social" || currentTab === "vcard" || currentTab === "mecard" || currentTab === "appstore") {
+        if (skipSave) {
+          // For auto-preview of design changes, use the existing URL or a placeholder
+          finalContent = lastCreatedPage?.pageUrl || `https://dukaancard.com/preview`;
+        } else {
+          const pagePayload = {
+            type: currentTab,
+            config: currentTab === "social" ? {
               pageTitle: socialPageTitle,
               pageDescription: socialPageDescription,
               links: socialLinks.filter((l) => l.url.trim()),
-            },
+            } : fields, // Send all fields for vcard and mecard
             theme: { bgColor, textColor: fgColor },
-            meta: { title: socialPageTitle, description: socialPageDescription },
-          }),
-        });
-        const data = await res.json();
-        if (!data.pageUrl) { setIsGenerating(false); return; }
-        finalContent = data.pageUrl;
-        setLastCreatedPage({
-          shortId: data.shortId,
-          editToken: data.editToken,
-          pageUrl: data.pageUrl,
-          editUrl: data.editUrl,
-        });
+            meta: currentTab === "social"
+              ? { title: socialPageTitle, description: socialPageDescription }
+              : currentTab === "mecard"
+                ? { title: fields.mcName.trim() || "My Profile", description: fields.mcBio }
+                : currentTab === "appstore"
+                  ? { title: fields.asName.trim() || "Download App", description: fields.asDesc }
+                  : { title: fields.vcCompany || `${fields.vcFirstName} ${fields.vcLastName}`.trim(), description: fields.vcTitle },
+          };
+          
+          const res = await fetch("/api/pages", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(pagePayload),
+          });
+          const data = await res.json();
+          if (!data.pageUrl) { setIsGenerating(false); return; }
+          finalContent = data.pageUrl;
+          setLastCreatedPage({
+            shortId: data.shortId,
+            editToken: data.editToken,
+            pageUrl: data.pageUrl,
+            editUrl: data.editUrl,
+          });
+        }
       } else {
         finalContent = await formatQrData(currentTab, fields);
         if (!finalContent) { setIsGenerating(false); return; }
@@ -230,7 +246,7 @@ export default function useQrGenerator(qrCodeRef, qrCodeInstanceRef) {
       setQrCodeUrl("generated");
 
       // Save to DB only on explicit download, not on preview
-      if (!skipSave && currentTab !== "social") {
+      if (!skipSave && currentTab !== "social" && currentTab !== "vcard" && currentTab !== "mecard" && currentTab !== "appstore") {
         const hash = finalContent + fgColor + bgColor + (logo ? "logo" : "");
         if (!savedHashesRef.current.has(hash)) {
           savedHashesRef.current.add(hash);
@@ -251,15 +267,13 @@ export default function useQrGenerator(qrCodeRef, qrCodeInstanceRef) {
     }
     setIsGenerating(false);
   }, [activeTab, isValid, isGenerating, socialPageTitle, socialPageDescription,
-    socialLinks, fgColor, bgColor, logo, fields, buildQrOptions, qrCodeRef, qrCodeInstanceRef]);
+    socialLinks, fgColor, bgColor, logo, fields, buildQrOptions, qrCodeRef, qrCodeInstanceRef, lastCreatedPage]);
 
   // ── Real-time preview with debounce ──
   useEffect(() => {
     if (!isValidCurrent()) return;
     // Skip file-upload tabs for auto-preview (they need server upload)
     if (["mp3", "video", "pdf", "gallery"].includes(activeTab)) return;
-    // Skip social tab (needs API call to create dynamic page)
-    if (activeTab === "social") return;
 
     const t = setTimeout(() => {
       generateQR({ skipSave: true });
@@ -269,15 +283,16 @@ export default function useQrGenerator(qrCodeRef, qrCodeInstanceRef) {
   }, [activeTab, fields, fgColor, bgColor, useGradient, gradientColor1,
     gradientColor2, gradientType, useCustomEyeColor, eyeFrameColor,
     eyeBallColor, dotPattern, cornerStyle, eyeBallStyle, qrSize,
-    logo, hideBackgroundDots, errorCorrectionLevel]);
+    logo, hideBackgroundDots, errorCorrectionLevel, frameStyle,
+    frameText, frameTextColor, frameFillColor, frameBorderColor]);
 
   // ── Download ──
   const downloadQR = useCallback(async (ext) => {
     if (!qrCodeInstanceRef.current) return;
     setLastFormat(ext);
 
-    // For first download, save to DB
-    if (activeTab !== "social") {
+    // For first download, save to DB (dynamic pages save separately during generation)
+    if (activeTab !== "social" && activeTab !== "vcard" && activeTab !== "mecard" && activeTab !== "appstore") {
       try {
         const finalContent = await formatQrData(activeTab, fields);
         if (finalContent) {
