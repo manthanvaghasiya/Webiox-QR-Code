@@ -8,6 +8,7 @@ export default function NavbarFooterWrapper({ children }) {
   const hideChrome =
     pathname.startsWith("/p/") ||
     pathname.startsWith("/r/") ||
+    pathname.startsWith("/b/") ||
     pathname.startsWith("/edit/") ||
     pathname.startsWith("/dashboard") ||
     pathname.startsWith("/admin");

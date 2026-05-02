@@ -22,5 +22,5 @@ export default async function EditProfilePage({ params }) {
   // Serialize for client component
   const serialized = JSON.parse(JSON.stringify(profile));
 
-  return <ProfileWizard mode="edit" profile={serialized} />;
+  return <ProfileWizard mode="edit" initialData={serialized} />;
 }
