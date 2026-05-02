@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Star, ChevronRight, Check, ArrowLeft } from "lucide-react";
+import WelcomeScreen from "../_components/WelcomeScreen";
 
 export default function FeedbackPage({ page }) {
   const cfg = page.config || {};
@@ -9,6 +10,7 @@ export default function FeedbackPage({ page }) {
   const primary = theme.primaryColor || "#E5A82A";
   const { businessName, prompt, categories = [], website, thankYouMessage } = cfg;
 
+  const [showWelcome, setShowWelcome] = useState(true);
   const [step, setStep] = useState("category");
   const [category, setCategory] = useState(null);
   const [rating, setRating] = useState(0);
@@ -19,6 +21,10 @@ export default function FeedbackPage({ page }) {
     setCategory(null);
     setRating(0);
     setComment("");
+  }
+
+  if (showWelcome && cfg.welcomeScreenEnabled) {
+    return <WelcomeScreen config={cfg} onContinue={() => setShowWelcome(false)} />;
   }
 
   return (

@@ -1,10 +1,17 @@
 "use client";
 
+import { useState } from "react";
 import { Download, Globe, ArrowRight } from "lucide-react";
+import WelcomeScreen from "../_components/WelcomeScreen";
 
 export default function AppStorePage({ page }) {
   const config = page.config || {};
+  const [showWelcome, setShowWelcome] = useState(true);
   const { asName, asDesc, asIos, asAndroid, asWeb } = config;
+
+  if (showWelcome && config.welcomeScreenEnabled) {
+    return <WelcomeScreen config={config} onContinue={() => setShowWelcome(false)} />;
+  }
 
   return (
     <div className="min-h-screen bg-[#101415] text-white selection:bg-blue-500/30 font-sans pb-24 relative overflow-hidden flex flex-col items-center justify-center">

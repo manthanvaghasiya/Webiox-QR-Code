@@ -1,12 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import {
   Download, Phone, MapPin, Mail, Globe, MessageCircle,
   Camera as Instagram, Briefcase as Linkedin, MessageCircle as Twitter,
   Users as Facebook, Video as Youtube,
 } from "lucide-react";
+import WelcomeScreen from "../_components/WelcomeScreen";
 
-// Helper to escape vCard values
 const escVCard = (v) =>
   String(v ?? "")
     .replace(/\\/g, "\\\\")
@@ -44,6 +45,7 @@ function generatePersonalVCard(s) {
 
 export default function MecardPage({ page }) {
   const config = page.config || {};
+  const [showWelcome, setShowWelcome] = useState(true);
   
   // Generate download URL
   const vcardString = generatePersonalVCard(config);
@@ -65,6 +67,10 @@ export default function MecardPage({ page }) {
     { icon: Facebook, url: config.mcFacebook, label: "Facebook", color: "text-blue-500", bg: "bg-blue-500/10" },
     { icon: Youtube, url: config.mcYoutube, label: "YouTube", color: "text-red-400", bg: "bg-red-500/10" }
   ].filter(link => link.url);
+
+  if (showWelcome && config.welcomeScreenEnabled) {
+    return <WelcomeScreen config={config} onContinue={() => setShowWelcome(false)} />;
+  }
 
   return (
     <div className="min-h-screen bg-[#101415] text-white selection:bg-purple-500/30 font-sans pb-24 relative overflow-hidden">

@@ -1,19 +1,24 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Camera as Instagram, ExternalLink } from "lucide-react";
+import WelcomeScreen from "../_components/WelcomeScreen";
 
 export default function InstagramPage({ page }) {
   const cfg = page.config || {};
+  const [showWelcome, setShowWelcome] = useState(true);
   const username = (cfg.username || "").replace(/^@/, "");
 
   useEffect(() => {
-    if (username) {
-      // Instagram QR codes typically deep-link to the profile.
+    if (username && !showWelcome) {
       const url = `https://instagram.com/${encodeURIComponent(username)}`;
       window.location.href = url;
     }
-  }, [username]);
+  }, [username, showWelcome]);
+
+  if (showWelcome && cfg.welcomeScreenEnabled) {
+    return <WelcomeScreen config={cfg} onContinue={() => setShowWelcome(false)} />;
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400 px-4">

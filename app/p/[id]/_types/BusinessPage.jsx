@@ -1,6 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { Phone, Mail, MapPin, Clock, Globe, Share2 } from "lucide-react";
+import WelcomeScreen from "../_components/WelcomeScreen";
 
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
@@ -18,6 +20,7 @@ function isOpenNow(hours) {
 
 export default function BusinessPage({ page }) {
   const cfg = page.config || {};
+  const [showWelcome, setShowWelcome] = useState(true);
   const theme = page.theme || {};
   const primary = theme.primaryColor || "#3F8FD3";
   const {
@@ -25,6 +28,10 @@ export default function BusinessPage({ page }) {
     phone, email, address, website, hours,
   } = cfg;
   const open = isOpenNow(hours);
+
+  if (showWelcome && cfg.welcomeScreenEnabled) {
+    return <WelcomeScreen config={cfg} onContinue={() => setShowWelcome(false)} />;
+  }
 
   return (
     <div className="min-h-screen bg-ink-50 pb-12">

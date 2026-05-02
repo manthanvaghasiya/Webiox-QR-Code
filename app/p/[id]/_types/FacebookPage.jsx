@@ -1,18 +1,24 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ThumbsUp, ArrowRight } from "lucide-react";
+import WelcomeScreen from "../_components/WelcomeScreen";
 
 export default function FacebookPage({ page }) {
   const cfg = page.config || {};
+  const [showWelcome, setShowWelcome] = useState(true);
   const url = cfg.pageUrl || cfg.url;
   const { pageName, headline, likeCount } = cfg;
 
   useEffect(() => {
-    if (cfg.autoRedirect && url) {
+    if (cfg.autoRedirect && url && !showWelcome) {
       window.location.href = url;
     }
-  }, [url, cfg.autoRedirect]);
+  }, [url, cfg.autoRedirect, showWelcome]);
+
+  if (showWelcome && cfg.welcomeScreenEnabled) {
+    return <WelcomeScreen config={cfg} onContinue={() => setShowWelcome(false)} />;
+  }
 
   return (
     <div className="min-h-screen bg-[#1877F2] flex items-center justify-center px-4 py-8">

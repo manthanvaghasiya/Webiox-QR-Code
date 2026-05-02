@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Share2, X, ChevronLeft, ChevronRight } from "lucide-react";
+import WelcomeScreen from "../_components/WelcomeScreen";
 
 export default function GalleryPage({ page }) {
   const cfg = page.config || {};
@@ -12,6 +13,7 @@ export default function GalleryPage({ page }) {
     ctaLabel, ctaUrl, gridView,
   } = cfg;
 
+  const [showWelcome, setShowWelcome] = useState(true);
   const [lightbox, setLightbox] = useState(null);
 
   function next() {
@@ -21,6 +23,10 @@ export default function GalleryPage({ page }) {
   function prev() {
     if (lightbox === null) return;
     setLightbox((lightbox - 1 + images.length) % images.length);
+  }
+
+  if (showWelcome && cfg.welcomeScreenEnabled) {
+    return <WelcomeScreen config={cfg} onContinue={() => setShowWelcome(false)} />;
   }
 
   return (

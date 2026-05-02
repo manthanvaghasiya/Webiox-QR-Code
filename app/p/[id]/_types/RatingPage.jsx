@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Star, Send, Check } from "lucide-react";
+import WelcomeScreen from "../_components/WelcomeScreen";
 
 export default function RatingPage({ page }) {
   const cfg = page.config || {};
@@ -10,6 +11,7 @@ export default function RatingPage({ page }) {
   const accent = theme.accentColor || "#F09A23";
   const { businessName, question, coverImage, thankYouMessage } = cfg;
 
+  const [showWelcome, setShowWelcome] = useState(true);
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [submitted, setSubmitted] = useState(false);
@@ -19,6 +21,10 @@ export default function RatingPage({ page }) {
       // In a real app: POST rating to /api/rating-submission
       setSubmitted(true);
     }
+  }
+
+  if (showWelcome && cfg.welcomeScreenEnabled) {
+    return <WelcomeScreen config={cfg} onContinue={() => setShowWelcome(false)} />;
   }
 
   return (

@@ -1,6 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { Play, Share2 } from "lucide-react";
+import WelcomeScreen from "../_components/WelcomeScreen";
 
 function isYouTube(url) {
   return /(?:youtube\.com|youtu\.be)/i.test(url || "");
@@ -19,6 +21,7 @@ function vimeoEmbed(url) {
 
 export default function VideoPage({ page }) {
   const cfg = page.config || {};
+  const [showWelcome, setShowWelcome] = useState(true);
   const theme = page.theme || {};
   const primary = theme.primaryColor || "#3F8FD3";
   const {
@@ -26,6 +29,10 @@ export default function VideoPage({ page }) {
   } = cfg;
 
   const main = videos[0];
+
+  if (showWelcome && cfg.welcomeScreenEnabled) {
+    return <WelcomeScreen config={cfg} onContinue={() => setShowWelcome(false)} />;
+  }
 
   return (
     <div className="min-h-screen bg-ink-50 pb-12">

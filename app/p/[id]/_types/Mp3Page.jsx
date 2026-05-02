@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Play, Pause, Share2 } from "lucide-react";
+import WelcomeScreen from "../_components/WelcomeScreen";
 
 function formatTime(s) {
   if (!Number.isFinite(s)) return "0:00";
@@ -20,6 +21,7 @@ export default function Mp3Page({ page }) {
   } = cfg;
 
   const audioRef = useRef(null);
+  const [showWelcome, setShowWelcome] = useState(true);
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -58,6 +60,10 @@ export default function Mp3Page({ page }) {
     const rect = e.currentTarget.getBoundingClientRect();
     const pct = (e.clientX - rect.left) / rect.width;
     a.currentTime = pct * a.duration;
+  }
+
+  if (showWelcome && cfg.welcomeScreenEnabled) {
+    return <WelcomeScreen config={cfg} onContinue={() => setShowWelcome(false)} />;
   }
 
   return (

@@ -1,6 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { Calendar, Clock, MapPin, Share2, Plus } from "lucide-react";
+import WelcomeScreen from "../_components/WelcomeScreen";
 
 function fmtDate(iso) {
   if (!iso) return "—";
@@ -35,6 +37,7 @@ function buildIcs({ title, description, location, start, end }) {
 
 export default function EventPage({ page }) {
   const cfg = page.config || {};
+  const [showWelcome, setShowWelcome] = useState(true);
   const theme = page.theme || {};
   const primary = theme.primaryColor || "#3F8FD3";
   const accent = theme.accentColor || "#F09A23";
@@ -42,6 +45,10 @@ export default function EventPage({ page }) {
     title, description, coverImage, start, end,
     location, ctaLabel, ctaUrl,
   } = cfg;
+
+  if (showWelcome && cfg.welcomeScreenEnabled) {
+    return <WelcomeScreen config={cfg} onContinue={() => setShowWelcome(false)} />;
+  }
 
   return (
     <div className="min-h-screen bg-ink-50 pb-12">

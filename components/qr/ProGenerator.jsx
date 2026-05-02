@@ -98,7 +98,17 @@ function PhonePreview({ tab, fields }) {
   const isAppstore = tab === "appstore";
   const isPdf = tab === "pdf";
   const isEvent = tab === "event";
-  const isUrl = ["url","facebook","twitter","youtube","rating","feedback"].includes(tab);
+  const isSocial = tab === "social";
+  const isVideo = tab === "video";
+  const isBusiness = tab === "business";
+  const isGallery = ["gallery", "images"].includes(tab);
+  const isRating = tab === "rating";
+  const isFeedback = tab === "feedback";
+  const isCoupon = tab === "coupon";
+  const isInstagram = tab === "instagram";
+  const isFacebook = tab === "facebook";
+  const isMp3 = ["mp3", "audio"].includes(tab);
+  const isUrl = ["url","twitter","youtube"].includes(tab);
 
   if (isVcard) {
     const name = fields.vcCompany || `${fields.vcFirstName || ""} ${fields.vcLastName || ""}`.trim() || "Your Name";
@@ -238,17 +248,17 @@ function PhonePreview({ tab, fields }) {
     return (
       <div className="bg-[#101415] rounded-2xl shadow-inner overflow-hidden h-full relative font-sans border border-gray-800 flex flex-col justify-between">
         <div className="absolute top-[-20%] left-[-20%] w-40 h-40 bg-blue-500/20 rounded-full blur-2xl pointer-events-none" />
-        
+
         <div className="pt-8 px-4 pb-4 text-center relative z-10 flex flex-col items-center flex-1 w-full h-full">
           <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-400 to-indigo-600 flex items-center justify-center border-2 border-[#101415] shadow-lg text-white font-bold text-3xl mb-4 shrink-0">
              {avatarChar}
           </div>
-          
+
           <h4 className="text-[14px] font-bold text-white leading-tight truncate w-full">{appName}</h4>
           <p className="text-[9px] text-gray-400 mt-2 line-clamp-3 w-full px-2 leading-relaxed">
             {fields.asDesc || "Download the ultimate app today. Available on iOS and Android."}
           </p>
-          
+
           <div className="w-full flex flex-col gap-2 mt-auto pt-6">
              <div className="w-full h-10 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center px-2.5 gap-2 shrink-0 backdrop-blur-md">
                <div className="text-[10px] font-semibold text-white">App Store</div>
@@ -262,12 +272,164 @@ function PhonePreview({ tab, fields }) {
     );
   }
 
+  if (isSocial) {
+    const pageTitle = fields.pageTitle || "Your Page";
+    const titleChar = pageTitle.charAt(0).toUpperCase();
+    return (
+      <div className="bg-gradient-to-br from-slate-900 via-purple-950 to-slate-900 rounded-2xl shadow-inner overflow-hidden h-full relative font-sans border border-gray-800 flex flex-col p-4">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400 to-indigo-600 flex items-center justify-center text-white font-black text-lg">
+            {titleChar}
+          </div>
+          <h4 className="text-[12px] font-bold text-white">{pageTitle}</h4>
+          <p className="text-[8px] text-gray-400">{fields.pageDescription || "Your description"}</p>
+        </div>
+        <div className="flex flex-col gap-2 mt-4 space-y-2">
+          <div className="w-full h-8 rounded-lg bg-white/10 border border-white/10 flex items-center px-2 gap-2">
+            <div className="w-4 h-4 rounded bg-blue-500/30" />
+            <div className="text-[8px] text-white font-semibold">Link 1</div>
+          </div>
+          <div className="w-full h-8 rounded-lg bg-white/10 border border-white/10 flex items-center px-2 gap-2">
+            <div className="w-4 h-4 rounded bg-pink-500/30" />
+            <div className="text-[8px] text-white font-semibold">Link 2</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (isVideo) {
+    return (
+      <div className="bg-white rounded-2xl shadow-inner overflow-hidden h-full relative font-sans border border-gray-200">
+        <div className="w-full h-32 bg-black flex items-center justify-center">
+          <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+            <div className="w-0 h-0 border-l-4 border-l-white border-t-2 border-t-transparent border-b-2 border-b-transparent ml-1" />
+          </div>
+        </div>
+        <div className="p-3">
+          <h4 className="text-[11px] font-bold text-gray-900">{fields.title || "Video Title"}</h4>
+          <p className="text-[8px] text-gray-500 mt-1">{fields.description || "Video description"}</p>
+          <button className="w-full mt-3 h-7 rounded-md bg-blue-600 text-white text-[9px] font-bold">Watch</button>
+        </div>
+      </div>
+    );
+  }
+
+  if (isBusiness) {
+    return (
+      <div className="bg-white rounded-2xl shadow-inner overflow-hidden h-full relative font-sans border border-gray-200">
+        <div className="w-full h-24 bg-gradient-to-r from-blue-500 to-blue-600" />
+        <div className="p-3 -mt-8 relative z-10">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 text-white font-bold flex items-center justify-center text-sm mb-2">
+            {(fields.name || "B").charAt(0).toUpperCase()}
+          </div>
+          <h4 className="text-[11px] font-bold text-gray-900">{fields.name || "Business Name"}</h4>
+          <p className="text-[8px] text-gray-500 mt-1">{fields.tagline || "Business tagline"}</p>
+          <div className="flex flex-col gap-1 mt-3">
+            <div className="flex items-center gap-2 text-[8px] text-gray-600">
+              <div className="w-3 h-3 rounded-full bg-blue-500" />
+              <span>Open now</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (isGallery) {
+    return (
+      <div className="bg-gray-900 rounded-2xl shadow-inner overflow-hidden h-full relative font-sans border border-gray-800 flex flex-col p-3">
+        <div className="text-center text-white mb-3">
+          <h4 className="text-[11px] font-bold">{fields.title || "Gallery"}</h4>
+        </div>
+        <div className="grid grid-cols-2 gap-2 flex-1">
+          <div className="bg-gray-700 rounded h-12" />
+          <div className="bg-gray-700 rounded h-12" />
+          <div className="bg-gray-700 rounded h-12" />
+          <div className="bg-gray-700 rounded h-12" />
+        </div>
+      </div>
+    );
+  }
+
+  if (isRating) {
+    return (
+      <div className="bg-white rounded-2xl shadow-inner overflow-hidden h-full relative font-sans border border-gray-200 flex flex-col p-4">
+        <h4 className="text-[11px] font-bold text-gray-900 text-center">{fields.businessName || "Rate Us"}</h4>
+        <p className="text-[8px] text-gray-500 text-center mt-2">{fields.question || "How was your experience?"}</p>
+        <div className="flex gap-1 justify-center mt-4">
+          {[1,2,3,4,5].map(i => <div key={i} className="w-4 h-4 rounded-full bg-yellow-400 text-[6px] flex items-center justify-center text-yellow-700 font-bold">★</div>)}
+        </div>
+      </div>
+    );
+  }
+
+  if (isFeedback) {
+    return (
+      <div className="bg-white rounded-2xl shadow-inner overflow-hidden h-full relative font-sans border border-gray-200 flex flex-col p-4">
+        <h4 className="text-[11px] font-bold text-gray-900">{fields.businessName || "Feedback"}</h4>
+        <p className="text-[8px] text-gray-500 mt-2">{fields.prompt || "Give us your feedback"}</p>
+        <button className="w-full mt-4 h-7 rounded-md bg-blue-600 text-white text-[9px] font-bold">Start</button>
+      </div>
+    );
+  }
+
+  if (isCoupon) {
+    return (
+      <div className="bg-white rounded-2xl shadow-inner overflow-hidden h-full relative font-sans border border-gray-200">
+        <div className="p-3 bg-red-600 text-white">
+          <h4 className="text-[10px] font-bold uppercase">{fields.businessName || "Coupon"}</h4>
+        </div>
+        <div className="p-4 text-center">
+          <div className="text-[20px] font-black text-red-600">{fields.discount || "50% OFF"}</div>
+          <p className="text-[9px] text-gray-600 mt-2">{fields.headline || "Special Offer"}</p>
+          <div className="mt-3 px-2 py-1 bg-gray-100 rounded border-2 border-dashed border-gray-300">
+            <p className="text-[8px] font-mono font-bold text-gray-700">{fields.code || "SAVE50"}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (isInstagram) {
+    return (
+      <div className="bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400 rounded-2xl shadow-inner overflow-hidden h-full relative font-sans border border-gray-300 flex flex-col items-center justify-center p-4">
+        <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-pink-600 mb-2">
+          <Briefcase className="w-6 h-6" />
+        </div>
+        <p className="text-white font-bold text-[11px]">@{fields.username || "username"}</p>
+        <p className="text-white text-[8px] mt-1 opacity-80">View Profile</p>
+      </div>
+    );
+  }
+
+  if (isFacebook) {
+    return (
+      <div className="bg-white rounded-2xl shadow-inner overflow-hidden h-full relative font-sans border border-gray-200 flex flex-col p-4">
+        <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm mb-2">f</div>
+        <p className="text-[9px] font-bold text-gray-900">{fields.pageName || "Facebook Page"}</p>
+        <button className="w-full mt-4 h-7 rounded-md bg-blue-600 text-white text-[9px] font-bold">Like</button>
+      </div>
+    );
+  }
+
+  if (isMp3) {
+    return (
+      <div className="bg-gradient-to-br from-purple-900 to-pink-900 rounded-2xl shadow-inner overflow-hidden h-full relative font-sans border border-gray-700 flex flex-col items-center justify-center p-4">
+        <div className="w-12 h-12 rounded-lg bg-purple-700 flex items-center justify-center text-white mb-2 text-xl">♪</div>
+        <p className="text-white font-bold text-[11px] text-center">{fields.trackTitle || "Track Title"}</p>
+        <p className="text-purple-200 text-[8px] text-center mt-1">{fields.artist || "Artist Name"}</p>
+        <button className="mt-4 w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white">▶</button>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white rounded-2xl shadow-inner h-full flex flex-col items-center justify-center p-6 text-center">
       <div className="w-14 h-14 rounded-2xl bg-gray-100 flex items-center justify-center mb-3">
         <QrCode className="w-7 h-7 text-gray-300" />
       </div>
-      <p className="text-xs font-bold text-gray-700">QR Preview</p>
+      <p className="text-xs font-bold text-gray-700">Preview</p>
       <p className="text-[10px] text-gray-400 mt-1">Fill in details to see preview</p>
     </div>
   );

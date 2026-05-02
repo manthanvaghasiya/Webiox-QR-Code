@@ -1,16 +1,23 @@
 "use client";
 
+import { useState } from "react";
 import { FileText, Eye, Download, Share2 } from "lucide-react";
+import WelcomeScreen from "../_components/WelcomeScreen";
 
 export default function PdfPage({ page }) {
   const cfg = page.config || {};
+  const [showWelcome, setShowWelcome] = useState(true);
   const theme = page.theme || {};
   const primary = theme.primaryColor || "#da5167";
   const accent = theme.accentColor || "#464154";
   const { company, title, description, website, pdfUrl, linkDirect } = cfg;
 
-  if (linkDirect && pdfUrl) {
+  if (linkDirect && pdfUrl && !showWelcome) {
     if (typeof window !== "undefined") window.location.href = pdfUrl;
+  }
+
+  if (showWelcome && cfg.welcomeScreenEnabled) {
+    return <WelcomeScreen config={cfg} onContinue={() => setShowWelcome(false)} />;
   }
 
   const fileName = (title || "document").replace(/\s+/g, "-");

@@ -1,12 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import {
   Download, Phone, MapPin, Mail, Globe, MessageCircle,
   Camera as Instagram, Briefcase as Linkedin, MessageCircle as Twitter,
   Users as Facebook, Video as Youtube,
 } from "lucide-react";
+import WelcomeScreen from "../_components/WelcomeScreen";
 
-// Helper to escape vCard values
 const escVCard = (v) =>
   String(v ?? "")
     .replace(/\\/g, "\\\\")
@@ -15,10 +16,10 @@ const escVCard = (v) =>
     .replace(/;/g, "\\;");
 
 function generateVCardString(s) {
-  const displayName = s.vcCompany 
-    ? s.vcCompany 
+  const displayName = s.vcCompany
+    ? s.vcCompany
     : `${s.vcFirstName || ""} ${s.vcLastName || ""}`.trim();
-    
+
   const lines = [
     "BEGIN:VCARD",
     "VERSION:3.0",
@@ -30,7 +31,7 @@ function generateVCardString(s) {
   if (s.vcEmail) lines.push(`EMAIL:${escVCard(s.vcEmail)}`);
   if (s.vcCompany) lines.push(`ORG:${escVCard(s.vcCompany)}`);
   if (s.vcTitle) lines.push(`TITLE:${escVCard(s.vcTitle)}`);
-  
+
   const hasStructuredAddr = s.vcStreet || s.vcCity || s.vcState || s.vcZip || s.vcCountry;
   if (hasStructuredAddr) {
     lines.push(`ADR;TYPE=WORK:;;${escVCard(s.vcStreet || "")};${escVCard(s.vcCity || "")};${escVCard(s.vcState || "")};${escVCard(s.vcZip || "")};${escVCard(s.vcCountry || "")}`);
@@ -47,6 +48,7 @@ function generateVCardString(s) {
 }
 
 export default function VcardPage({ page }) {
+  const [showWelcome, setShowWelcome] = useState(true);
   const config = page.config || {};
   
   // Generate download URL
@@ -63,6 +65,10 @@ export default function VcardPage({ page }) {
   
   const addressQuery = [config.vcStreet, config.vcCity, config.vcState, config.vcCountry].filter(Boolean).join(" ");
   const mapUrl = addressQuery ? `https://maps.google.com/?q=${encodeURIComponent(addressQuery)}` : null;
+
+  if (showWelcome && config.welcomeScreenEnabled) {
+    return <WelcomeScreen config={config} onContinue={() => setShowWelcome(false)} />;
+  }
 
   return (
     <div className="min-h-screen bg-[#101415] text-white selection:bg-emerald-500/30 font-sans pb-24 relative overflow-hidden">

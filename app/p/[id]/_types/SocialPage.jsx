@@ -1,7 +1,11 @@
+"use client";
+
+import { useState } from 'react';
 import {
   Globe, Mail, Music, Video, Send, MessageCircle,
   Code2, Users, Briefcase, ExternalLink, Camera, Phone, Hash,
 } from 'lucide-react';
+import WelcomeScreen from "../_components/WelcomeScreen";
 
 const PLATFORM_CONFIG = {
   Instagram: { icon: Camera,        gradient: 'from-purple-500 via-pink-500 to-orange-400' },
@@ -19,7 +23,13 @@ const PLATFORM_CONFIG = {
 };
 
 export default function SocialPage({ page }) {
-  const { pageTitle, pageDescription, links = [] } = page.config ?? {};
+  const config = page.config ?? {};
+  const { pageTitle, pageDescription, links = [] } = config;
+  const [showWelcome, setShowWelcome] = useState(true);
+
+  if (showWelcome && config.welcomeScreenEnabled) {
+    return <WelcomeScreen config={config} onContinue={() => setShowWelcome(false)} />;
+  }
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-slate-900 via-purple-950 to-slate-900 flex flex-col items-center py-16 px-4 overflow-hidden">

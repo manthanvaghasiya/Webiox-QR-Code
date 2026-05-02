@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Copy, Check, Tag, Sparkles, Calendar } from "lucide-react";
+import WelcomeScreen from "../_components/WelcomeScreen";
 
 export default function CouponPage({ page }) {
   const cfg = page.config || {};
@@ -13,12 +14,18 @@ export default function CouponPage({ page }) {
     validUntil, ctaUrl, ctaLabel, terms,
   } = cfg;
 
+  const [showWelcome, setShowWelcome] = useState(true);
   const [copied, setCopied] = useState(false);
+
   function copyCode() {
     if (!code) return;
     navigator.clipboard?.writeText(code);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  }
+
+  if (showWelcome && cfg.welcomeScreenEnabled) {
+    return <WelcomeScreen config={cfg} onContinue={() => setShowWelcome(false)} />;
   }
 
   return (
