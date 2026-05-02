@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   Search, Filter, LayoutGrid, List, ArrowUpDown, X,
-  Plus, Trash2, Pause, Play, ChevronDown, QrCode,
+  Plus, Trash2, Pause, Play, ChevronDown, QrCode, FileSpreadsheet,
 } from "lucide-react";
 import QrCodeCard from "./QrCodeCard";
 import EditContentModal from "./modals/EditContentModal";
@@ -226,13 +226,22 @@ export default function QrListShell({ initialQrs, initialFolders, initialSummary
                 )}
               </p>
             </div>
-            <Link
-              href="/generator"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-brand-600 to-purple-600 text-white text-sm font-bold shadow-lg shadow-brand-500/20 hover:opacity-90 transition-opacity cursor-pointer"
-            >
-              <Plus className="w-4 h-4" />
-              Create QR code
-            </Link>
+            <div className="flex items-center gap-2">
+              <Link
+                href="/dashboard/qr-codes/bulk"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full border border-ink-200 text-sm font-bold text-ink-700 hover:bg-ink-50 transition-colors cursor-pointer"
+              >
+                <FileSpreadsheet className="w-3.5 h-3.5" />
+                Bulk CSV
+              </Link>
+              <Link
+                href="/generator"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-brand-600 to-purple-600 text-white text-sm font-bold shadow-lg shadow-brand-500/20 hover:opacity-90 transition-opacity cursor-pointer"
+              >
+                <Plus className="w-4 h-4" />
+                Create QR code
+              </Link>
+            </div>
           </div>
 
           {/* Toolbar */}

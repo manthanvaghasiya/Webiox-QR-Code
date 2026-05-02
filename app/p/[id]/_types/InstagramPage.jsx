@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { Instagram, ExternalLink } from "lucide-react";
+import { Camera as Instagram, ExternalLink } from "lucide-react";
 
 export default function InstagramPage({ page }) {
   const cfg = page.config || {};

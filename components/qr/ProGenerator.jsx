@@ -21,6 +21,9 @@ import DownloadMenu from "./DownloadMenu";
 import TemplateGallery from "./TemplateGallery";
 import PageCreatedPanel from "./PageCreatedPanel";
 import QrFrameWrapper from "./QrFrameWrapper";
+import TypePickerPreview from "./TypePickerPreview";
+import SaveAsTemplateModal from "./SaveAsTemplateModal";
+import { Bookmark } from "lucide-react";
 
 const TOTAL_STEPS = 3;
 
@@ -275,6 +278,8 @@ export default function ProGenerator({ qr, qrContainerRef }) {
   const [direction, setDirection] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
+  const [previewType, setPreviewType] = useState(null);
+  const [showSaveTemplate, setShowSaveTemplate] = useState(false);
   const [qrName, setQrName] = useState("");
   const [openSections, setOpenSections] = useState({
     colors: true, logo: false, design: false, frame: false, quality: false,
@@ -410,6 +415,9 @@ export default function ProGenerator({ qr, qrContainerRef }) {
               </div>
             </div>
 
+            {/* Two-column: cards + live preview */}
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10">
+            <div className="min-w-0">
             {/* Quick Templates */}
             <div className="mb-8">
               <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2">
@@ -437,12 +445,16 @@ export default function ProGenerator({ qr, qrContainerRef }) {
                         key={tab.id}
                         type="button"
                         onClick={() => { qr.setActiveTab(tab.id); goTo(2); }}
+                        onMouseEnter={() => setPreviewType(tab)}
+                        onFocus={() => setPreviewType(tab)}
                         initial={{ opacity: 0, y: 16 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3, delay: i * 0.03 }}
                         whileHover={{ y: -4, scale: 1.02 }}
                         whileTap={{ scale: 0.96 }}
-                        className="group relative text-left p-4 rounded-2xl border border-white/40 bg-white/70 backdrop-blur-xl shadow-sm hover:shadow-xl hover:border-blue-300 transition-all overflow-hidden cursor-pointer"
+                        className={`group relative text-left p-4 rounded-2xl border bg-white/70 backdrop-blur-xl shadow-sm hover:shadow-xl transition-all overflow-hidden cursor-pointer ${
+                          previewType?.id === tab.id ? "border-blue-400 ring-2 ring-blue-200" : "border-white/40 hover:border-blue-300"
+                        }`}
                       >
                         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 to-purple-500/0 group-hover:from-blue-500/5 group-hover:to-purple-500/10 transition-all" />
                         <div className="relative flex flex-col items-center text-center gap-2.5">
@@ -471,6 +483,13 @@ export default function ProGenerator({ qr, qrContainerRef }) {
                 </button>
               </div>
             )}
+            </div>
+
+            {/* Live preview pane */}
+            <div className="hidden lg:block">
+              <TypePickerPreview tab={previewType} />
+            </div>
+            </div>
           </motion.div>
         )}
 
@@ -712,11 +731,43 @@ export default function ProGenerator({ qr, qrContainerRef }) {
                         className="flex-1 py-2 px-3 bg-white/80 border border-gray-200/60 rounded-xl text-xs font-bold text-gray-700 hover:bg-white disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-1.5">
                         <Copy className="w-3.5 h-3.5" /> Copy
                       </button>
+                      <button
+                        onClick={() => setShowSaveTemplate(true)}
+                        className="py-2 px-3 bg-white/80 border border-gray-200/60 rounded-xl text-xs font-bold text-gray-700 hover:bg-white transition-all flex items-center justify-center gap-1.5"
+                        title="Save current design as a reusable template"
+                      >
+                        <Bookmark className="w-3.5 h-3.5" /> Save as template
+                      </button>
                       <button onClick={qr.resetAll}
                         className="py-2 px-3 bg-white/80 border border-gray-200/60 rounded-xl text-xs font-bold text-gray-500 hover:bg-red-50 hover:text-red-600 transition-all flex items-center justify-center gap-1.5">
                         <RotateCcw className="w-3.5 h-3.5" /> Reset
                       </button>
                     </div>
+
+                    <SaveAsTemplateModal
+                      open={showSaveTemplate}
+                      onClose={() => setShowSaveTemplate(false)}
+                      design={{
+                        fgColor: qr.fgColor,
+                        bgColor: qr.bgColor,
+                        useGradient: qr.useGradient,
+                        gradientColor1: qr.gradientColor1,
+                        gradientColor2: qr.gradientColor2,
+                        gradientType: qr.gradientType,
+                        dotPattern: qr.dotPattern,
+                        cornerStyle: qr.cornerStyle,
+                        eyeBallStyle: qr.eyeBallStyle,
+                        useCustomEyeColor: qr.useCustomEyeColor,
+                        eyeFrameColor: qr.eyeFrameColor,
+                        eyeBallColor: qr.eyeBallColor,
+                        logo: qr.logo,
+                        errorCorrectionLevel: qr.errorCorrectionLevel,
+                        frameStyle: qr.frameStyle,
+                        frameText: qr.frameText,
+                        frameTextColor: qr.frameTextColor,
+                        frameFillColor: qr.frameFillColor,
+                      }}
+                    />
 
                     {/* Hosted page created panel */}
                     {qr.lastCreatedPage && (

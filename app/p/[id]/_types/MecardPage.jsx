@@ -1,6 +1,10 @@
 "use client";
 
-import { Download, Phone, MapPin, Mail, Globe, MessageCircle, Instagram, Linkedin, Twitter, Facebook, Youtube } from "lucide-react";
+import {
+  Download, Phone, MapPin, Mail, Globe, MessageCircle,
+  Camera as Instagram, Briefcase as Linkedin, MessageCircle as Twitter,
+  Users as Facebook, Video as Youtube,
+} from "lucide-react";
 
 // Helper to escape vCard values
 const escVCard = (v) =>
