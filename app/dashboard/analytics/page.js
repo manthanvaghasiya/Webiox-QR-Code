@@ -1,22 +1,43 @@
-import { BarChart3 } from "lucide-react";
-import PageHeader from "@/components/dashboard/PageHeader";
-import EmptyState from "@/components/dashboard/EmptyState";
+import { redirect } from "next/navigation";
+import { ObjectId } from "mongodb";
+import clientPromise from "@/lib/mongodb";
+import { auth } from "@/auth";
+import { findQrCodesByUser } from "@/lib/models/qrCodes";
+import { totalScanCount, uniqueScanCount } from "@/lib/models/scanEvents";
+import AnalyticsListShell from "@/components/dashboard/analytics/AnalyticsListShell";
 
-export default function AnalyticsPage() {
-  return (
-    <div className="max-w-7xl mx-auto px-6 py-8">
-      <PageHeader
-        title="Analytics"
-        description="Track scans, visits, device types, and geographic data across all your QR codes."
-      />
+export default async function AnalyticsPage() {
+  const session = await auth();
+  if (!session?.user) {
+    redirect("/signin?callbackUrl=/dashboard/analytics");
+  }
 
-      <div className="bg-white rounded-3xl border border-ink-100 shadow-card">
-        <EmptyState
-          icon={BarChart3}
-          title="No data to show yet"
-          description="Analytics will appear here once your QR codes start getting scanned. Create a QR code to get started."
-        />
-      </div>
-    </div>
+  const client = await clientPromise;
+  const db = client.db();
+
+  // Fetch user's QR codes
+  const qrs = await findQrCodesByUser(db, session.user.id, { limit: 100 });
+
+  // Fetch scan stats for each QR code
+  const qrsWithStats = await Promise.all(
+    qrs.map(async (qr) => {
+      const [totalScans, uniqueScans] = await Promise.all([
+        totalScanCount(db, qr._id.toString()),
+        uniqueScanCount(db, qr._id.toString()),
+      ]);
+
+      return {
+        ...qr,
+        stats: {
+          totalScans: totalScans || 0,
+          uniqueScans: uniqueScans || 0,
+        },
+      };
+    })
   );
+
+  // Serialize ObjectIds + Dates for the client component
+  const safe = (v) => JSON.parse(JSON.stringify(v));
+
+  return <AnalyticsListShell initialQrs={safe(qrsWithStats)} />;
 }

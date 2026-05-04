@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import {
   ArrowLeft, Edit2, Download, ScanLine, Users,
   Calendar, Pause, Play, RotateCcw, FileSpreadsheet,
@@ -47,7 +46,7 @@ function StatCard({ icon: Icon, label, value, hint, color = "from-brand-500 to-p
   );
 }
 
-export default function QrDetailShell({ qr: initialQr, analytics }) {
+export default function QrDetailShell({ qr: initialQr, analytics, onBack }) {
   const router = useRouter();
   const [qr, setQr] = useState(initialQr);
   const [showEdit, setShowEdit] = useState(false);
@@ -103,13 +102,13 @@ export default function QrDetailShell({ qr: initialQr, analytics }) {
   return (
     <div className="max-w-6xl mx-auto px-6 py-8">
       {/* Breadcrumb / back */}
-      <Link
-        href="/dashboard/qr-codes"
+      <button
+        onClick={onBack || (() => router.push("/dashboard/qr-codes"))}
         className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink-500 hover:text-ink-900 transition-colors mb-4 cursor-pointer"
       >
         <ArrowLeft className="w-4 h-4" />
-        Back to QR Codes
-      </Link>
+        {onBack ? "Back to Analytics" : "Back to QR Codes"}
+      </button>
 
       {/* Header card */}
       <div className="bg-white rounded-3xl border border-ink-100 shadow-card p-6 mb-6">
