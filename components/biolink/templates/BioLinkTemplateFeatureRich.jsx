@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
+import { Download } from 'lucide-react';
 
 export default function BioLinkTemplateFeatureRich({ biolink }) {
   const router = useRouter();
@@ -86,9 +87,21 @@ export default function BioLinkTemplateFeatureRich({ biolink }) {
             ))}
           </div>
 
-          {/* Footer branding */}
-          <div className="text-center text-xs text-gray-500 mt-12">
-            <p>Made with <span className="text-red-500">♥</span> on Webiox</p>
+          {/* Footer branding + vCard */}
+          <div className="text-center mt-12 space-y-4">
+            {/* vCard Download */}
+            <a
+              href={`/api/biolinks/${biolink._id}/vcard`}
+              download
+              className="inline-flex items-center justify-center gap-2 px-6 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 font-semibold text-sm hover:bg-gray-50 transition-colors"
+            >
+              <Download className="w-4 h-4" />
+              Save Contact
+            </a>
+
+            <p className="text-xs text-gray-500">
+              Made with <span className="text-red-500">♥</span> on Webiox
+            </p>
           </div>
         </div>
       </div>

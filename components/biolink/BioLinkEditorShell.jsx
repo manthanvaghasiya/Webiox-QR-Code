@@ -3,9 +3,10 @@
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import {
-  Save, X, Plus, Eye, EyeOff, Edit3, Trash2, ArrowLeft,
+  Save, X, Plus, Eye, EyeOff, Edit3, Trash2, ArrowLeft, Download,
 } from "lucide-react";
 import BioLinkPreview from "./BioLinkPreview";
+import BioLinkQRCard from "./BioLinkQRCard";
 import BlockEditor from "./BlockEditor";
 
 export default function BioLinkEditorShell({ biolink: initialBiolink }) {
@@ -95,7 +96,7 @@ export default function BioLinkEditorShell({ biolink: initialBiolink }) {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
           <button
             onClick={() => router.back()}
             className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 font-medium"
@@ -104,9 +105,18 @@ export default function BioLinkEditorShell({ biolink: initialBiolink }) {
             Back
           </button>
 
-          <h1 className="text-xl font-bold text-gray-900">
+          <h1 className="text-xl font-bold text-gray-900 flex-1 truncate">
             {biolink.title || 'Edit Bio Link'}
           </h1>
+
+          <a
+            href={`/api/biolinks/${biolink._id}/vcard`}
+            download
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-300 text-gray-700 font-semibold text-sm hover:bg-gray-50 transition-colors"
+          >
+            <Download className="w-4 h-4" />
+            <span className="hidden sm:inline">vCard</span>
+          </a>
 
           <button
             onClick={handleSave}
@@ -116,12 +126,12 @@ export default function BioLinkEditorShell({ biolink: initialBiolink }) {
             {saving ? (
               <>
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                Saving...
+                <span className="hidden sm:inline">Saving...</span>
               </>
             ) : (
               <>
                 <Save className="w-4 h-4" />
-                Save
+                <span className="hidden sm:inline">Save</span>
               </>
             )}
           </button>
@@ -308,9 +318,10 @@ export default function BioLinkEditorShell({ biolink: initialBiolink }) {
           </div>
         </div>
 
-        {/* Preview */}
+        {/* Preview & QR */}
         <div className="lg:col-span-1">
-          <div className="sticky top-24">
+          <div className="sticky top-24 space-y-6">
+            {/* Mobile Preview */}
             <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
               <div className="bg-gradient-to-r from-brand-500 to-purple-600 px-4 py-3 flex items-center justify-between">
                 <h3 className="font-semibold text-white text-sm">Live Preview</h3>
@@ -327,6 +338,11 @@ export default function BioLinkEditorShell({ biolink: initialBiolink }) {
 
               <BioLinkPreview biolink={biolink} />
             </div>
+
+            {/* QR Code Card */}
+            {biolink._id && (
+              <BioLinkQRCard biolink={biolink} biolinkId={biolink._id} />
+            )}
           </div>
         </div>
       </div>
