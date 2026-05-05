@@ -7,6 +7,7 @@ import {
   generateSlug,
 } from '@/lib/models/businessProfiles';
 import { createQrCode } from '@/lib/models/qrCodes';
+import { createBiolink } from '@/lib/models/biolinks';
 import { sanitizeProfileData } from '@/lib/sanitize';
 import { customAlphabet } from 'nanoid';
 
@@ -65,6 +66,45 @@ export async function POST(request) {
     // Create the profile
     const profile = await createProfile(db, sanitized);
 
+    // Auto-create a biolink for this business profile
+    const biolink = await createBiolink(db, {
+      userId: session.user.id,
+      title: sanitized.businessName,
+      bio: sanitized.tagline || '',
+      avatarUrl: sanitized.logoUrl || null,
+      blocks: [
+        sanitized.contact?.phone && {
+          id: nanoid8(),
+          type: 'phone',
+          label: 'Call',
+          icon: 'phone',
+          url: `tel:${sanitized.contact.phone}`,
+          order: 0,
+        },
+        sanitized.contact?.email && {
+          id: nanoid8(),
+          type: 'email',
+          label: 'Email',
+          icon: 'email',
+          url: `mailto:${sanitized.contact.email}`,
+          order: 1,
+        },
+        sanitized.contact?.website && {
+          id: nanoid8(),
+          type: 'link',
+          label: 'Website',
+          icon: 'website',
+          url: sanitized.contact.website,
+          order: 2,
+        },
+      ].filter(Boolean),
+      theme: {
+        primaryColor: sanitized.theme?.primaryColor || '#4F46E5',
+        secondaryColor: sanitized.theme?.secondaryColor || '#7C3AED',
+        fontFamily: sanitized.theme?.fontFamily || 'Inter',
+      },
+    });
+
     return NextResponse.json({
       success: true,
       profile: {
@@ -77,7 +117,12 @@ export async function POST(request) {
         shortId: qrRecord.shortId,
         destination,
       },
+      biolink: {
+        _id: biolink._id,
+        slug: biolink.slug,
+      },
       pageUrl: `${baseUrl}/b/${slug}`,
+      biolinkUrl: `${baseUrl}/link/${biolink.slug}`,
     }, { status: 201 });
 
   } catch (err) {
