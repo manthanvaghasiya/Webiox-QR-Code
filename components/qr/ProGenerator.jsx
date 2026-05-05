@@ -23,6 +23,7 @@ import PageCreatedPanel from "./PageCreatedPanel";
 import QrFrameWrapper from "./QrFrameWrapper";
 import TypePickerPreview from "./TypePickerPreview";
 import SaveAsTemplateModal from "./SaveAsTemplateModal";
+import WelcomeScreenSection from "./WelcomeScreenSection";
 import { Bookmark } from "lucide-react";
 
 const TOTAL_STEPS = 3;
@@ -444,7 +445,7 @@ export default function ProGenerator({ qr, qrContainerRef }) {
   const [showSaveTemplate, setShowSaveTemplate] = useState(false);
   const [qrName, setQrName] = useState("");
   const [openSections, setOpenSections] = useState({
-    colors: true, logo: false, design: false, frame: false, quality: false,
+    welcome: false, colors: true, logo: false, design: false, frame: false, quality: false,
   });
 
   const toggle = (k) => setOpenSections((p) => ({ ...p, [k]: !p[k] }));
@@ -709,8 +710,17 @@ export default function ProGenerator({ qr, qrContainerRef }) {
 
             {/* 2-column: Form + Phone Preview */}
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-6">
-              {/* Left: Content form */}
-              <div className="lg:col-span-3">
+              {/* Left: Content form + Welcome Screen */}
+              <div className="lg:col-span-3 space-y-4">
+                {/* Welcome Screen Section */}
+                <AccordionSection title="Welcome Screen" icon={Sparkles} isOpen={openSections.welcome} onToggle={() => toggle("welcome")}>
+                  <WelcomeScreenSection
+                    fields={qr.fields}
+                    onFieldChange={(key, value) => qr.set({ [key]: value })}
+                  />
+                </AccordionSection>
+
+                {/* Content Form */}
                 <div className="rounded-2xl border border-white/30 bg-white/70 backdrop-blur-xl shadow-lg p-6">
                   <h3 className="text-xs font-bold text-gray-800 uppercase tracking-wider mb-4 flex items-center gap-2">
                     <div className="w-1.5 h-4 bg-brand-500 rounded-full" />
@@ -746,6 +756,7 @@ export default function ProGenerator({ qr, qrContainerRef }) {
               </div>
             </div>
 
+
             <div className="flex items-center justify-between">
               <button
                 onClick={() => goTo(1)}
@@ -755,7 +766,7 @@ export default function ProGenerator({ qr, qrContainerRef }) {
               </button>
               <motion.button
                 onClick={async () => {
-                  if (qr.activeTab === "social" || qr.activeTab === "vcard") {
+                  if ((qr.activeTab === "social" || qr.activeTab === "vcard" || qr.activeTab === "mecard" || qr.activeTab === "appstore") && !qr.lastCreatedPage) {
                     await qr.generateQR({ skipSave: false });
                   }
                   goTo(3);
