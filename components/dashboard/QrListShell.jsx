@@ -15,6 +15,7 @@ import CreateFolderModal from "./modals/CreateFolderModal";
 import QrSidebarPanel from "./QrSidebarPanel";
 import EmptyState from "./EmptyState";
 import { downloadQrCode } from "@/lib/qrDownload";
+import { getQrTypesByCategory, getAllQrTypes } from "@/lib/qr-types";
 
 const SORTS = [
   { value: "recent", label: "Last created" },
@@ -70,6 +71,76 @@ function Dropdown({ value, options, onChange, label, icon: Icon }) {
   );
 }
 
+function TypeFilterDropdown({ value, onChange }) {
+  const [open, setOpen] = useState(false);
+  const types = getAllQrTypes();
+  const typesByCategory = getQrTypesByCategory();
+  const current = types.find((t) => t.type === value);
+  const label = value === "all" ? "All Types" : current?.label || "All Types";
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        onBlur={() => setTimeout(() => setOpen(false), 120)}
+        className="flex items-center gap-1.5 h-9 px-3 rounded-xl border border-ink-200 bg-white text-sm font-semibold text-ink-700 hover:border-ink-300 transition-colors cursor-pointer"
+      >
+        {current && <span className="text-base">{current.icon}</span>}
+        {!current && <Filter className="w-3.5 h-3.5 text-ink-400" />}
+        <span className="text-xs uppercase tracking-wide text-ink-400">Type:</span>
+        <span className="truncate max-w-[120px]">{label}</span>
+        <ChevronDown className={`w-3.5 h-3.5 text-ink-400 transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+      {open && (
+        <div className="absolute right-0 top-full mt-1.5 z-30 w-56 bg-white rounded-2xl shadow-glow border border-ink-100 overflow-hidden max-h-96 overflow-y-auto">
+          <button
+            onClick={() => {
+              onChange("all");
+              setOpen(false);
+            }}
+            className={[
+              "block w-full text-left px-3.5 py-2 text-sm transition-colors cursor-pointer border-b border-ink-100",
+              value === "all"
+                ? "bg-brand-50 text-brand-700 font-semibold"
+                : "text-ink-700 hover:bg-ink-50",
+            ].join(" ")}
+          >
+            All Types
+          </button>
+          {Object.entries(typesByCategory).map(([category, items]) => (
+            <div key={category}>
+              <div className="px-3.5 py-2 text-xs font-bold uppercase tracking-wider text-ink-400 bg-ink-50 sticky top-0">
+                {category}
+              </div>
+              {items.map((type) => (
+                <button
+                  key={type.type}
+                  onClick={() => {
+                    onChange(type.type);
+                    setOpen(false);
+                  }}
+                  className={[
+                    "block w-full text-left px-3.5 py-2.5 text-sm transition-colors cursor-pointer flex items-center gap-2",
+                    type.type === value
+                      ? "bg-brand-50 text-brand-700 font-semibold"
+                      : "text-ink-700 hover:bg-ink-50",
+                  ].join(" ")}
+                >
+                  <span className="text-base w-4">{type.icon}</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-semibold truncate">{type.label}</div>
+                    <div className="text-xs text-ink-500 truncate">{type.description}</div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function QrListShell({ initialQrs, initialFolders, initialSummary }) {
   const [qrs, setQrs] = useState(initialQrs || []);
   const [folders, setFolders] = useState(initialFolders || []);
@@ -79,6 +150,7 @@ export default function QrListShell({ initialQrs, initialFolders, initialSummary
   const [status, setStatus] = useState("all");
   const [sort, setSort] = useState("recent");
   const [folderFilter, setFolderFilter] = useState("all"); // "all" | "unassigned" | folderId
+  const [typeFilter, setTypeFilter] = useState("all"); // "all" | qr type
   const [view, setView] = useState("grid");
   const [selected, setSelected] = useState(new Set());
 
@@ -98,6 +170,7 @@ export default function QrListShell({ initialQrs, initialFolders, initialSummary
     if (sort) url.searchParams.set("sort", sort);
     if (folderFilter === "unassigned") url.searchParams.set("folderId", "unassigned");
     else if (folderFilter !== "all") url.searchParams.set("folderId", folderFilter);
+    if (typeFilter !== "all") url.searchParams.set("type", typeFilter);
 
     const t = setTimeout(() => {
       fetch(url, { signal: controller.signal })
@@ -111,7 +184,7 @@ export default function QrListShell({ initialQrs, initialFolders, initialSummary
       controller.abort();
       clearTimeout(t);
     };
-  }, [search, status, sort, folderFilter]);
+  }, [search, status, sort, folderFilter, typeFilter]);
 
   // Refresh summary on first mount if not provided
   useEffect(() => {
@@ -267,6 +340,7 @@ export default function QrListShell({ initialQrs, initialFolders, initialSummary
             </label>
 
             <Dropdown value={status} options={STATUSES} onChange={setStatus} label="Status:" icon={Filter} />
+            <TypeFilterDropdown value={typeFilter} onChange={setTypeFilter} />
             <Dropdown value={sort} options={SORTS} onChange={setSort} label="Sort:" icon={ArrowUpDown} />
 
             <div className="ml-auto flex items-center gap-1 bg-white border border-ink-200 rounded-xl p-1">

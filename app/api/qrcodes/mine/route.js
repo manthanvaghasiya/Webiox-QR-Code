@@ -17,12 +17,13 @@ export async function GET(request) {
     const status = searchParams.get('status') ?? undefined;
     const search = searchParams.get('search') ?? undefined;
     const sort = searchParams.get('sort') ?? 'recent';
+    const type = searchParams.get('type') ?? undefined;
 
     const client = await clientPromise;
     const db = client.db();
 
     const [codes, total] = await Promise.all([
-      findQrCodesByUser(db, session.user.id, { folderId, status, search, sort, limit, skip }),
+      findQrCodesByUser(db, session.user.id, { folderId, status, search, sort, limit, skip, type }),
       countQrCodesByUser(db, session.user.id),
     ]);
 

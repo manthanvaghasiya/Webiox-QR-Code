@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { buildQrCodeStyling } from "@/lib/qrDownload";
 
 const TEMPLATE_EMOJI = {
   starter: "✨", bold: "🔥", elegant: "👑", modern: "🚀", storefront: "🛍️", professional: "💼",
@@ -10,6 +11,33 @@ const TEMPLATE_EMOJI = {
 export default function ProfileCard({ profile, onDelete }) {
   const [deleting, setDeleting] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const qrContainerRef = useRef(null);
+
+  // Generate QR code visualization
+  useEffect(() => {
+    if (qrContainerRef.current && profile.qrCodeId) {
+      try {
+        const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://webiox.in';
+        const qrCode = buildQrCodeStyling(
+          {
+            _id: profile.qrCodeId,
+            destination: `${baseUrl}/b/${profile.slug}`,
+            type: 'business-profile',
+            isDynamic: true,
+            design: {
+              fgColor: profile.theme?.primaryColor || '#000000',
+              bgColor: '#ffffff',
+            },
+          },
+          150
+        );
+        qrContainerRef.current.innerHTML = "";
+        qrCode.append(qrContainerRef.current);
+      } catch (e) {
+        console.error("Failed to render QR code:", e);
+      }
+    }
+  }, [profile]);
 
   const handleDelete = async () => {
     setDeleting(true);
@@ -25,6 +53,7 @@ export default function ProfileCard({ profile, onDelete }) {
   };
 
   const profileUrl = `/b/${profile.slug}`;
+  const biolinkUrl = profile.biolinkSlug ? `/link/${profile.biolinkSlug}` : null;
   const templateEmoji = TEMPLATE_EMOJI[profile.theme?.template] || "✨";
 
   return (
@@ -55,7 +84,57 @@ export default function ProfileCard({ profile, onDelete }) {
           </div>
         </div>
 
-        {/* Stats */}
+        {/* QR Code + Digital Profile Links */}
+        <div className="bg-gray-50 rounded-xl p-3 mb-4">
+          <div className="grid grid-cols-3 gap-3">
+            {/* QR Code */}
+            <div className="flex flex-col items-center">
+              <div
+                className="w-20 h-20 bg-white rounded-lg border border-gray-200 p-1 flex items-center justify-center [&_canvas]:!w-full [&_canvas]:!h-full"
+                ref={qrContainerRef}
+              />
+              <p className="text-[10px] text-gray-500 font-semibold mt-1.5 text-center">QR Code</p>
+            </div>
+
+            {/* Profile Links */}
+            <div className="flex flex-col justify-center gap-1.5">
+              <a
+                href={profileUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-white border border-gray-200 text-[11px] font-bold text-gray-600 hover:bg-gray-100 transition-colors text-center justify-center"
+              >
+                <span>🏢</span>
+                <span className="hidden sm:inline">Profile</span>
+              </a>
+              {biolinkUrl && (
+                <a
+                  href={biolinkUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-white border border-gray-200 text-[11px] font-bold text-gray-600 hover:bg-gray-100 transition-colors text-center justify-center"
+                >
+                  <span>🔗</span>
+                  <span className="hidden sm:inline">Biolink</span>
+                </a>
+              )}
+            </div>
+
+            {/* Analytics Summary */}
+            <div className="flex flex-col justify-center gap-1">
+              <div className="text-center bg-white rounded-lg p-1.5 border border-gray-200">
+                <div className="text-base font-extrabold text-gray-900">{profile.totalScans ?? 0}</div>
+                <div className="text-[10px] text-gray-500 font-semibold">Scans</div>
+              </div>
+              <div className="text-center bg-white rounded-lg p-1.5 border border-gray-200">
+                <div className="text-base font-extrabold text-gray-900">{profile.totalCalls ?? 0}</div>
+                <div className="text-[10px] text-gray-500 font-semibold">Calls</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Extended Stats */}
         <div className="grid grid-cols-3 gap-2 mb-4">
           <Stat label="Scans" value={profile.totalScans ?? 0} icon="📊" />
           <Stat label="Calls" value={profile.totalCalls ?? 0} icon="📞" />

@@ -4,11 +4,18 @@ import { useEffect, useRef, useState } from "react";
 import { Copy, Check, BarChart2, ExternalLink, PauseCircle } from "lucide-react";
 import Link from "next/link";
 import { buildQrCodeStyling } from "@/lib/qrDownload";
+import { getQrTypeMetadata } from "@/lib/qr-types";
 import QrCardMenu from "./QrCardMenu";
 
 function typeLabel(t) {
   if (!t) return "QR";
-  return t.charAt(0).toUpperCase() + t.slice(1);
+  const meta = getQrTypeMetadata(t);
+  return meta?.label || (t.charAt(0).toUpperCase() + t.slice(1));
+}
+
+function typeIcon(t) {
+  const meta = getQrTypeMetadata(t);
+  return meta?.icon || "🔗";
 }
 
 function formatRelative(date) {
@@ -81,7 +88,8 @@ export default function QrCodeCard({
             <h3 className="text-sm font-bold text-ink-900 truncate">
               {qr.name || `Untitled ${typeLabel(qr.type)}`}
             </h3>
-            <span className="px-1.5 py-px rounded-md bg-ink-100 text-ink-600 text-[10px] font-bold uppercase tracking-wider">
+            <span className="flex items-center gap-1 px-1.5 py-px rounded-md bg-ink-100 text-ink-600 text-[10px] font-bold uppercase tracking-wider">
+              <span className="text-xs">{typeIcon(qr.type)}</span>
               {typeLabel(qr.type)}
             </span>
             {qr.isPaused && (
@@ -164,7 +172,8 @@ export default function QrCodeCard({
 
       <div className="p-4 flex flex-col items-center justify-center bg-ink-50/50 border-b border-ink-100 relative pt-10">
         <div className="absolute top-3 left-1/2 -translate-x-1/2 flex gap-1">
-          <span className="px-2 py-0.5 rounded-md bg-ink-100 text-ink-600 text-[10px] font-bold uppercase tracking-wider">
+          <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-ink-100 text-ink-600 text-[10px] font-bold uppercase tracking-wider">
+            <span className="text-sm">{typeIcon(qr.type)}</span>
             {typeLabel(qr.type)}
           </span>
           {qr.isPaused ? (

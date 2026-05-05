@@ -63,9 +63,6 @@ export async function POST(request) {
 
     sanitized.qrCodeId = qrRecord._id;
 
-    // Create the profile
-    const profile = await createProfile(db, sanitized);
-
     // Auto-create a biolink for this business profile
     const biolink = await createBiolink(db, {
       userId: session.user.id,
@@ -104,6 +101,12 @@ export async function POST(request) {
         fontFamily: sanitized.theme?.fontFamily || 'Inter',
       },
     });
+
+    sanitized.biolinkId = biolink._id;
+    sanitized.biolinkSlug = biolink.slug;
+
+    // Create the profile
+    const profile = await createProfile(db, sanitized);
 
     return NextResponse.json({
       success: true,
