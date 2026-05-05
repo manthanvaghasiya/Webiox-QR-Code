@@ -11,41 +11,50 @@ const TEMPLATE_EMOJI = {
 export default function ProfileCard({ profile, onDelete }) {
   const [deleting, setDeleting] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [error, setError] = useState(null);
   const qrContainerRef = useRef(null);
 
   // Generate QR code visualization
   useEffect(() => {
-    if (qrContainerRef.current && profile.qrCodeId) {
-      try {
-        const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://webiox.in';
-        const qrCode = buildQrCodeStyling(
-          {
-            _id: profile.qrCodeId,
-            destination: `${baseUrl}/b/${profile.slug}`,
-            type: 'business-profile',
-            isDynamic: true,
-            design: {
-              fgColor: profile.theme?.primaryColor || '#000000',
-              bgColor: '#ffffff',
-            },
+    const container = qrContainerRef.current;
+    if (!container || !profile.qrCodeId) return;
+
+    try {
+      const baseUrl = typeof window !== 'undefined' ? window.location.origin : process.env.NEXT_PUBLIC_BASE_URL || 'https://webiox.in';
+      const qrCode = buildQrCodeStyling(
+        {
+          _id: profile.qrCodeId,
+          destination: `${baseUrl}/b/${profile.slug}`,
+          type: 'business-profile',
+          isDynamic: true,
+          design: {
+            fgColor: profile.theme?.primaryColor || '#000000',
+            bgColor: '#ffffff',
           },
-          150
-        );
-        qrContainerRef.current.innerHTML = "";
-        qrCode.append(qrContainerRef.current);
-      } catch (e) {
-        console.error("Failed to render QR code:", e);
-      }
+        },
+        150
+      );
+      // Clear previous content safely
+      container.replaceChildren();
+      qrCode.append(container);
+    } catch (e) {
+      console.error("Failed to render QR code:", e);
+      setError("QR code generation failed");
     }
-  }, [profile]);
+  }, [profile.qrCodeId, profile.slug, profile.theme?.primaryColor]);
 
   const handleDelete = async () => {
     setDeleting(true);
+    setError(null);
     try {
       const res = await fetch(`/api/business-profiles/${profile._id}`, { method: "DELETE" });
-      if (res.ok) onDelete(profile._id);
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || `Delete failed with status ${res.status}`);
+      }
+      onDelete(profile._id);
     } catch (e) {
-      console.error("Delete failed", e);
+      setError(e instanceof Error ? e.message : "Failed to delete profile");
     } finally {
       setDeleting(false);
       setShowConfirm(false);
@@ -60,6 +69,12 @@ export default function ProfileCard({ profile, onDelete }) {
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
       {/* Color bar */}
       <div className="h-1.5 w-full" style={{ backgroundColor: profile.theme?.primaryColor || "#4F46E5" }} />
+
+      {error && (
+        <div className="bg-red-50 border-b border-red-200 px-4 py-3 text-sm text-red-700">
+          {error}
+        </div>
+      )}
 
       <div className="p-5">
         {/* Header */}

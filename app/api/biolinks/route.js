@@ -8,6 +8,7 @@ import {
   createIndexes,
   isSlugReserved,
 } from '@/lib/models/biolinks';
+import { validateStringLength, validateTheme, validateBlocks } from '@/lib/validation';
 
 /**
  * POST /api/biolinks — Create a new bio-link
@@ -25,12 +26,33 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
   }
 
-  if (!body.title?.trim()) {
-    return NextResponse.json({ error: 'title is required' }, { status: 400 });
+  if (!body.title?.trim() || !validateStringLength(body.title, 1, 100)) {
+    return NextResponse.json({ error: 'title must be 1-100 characters' }, { status: 400 });
   }
 
   if (body.slug && isSlugReserved(body.slug)) {
     return NextResponse.json({ error: 'slug is reserved' }, { status: 400 });
+  }
+
+  // Validate optional fields
+  if (body.bio && !validateStringLength(body.bio, 0, 500)) {
+    return NextResponse.json({ error: 'bio must be 0-500 characters' }, { status: 400 });
+  }
+
+  if (body.theme) {
+    try {
+      validateTheme(body.theme);
+    } catch (err) {
+      return NextResponse.json({ error: err.message }, { status: 400 });
+    }
+  }
+
+  if (body.blocks) {
+    try {
+      validateBlocks(body.blocks);
+    } catch (err) {
+      return NextResponse.json({ error: err.message }, { status: 400 });
+    }
   }
 
   const client = await clientPromise;
@@ -54,8 +76,7 @@ export async function POST(request) {
       blocks: body.blocks || [],
     });
 
-    const serialized = JSON.parse(JSON.stringify(biolink));
-    return NextResponse.json(serialized, { status: 201 });
+    return NextResponse.json(biolink, { status: 201 });
   } catch (error) {
     console.error('POST /api/biolinks error:', error);
     if (error.message.includes('E11000') || error.message.includes('duplicate')) {
@@ -68,7 +89,7 @@ export async function POST(request) {
 /**
  * GET /api/biolinks — List user's bio-links
  */
-export async function GET(request) {
+export async function GET() {
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -79,8 +100,7 @@ export async function GET(request) {
 
   try {
     const biolinks = await findBiolinksByUser(db, session.user.id);
-    const serialized = JSON.parse(JSON.stringify(biolinks));
-    return NextResponse.json(serialized);
+    return NextResponse.json(biolinks);
   } catch (error) {
     console.error('GET /api/biolinks error:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

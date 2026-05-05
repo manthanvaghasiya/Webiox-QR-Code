@@ -7,6 +7,7 @@ import {
   deleteProfile,
 } from '@/lib/models/businessProfiles';
 import { sanitizeProfileData } from '@/lib/sanitize';
+import { logAuditEvent, getAuditContext, AUDIT_ACTIONS } from '@/lib/audit-log';
 
 /**
  * GET /api/business-profiles/:id — Fetch single profile (owner only)
@@ -84,15 +85,42 @@ export async function DELETE(request, { params }) {
   const { id } = await params;
   const client = await clientPromise;
   const db = client.db();
+  const auditContext = getAuditContext(request, session);
 
   try {
+    const profile = await findProfileById(db, id, session.user.id);
+    if (!profile) {
+      return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    }
+
     const result = await deleteProfile(db, id, session.user.id);
     if (!result) {
       return NextResponse.json({ error: 'Not found' }, { status: 404 });
     }
+
+    // Log deletion
+    await logAuditEvent({
+      action: AUDIT_ACTIONS.PROFILE_DELETE,
+      ...auditContext,
+      resourceType: 'business_profile',
+      resourceId: id,
+      changes: {
+        businessName: profile.businessName,
+        slug: profile.slug,
+      },
+    });
+
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error(`DELETE /api/business-profiles/${id} failed:`, err);
+    await logAuditEvent({
+      action: AUDIT_ACTIONS.PROFILE_DELETE,
+      ...auditContext,
+      resourceType: 'business_profile',
+      resourceId: id,
+      status: 'error',
+      error: err.message,
+    });
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

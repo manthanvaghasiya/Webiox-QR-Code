@@ -5,6 +5,7 @@ import {
   createProfile,
   findProfilesByUser,
   generateSlug,
+  generateSlugCandidate,
 } from '@/lib/models/businessProfiles';
 import { createQrCode } from '@/lib/models/qrCodes';
 import { createBiolink } from '@/lib/models/biolinks';
@@ -130,6 +131,98 @@ export async function POST(request) {
 
   } catch (err) {
     console.error('POST /api/business-profiles failed:', err);
+
+    // Handle duplicate slug (race condition) — retry with new slug
+    if (err.code === 11000 || err.message.includes('duplicate')) {
+      try {
+        console.log('Slug collision detected, retrying...');
+        const sanitized = sanitizeProfileData(body);
+        sanitized.userId = session.user.id;
+
+        // Generate a new slug with forced random suffix
+        const newSlug = generateSlugCandidate(sanitized.businessName);
+        sanitized.slug = newSlug;
+
+        const destination = `${baseUrl}/b/${newSlug}`;
+        const qrRecord = await createQrCode(db, {
+          userId: session.user.id,
+          type: 'business-profile',
+          isDynamic: true,
+          shortId: nanoid8(),
+          destination,
+          name: sanitized.businessName,
+        });
+
+        sanitized.qrCodeId = qrRecord._id;
+
+        const biolink = await createBiolink(db, {
+          userId: session.user.id,
+          title: sanitized.businessName,
+          bio: sanitized.tagline || '',
+          avatarUrl: sanitized.logoUrl || null,
+          blocks: [
+            sanitized.contact?.phone && {
+              id: nanoid8(),
+              type: 'phone',
+              label: 'Call',
+              icon: 'phone',
+              url: `tel:${sanitized.contact.phone}`,
+              order: 0,
+            },
+            sanitized.contact?.email && {
+              id: nanoid8(),
+              type: 'email',
+              label: 'Email',
+              icon: 'email',
+              url: `mailto:${sanitized.contact.email}`,
+              order: 1,
+            },
+            sanitized.contact?.website && {
+              id: nanoid8(),
+              type: 'link',
+              label: 'Website',
+              icon: 'website',
+              url: sanitized.contact.website,
+              order: 2,
+            },
+          ].filter(Boolean),
+          theme: {
+            primaryColor: sanitized.theme?.primaryColor || '#4F46E5',
+            secondaryColor: sanitized.theme?.secondaryColor || '#7C3AED',
+            fontFamily: sanitized.theme?.fontFamily || 'Inter',
+          },
+        });
+
+        sanitized.biolinkId = biolink._id;
+        sanitized.biolinkSlug = biolink.slug;
+
+        const profile = await createProfile(db, sanitized);
+
+        return NextResponse.json({
+          success: true,
+          profile: {
+            _id: profile._id,
+            slug: profile.slug,
+            businessName: profile.businessName,
+          },
+          qr: {
+            _id: qrRecord._id,
+            shortId: qrRecord.shortId,
+            destination,
+          },
+          biolink: {
+            _id: biolink._id,
+            slug: biolink.slug,
+          },
+          pageUrl: `${baseUrl}/b/${newSlug}`,
+          biolinkUrl: `${baseUrl}/link/${biolink.slug}`,
+        }, { status: 201 });
+      } catch (retryErr) {
+        console.error('Retry failed:', retryErr);
+        return NextResponse.json({ error: 'Failed to create profile (slug collision)' }, { status: 500 });
+      }
+    }
+
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

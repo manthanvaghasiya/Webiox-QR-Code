@@ -149,10 +149,12 @@ export default function QrListShell({ initialQrs, initialFolders, initialSummary
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
   const [sort, setSort] = useState("recent");
-  const [folderFilter, setFolderFilter] = useState("all"); // "all" | "unassigned" | folderId
-  const [typeFilter, setTypeFilter] = useState("all"); // "all" | qr type
+  const [folderFilter, setFolderFilter] = useState("all");
+  const [typeFilter, setTypeFilter] = useState("all");
   const [view, setView] = useState("grid");
   const [selected, setSelected] = useState(new Set());
+  const [loadError, setLoadError] = useState(null);
+  const [operationError, setOperationError] = useState(null);
 
   const [activeQr, setActiveQr] = useState(null);
   const [showEditContent, setShowEditContent] = useState(false);
@@ -174,11 +176,23 @@ export default function QrListShell({ initialQrs, initialFolders, initialSummary
 
     const t = setTimeout(() => {
       fetch(url, { signal: controller.signal })
-        .then((r) => r.json())
-        .then((j) => {
-          if (j?.success) setQrs(j.data);
+        .then((r) => {
+          if (!r.ok) throw new Error(`Failed with status ${r.status}`);
+          return r.json();
         })
-        .catch(() => {});
+        .then((j) => {
+          if (j?.success) {
+            setQrs(j.data);
+            setLoadError(null);
+          } else {
+            throw new Error(j?.error || 'Failed to load QR codes');
+          }
+        })
+        .catch((err) => {
+          if (err.name === 'AbortError') return;
+          setLoadError('Failed to load QR codes. Please try again.');
+          console.error('Load error:', err);
+        });
     }, 200);
     return () => {
       controller.abort();
@@ -190,9 +204,16 @@ export default function QrListShell({ initialQrs, initialFolders, initialSummary
   useEffect(() => {
     if (summary) return;
     fetch("/api/user/summary")
-      .then((r) => r.json())
-      .then((j) => j?.success && setSummary(j.data))
-      .catch(() => {});
+      .then((r) => {
+        if (!r.ok) throw new Error(`Failed with status ${r.status}`);
+        return r.json();
+      })
+      .then((j) => {
+        if (j?.success) setSummary(j.data);
+      })
+      .catch((err) => {
+        console.error('Failed to load summary:', err);
+      });
   }, [summary]);
 
   function toggleSelected(id) {
@@ -232,30 +253,50 @@ export default function QrListShell({ initialQrs, initialFolders, initialSummary
   async function handleBulkDelete() {
     if (selected.size === 0) return;
     if (!confirm(`Delete ${selected.size} QR codes? This can't be undone.`)) return;
+    setOperationError(null);
     const ids = Array.from(selected);
-    await Promise.all(
-      ids.map((id) => fetch(`/api/qrcodes/${id}`, { method: "DELETE" }))
-    );
-    setQrs((prev) => prev.filter((q) => !selected.has(q._id)));
-    clearSelection();
+    try {
+      const results = await Promise.allSettled(
+        ids.map((id) => fetch(`/api/qrcodes/${id}`, { method: "DELETE" }))
+      );
+      const failed = results.filter((r) => r.status === 'rejected' || (r.value && !r.value.ok)).length;
+      if (failed > 0) {
+        setOperationError(`Failed to delete ${failed} QR code(s). Others were deleted successfully.`);
+      }
+      setQrs((prev) => prev.filter((q) => !selected.has(q._id)));
+      clearSelection();
+    } catch (err) {
+      setOperationError('Failed to delete QR codes. Please try again.');
+      console.error('Bulk delete error:', err);
+    }
   }
 
   async function handleBulkPause(pause = true) {
     if (selected.size === 0) return;
+    setOperationError(null);
     const ids = Array.from(selected);
-    await Promise.all(
-      ids.map((id) =>
-        fetch(`/api/qrcodes/${id}`, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ isPaused: pause }),
-        })
-      )
-    );
-    setQrs((prev) =>
-      prev.map((q) => (selected.has(q._id) ? { ...q, isPaused: pause } : q))
-    );
-    clearSelection();
+    try {
+      const results = await Promise.allSettled(
+        ids.map((id) =>
+          fetch(`/api/qrcodes/${id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ isPaused: pause }),
+          })
+        )
+      );
+      const failed = results.filter((r) => r.status === 'rejected' || (r.value && !r.value.ok)).length;
+      if (failed > 0) {
+        setOperationError(`Failed to update ${failed} QR code(s). Others were updated successfully.`);
+      }
+      setQrs((prev) =>
+        prev.map((q) => (selected.has(q._id) ? { ...q, isPaused: pause } : q))
+      );
+      clearSelection();
+    } catch (err) {
+      setOperationError('Failed to update QR codes. Please try again.');
+      console.error('Bulk pause error:', err);
+    }
   }
 
   function openEditContent(qr) { setActiveQr(qr); setShowEditContent(true); }
@@ -288,6 +329,16 @@ export default function QrListShell({ initialQrs, initialFolders, initialSummary
 
       <div className="flex-1 min-w-0">
         <div className="max-w-6xl mx-auto px-6 py-8">
+          {loadError && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+              {loadError}
+            </div>
+          )}
+          {operationError && (
+            <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-700">
+              {operationError}
+            </div>
+          )}
           {/* Header */}
           <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
             <div>

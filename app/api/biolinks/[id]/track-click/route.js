@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 import clientPromise from '@/lib/mongodb';
 import { recordBlockClick } from '@/lib/models/biolinks';
+import { validateBlockId } from '@/lib/validation';
 
 /**
  * POST /api/biolinks/:id/track-click — Record a click on a block
@@ -21,8 +22,8 @@ export async function POST(request, { params }) {
   }
 
   const { blockId } = body;
-  if (!blockId) {
-    return NextResponse.json({ error: 'blockId is required' }, { status: 400 });
+  if (!blockId || !validateBlockId(blockId)) {
+    return NextResponse.json({ error: 'Invalid blockId format' }, { status: 400 });
   }
 
   const client = await clientPromise;

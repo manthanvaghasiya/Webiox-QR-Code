@@ -3,6 +3,10 @@ import { ObjectId } from 'mongodb';
 import { auth } from '@/auth';
 import clientPromise from '@/lib/mongodb';
 import { findBiolinkById, updateBiolink, deleteBiolink } from '@/lib/models/biolinks';
+import { validateBlocks, validateTheme, validateStringLength } from '@/lib/validation';
+import { customAlphabet } from 'nanoid';
+
+const nanoid6 = customAlphabet('0123456789abcdefghijklmnopqrstuvwxyz', 6);
 
 /**
  * GET /api/biolinks/:id — Get a specific bio-link
@@ -26,8 +30,7 @@ export async function GET(request, { params }) {
       return NextResponse.json({ error: 'Not found.' }, { status: 404 });
     }
 
-    const serialized = JSON.parse(JSON.stringify(biolink));
-    return NextResponse.json(serialized);
+    return NextResponse.json(biolink);
   } catch (error) {
     console.error('GET /api/biolinks/:id error:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
@@ -62,22 +65,43 @@ export async function PUT(request, { params }) {
   try {
     const patch = {};
 
-    if (body.title !== undefined) patch.title = body.title;
-    if (body.bio !== undefined) patch.bio = body.bio;
+    if (body.title !== undefined) {
+      if (!validateStringLength(body.title, 1, 100)) {
+        return NextResponse.json({ error: 'Title must be 1-100 characters' }, { status: 400 });
+      }
+      patch.title = body.title;
+    }
+
+    if (body.bio !== undefined) {
+      if (body.bio && !validateStringLength(body.bio, 0, 500)) {
+        return NextResponse.json({ error: 'Bio must be 0-500 characters' }, { status: 400 });
+      }
+      patch.bio = body.bio;
+    }
+
     if (body.avatarUrl !== undefined) patch.avatarUrl = body.avatarUrl;
     if (body.backgroundUrl !== undefined) patch.backgroundUrl = body.backgroundUrl;
-    if (body.theme !== undefined) patch.theme = body.theme;
-    if (body.blocks !== undefined) {
-      patch.blocks = Array.isArray(body.blocks) ? body.blocks.map((b, idx) => ({
-        id: b.id || require('crypto').randomBytes(3).toString('hex'),
-        type: b.type || 'link',
-        label: b.label || '',
-        icon: b.icon || '',
-        url: b.url || '',
-        color: b.color || null,
-        order: b.order ?? idx,
-      })) : [];
+
+    if (body.theme !== undefined) {
+      try {
+        patch.theme = validateTheme(body.theme);
+      } catch (err) {
+        return NextResponse.json({ error: err.message }, { status: 400 });
+      }
     }
+
+    if (body.blocks !== undefined) {
+      try {
+        const validatedBlocks = validateBlocks(body.blocks);
+        patch.blocks = validatedBlocks.map(b => ({
+          ...b,
+          id: b.id || nanoid6(),
+        }));
+      } catch (err) {
+        return NextResponse.json({ error: err.message }, { status: 400 });
+      }
+    }
+
     if (body.isPublished !== undefined) patch.isPublished = body.isPublished;
 
     const updated = await updateBiolink(db, id, session.user.id, patch);
@@ -85,8 +109,7 @@ export async function PUT(request, { params }) {
       return NextResponse.json({ error: 'Not found or unauthorized' }, { status: 404 });
     }
 
-    const serialized = JSON.parse(JSON.stringify(updated));
-    return NextResponse.json(serialized);
+    return NextResponse.json(updated);
   } catch (error) {
     console.error('PUT /api/biolinks/:id error:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
