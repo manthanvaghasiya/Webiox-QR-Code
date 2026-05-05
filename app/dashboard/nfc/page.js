@@ -17,6 +17,10 @@ function statusBadge(status) {
   return colors[status] || "bg-gray-100 text-gray-800";
 }
 
+function formatCardType(type) {
+  return type.charAt(0).toUpperCase() + type.slice(1).toLowerCase();
+}
+
 export default function NfcPage() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -132,7 +136,7 @@ export default function NfcPage() {
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
                         <h3 className="font-semibold text-gray-900">
-                          {order.cardType} Card Order
+                          {formatCardType(order.cardType)} Card Order
                         </h3>
                         <span
                           className={`text-xs font-semibold px-2.5 py-1 rounded-full capitalize ${statusBadge(

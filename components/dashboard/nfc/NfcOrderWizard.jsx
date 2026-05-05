@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { ChevronRight, ChevronLeft, Zap, AlertCircle } from "lucide-react";
-import { CARD_TYPE_INFO, calculatePrice } from "@/lib/models/nfcOrders";
+import { CARD_TYPE_INFO, calculatePrice } from "@/lib/nfc-pricing";
 
 export default function NfcOrderWizard({ profiles, onSuccess }) {
   const [step, setStep] = useState(1);
@@ -11,7 +11,7 @@ export default function NfcOrderWizard({ profiles, onSuccess }) {
 
   // Form state
   const [selectedProfileId, setSelectedProfileId] = useState("");
-  const [cardType, setCardType] = useState("PVC");
+  const [cardType, setCardType] = useState("pvc");
   const [quantity, setQuantity] = useState(25);
   const [design, setDesign] = useState({
     color: "#4F46E5",

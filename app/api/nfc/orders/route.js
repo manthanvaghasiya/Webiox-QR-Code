@@ -35,9 +35,9 @@ export async function POST(request) {
     );
   }
 
-  if (!cardType || !['PVC', 'Metal', 'Wood'].includes(cardType)) {
+  if (!cardType || !['pvc', 'metal', 'wood'].includes(cardType.toLowerCase())) {
     return NextResponse.json(
-      { error: 'Invalid cardType. Must be PVC, Metal, or Wood' },
+      { error: 'Invalid cardType. Must be pvc, metal, or wood' },
       { status: 400 }
     );
   }
@@ -126,7 +126,7 @@ export async function POST(request) {
     const order = await createNfcOrder(db, {
       userId,
       profileId: new ObjectId(profileId),
-      cardType,
+      cardType: cardType.toLowerCase(),
       design,
       contactInfo,
       quantity,

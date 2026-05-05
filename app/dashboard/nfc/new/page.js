@@ -6,6 +6,10 @@ import { ArrowLeft, CheckCircle } from "lucide-react";
 import Link from "next/link";
 import NfcOrderWizard from "@/components/dashboard/nfc/NfcOrderWizard";
 
+function formatCardType(type) {
+  return type.charAt(0).toUpperCase() + type.slice(1).toLowerCase();
+}
+
 export default function NfcOrderPage() {
   const router = useRouter();
   const [profiles, setProfiles] = useState([]);
@@ -73,7 +77,7 @@ export default function NfcOrderPage() {
                     Card Type
                   </p>
                   <p className="font-bold text-gray-900">
-                    {successOrder.cardType}
+                    {formatCardType(successOrder.cardType)}
                   </p>
                 </div>
                 <div>
