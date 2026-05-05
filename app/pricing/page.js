@@ -12,79 +12,95 @@ const TIERS = [
     id: "free",
     icon: Sparkles,
     name: "Free",
-    tagline: "For absolutely everyone",
+    tagline: "Perfect to start",
+    price: "₹0",
+    period: "/month",
     description:
-      "All features, unlimited QR codes, all 22+ types, logos, colors, all export formats. No credit card.",
+      "Get started with core features. Perfect for individuals and small projects.",
     bullets: [
-      "Unlimited QR codes",
-      "All 22+ content types",
-      "Logos, colors, gradients",
-      "PNG, SVG, WebP exports up to 2000px",
-      "No watermark, ever",
+      "1 business profile",
+      "3 QR codes",
+      "10 bio-link blocks",
+      "Basic analytics",
+      "Standard designs",
+      "Community support",
     ],
-    cta: "Get Started Free",
+    cta: "Get Started",
+    ctaHref: "/auth/signup",
     highlight: false,
   },
   {
-    id: "team",
+    id: "pro",
     icon: Heart,
-    name: "Free for Teams",
-    tagline: "Same as Free, but you can pretend",
+    name: "Pro",
+    tagline: "Most popular",
+    price: "₹499",
+    period: "/month",
     description:
-      "Same as Free. We just put \"team\" in the name so it sounds enterprise-y.",
+      "Unlimited profiles and QR codes with AI-powered insights and advanced features.",
     bullets: [
-      "Everything in Free",
-      "Same exact features",
-      "Same exact price ($0)",
-      "Now with the word \"team\"",
-      "Tell your boss it's a paid tier",
+      "Unlimited profiles",
+      "Unlimited QR codes (25+ types)",
+      "Unlimited bio-link blocks",
+      "AI-powered insights",
+      "Advanced analytics",
+      "Custom designs & themes",
+      "Priority support",
+      "NFC card ordering",
     ],
-    cta: "Get Started Free",
+    cta: "Start Free Trial",
+    ctaHref: "/auth/signup?plan=pro",
     highlight: true,
   },
   {
-    id: "enterprise",
+    id: "business",
     icon: Building2,
-    name: "Free Enterprise",
-    tagline: "Yes, also free",
+    name: "Business",
+    tagline: "For enterprises",
+    price: "₹1,499",
+    period: "/month",
     description:
-      "Yes, also free. Contact us for a custom free plan that's the same as the other free plans.",
+      "Everything you need for teams. White-label, API access, and dedicated support.",
     bullets: [
-      "Everything in Free for Teams",
-      "Same exact features (still)",
-      "We'll send a fancy PDF if you want",
-      "Custom invoice for $0.00",
-      "A handshake on a Zoom call",
+      "Everything in Pro",
+      "Team collaboration (5+ members)",
+      "REST API access",
+      "White-label solutions",
+      "Custom domain support",
+      "Advanced security",
+      "Dedicated account manager",
+      "Custom integrations",
     ],
-    cta: "Get Started Free",
+    cta: "Contact Sales",
+    ctaHref: "mailto:sales@webiox.com",
     highlight: false,
   },
 ];
 
 const FAQS = [
   {
-    q: "Is it really free?",
-    a: "Yes. Every feature, every QR type, every export format. No paywall, no trial timer, no credit card. We make money elsewhere — eventually maybe through the API and dynamic-QR analytics, but the generator stays free.",
+    q: "Can I try Pro for free?",
+    a: "Yes! All Pro plan features come with a 14-day free trial. No credit card required to start.",
   },
   {
-    q: "What's the catch?",
-    a: "There isn't one. Generated QRs work forever, have no watermark, and you can use them commercially. The only thing we ever may charge for is dynamic/trackable QR codes (where you want analytics), and that's still on the roadmap.",
+    q: "What's the Free plan good for?",
+    a: "The Free plan is perfect for trying out Webiox. You get 1 business profile, 3 QR codes, and basic analytics. Upgrade to Pro anytime for unlimited everything.",
   },
   {
-    q: "Do QR codes expire?",
-    a: "No. A static QR code is just an encoded string — it's a piece of math, not a service. Once you download it, it works as long as the destination URL works. The QR itself never expires.",
+    q: "Can I upgrade or downgrade anytime?",
+    a: "Absolutely. Change plans anytime and we'll prorate your subscription. Downgrade and your extra profiles stay active until the end of your billing cycle.",
   },
   {
-    q: "Can I use them commercially?",
-    a: "Absolutely. Use them on menus, business cards, packaging, ads, billboards — whatever. There's no licensing fee, no attribution requirement, and no watermark to remove.",
+    q: "What are NFC cards?",
+    a: "NFC cards are physical tap cards that link directly to your business profile. Customers tap their phone on the card to instantly access your profile, gallery, services, and contact info. Available in PVC, Metal, and Wood with volume discounts.",
   },
   {
-    q: "Do you track scans?",
-    a: "Static QR codes can't be tracked by anyone — they encode a destination directly. We do log generation requests on our server (so we can show you a history if you opt in to dynamic mode), but standard generated QRs don't phone home.",
+    q: "How much do NFC cards cost?",
+    a: "NFC cards are available to Pro and Business plan users. Pricing: PVC ₹50/card, Metal ₹150/card, Wood ₹200/card. Volume discounts: 5% at 25+, 10% at 50+, 15% at 100+ cards.",
   },
   {
-    q: "What's the difference between Simple and Pro mode?",
-    a: "Simple has the 10 most-used types in a clean accordion layout. Pro has 12 advanced types (vCard, payments, file uploads, social bundles) in a wizard layout with a card-based picker. Same engine, same features — just different UX.",
+    q: "Is there a contract or setup fee?",
+    a: "No contracts, no setup fees. Pay monthly and cancel anytime. Business plan customers get a dedicated account manager and can negotiate custom pricing.",
   },
 ];
 
@@ -130,7 +146,7 @@ export default function PricingPage() {
           transition={{ duration: 0.5 }}
           className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/70 backdrop-blur-sm border border-white/40 shadow-sm text-xs font-bold text-blue-700 uppercase tracking-wider mb-6"
         >
-          <Tag className="w-3.5 h-3.5" /> Pricing
+          <Tag className="w-3.5 h-3.5" /> Transparent Pricing
         </motion.div>
         <motion.h1
           initial={{ opacity: 0, y: 16 }}
@@ -138,11 +154,11 @@ export default function PricingPage() {
           transition={{ duration: 0.6 }}
           className="text-4xl md:text-6xl font-bold text-gray-900 tracking-tight mb-5 leading-[1.05]"
         >
-          Everything is{" "}
+          Simple,{" "}
           <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
-            FREE.
+            Transparent
           </span>{" "}
-          Forever.
+          Pricing
         </motion.h1>
         <motion.p
           initial={{ opacity: 0, y: 16 }}
@@ -150,7 +166,7 @@ export default function PricingPage() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="text-lg md:text-xl text-gray-600 font-medium max-w-2xl mx-auto leading-relaxed"
         >
-          Pick a plan. They&apos;re all $0. We promise.
+          Start free, grow with us. No hidden fees, no surprises.
         </motion.p>
       </section>
 
@@ -171,7 +187,7 @@ export default function PricingPage() {
             >
               {tier.highlight && (
                 <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs font-bold uppercase tracking-wider shadow-md">
-                  Most popular (jk, they&apos;re identical)
+                  Most popular
                 </span>
               )}
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center shadow-md mb-4">
@@ -182,8 +198,8 @@ export default function PricingPage() {
                 {tier.tagline}
               </p>
               <div className="flex items-baseline gap-1 mb-5">
-                <span className="text-5xl font-bold text-gray-900">$0</span>
-                <span className="text-sm text-gray-500 font-medium">/forever</span>
+                <span className="text-5xl font-bold text-gray-900">{tier.price}</span>
+                <span className="text-sm text-gray-500 font-medium">{tier.period}</span>
               </div>
               <p className="text-sm text-gray-600 leading-relaxed mb-5">{tier.description}</p>
               <ul className="space-y-2.5 mb-7 flex-1">
@@ -195,7 +211,7 @@ export default function PricingPage() {
                 ))}
               </ul>
               <Link
-                href="/generator"
+                href={tier.ctaHref}
                 className={`w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full font-bold text-sm transition-all ${
                   tier.highlight
                     ? "bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 text-white shadow-lg shadow-blue-600/20"
@@ -207,9 +223,8 @@ export default function PricingPage() {
             </motion.div>
           ))}
         </div>
-        <p className="text-center text-xs text-gray-500 mt-8 italic">
-          Yes, all three buttons go to the same generator. Yes, all three plans
-          are identical. Yes, this entire page is a bit of a joke.
+        <p className="text-center text-xs text-gray-500 mt-8">
+          All plans include a 14-day free trial. No credit card required.
         </p>
       </section>
 

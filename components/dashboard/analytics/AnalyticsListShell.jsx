@@ -6,6 +6,7 @@ import {
   Search, Filter, ScanLine,
 } from "lucide-react";
 import QrDetailShell from "./QrDetailShell";
+import AIInsightsPanel from "./AIInsightsPanel";
 
 function formatDateConsistent(dateString) {
   const date = new Date(dateString);
@@ -165,6 +166,13 @@ export default function AnalyticsListShell({ initialQrs = [] }) {
             <p className="text-3xl font-bold text-gray-900">{activeQrs}</p>
             <p className="text-xs text-gray-400 mt-1">With at least 1 scan</p>
           </div>
+        </div>
+      )}
+
+      {/* AI Insights */}
+      {qrs.length > 0 && (
+        <div className="mb-8">
+          <AIInsightsPanel />
         </div>
       )}
 

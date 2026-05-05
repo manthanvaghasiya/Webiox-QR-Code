@@ -1,12 +1,20 @@
 import { NextResponse } from 'next/server';
-import { generateProfileContent } from '@/lib/aiProfileGenerator';
+import { auth } from '@/auth';
+import { generateProfileContentAI } from '@/lib/ai/client';
 
 /**
  * POST /api/business-profiles/generate
- * Generate AI content for a business profile.
+ * Generate AI content for a business profile using Claude.
+ * Requires authentication.
  * Body: { businessName, category, keywords[] }
  */
 export async function POST(request) {
+  // Require authentication
+  const session = await auth();
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   let body;
   try {
     body = await request.json();
@@ -21,7 +29,7 @@ export async function POST(request) {
   }
 
   try {
-    const result = generateProfileContent({
+    const result = await generateProfileContentAI({
       businessName: String(businessName).slice(0, 120),
       category: String(category || 'general').slice(0, 60),
       keywords: Array.isArray(keywords)
