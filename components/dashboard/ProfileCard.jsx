@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect, useRef } from "react";
-import { buildQrCodeStyling } from "@/lib/qrDownload";
+import { useState, useEffect } from "react";
 
 const TEMPLATE_EMOJI = {
   starter: "✨", bold: "🔥", elegant: "👑", modern: "🚀", storefront: "🛍️", professional: "💼",
@@ -12,7 +11,6 @@ export default function ProfileCard({ profile, onDelete }) {
   const [deleting, setDeleting] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [error, setError] = useState(null);
-  const qrContainerRef = useRef(null);
 
   // Generate QR code visualization
   useEffect(() => {
@@ -41,6 +39,11 @@ export default function ProfileCard({ profile, onDelete }) {
       console.error("Failed to render QR code:", e);
       setError("QR code generation failed");
     }
+
+    // Cleanup: clear container on unmount
+    return () => {
+      if (container) container.replaceChildren();
+    };
   }, [profile.qrCodeId, profile.slug, profile.theme?.primaryColor]);
 
   const handleDelete = async () => {
@@ -62,7 +65,8 @@ export default function ProfileCard({ profile, onDelete }) {
   };
 
   const profileUrl = `/b/${profile.slug}`;
-  const biolinkUrl = profile.biolinkSlug ? `/link/${profile.biolinkSlug}` : null;
+  const baseUrl = typeof window !== 'undefined' ? window.location.host : process.env.NEXT_PUBLIC_BASE_URL?.replace(/^https?:\/\//, '') || 'webiox.in';
+  const displayUrl = `${baseUrl}/b/${profile.slug}`;
   const templateEmoji = TEMPLATE_EMOJI[profile.theme?.template] || "✨";
 
   return (
@@ -84,7 +88,12 @@ export default function ProfileCard({ profile, onDelete }) {
             style={{ backgroundColor: `${profile.theme?.primaryColor || "#4F46E5"}15` }}
           >
             {profile.logoUrl ? (
-              <img src={profile.logoUrl} alt={profile.businessName} className="w-full h-full object-cover rounded-xl" />
+              <img
+                src={profile.logoUrl}
+                alt={profile.businessName}
+                className="w-full h-full object-cover rounded-xl"
+                onError={(e) => { e.currentTarget.style.display = 'none'; }}
+              />
             ) : (
               profile.businessName?.[0]?.toUpperCase() || "B"
             )}
@@ -93,61 +102,12 @@ export default function ProfileCard({ profile, onDelete }) {
             <h3 className="font-extrabold text-gray-900 truncate">{profile.businessName}</h3>
             <p className="text-xs text-gray-500 truncate mt-0.5">{profile.tagline || "No tagline"}</p>
             <div className="flex items-center gap-2 mt-1">
-              <span className="text-[10px] text-gray-400 font-mono">webiox.in/b/{profile.slug}</span>
+              <span className="text-[10px] text-gray-400 font-mono">{displayUrl}</span>
               <span className="text-xs">{templateEmoji}</span>
             </div>
           </div>
         </div>
 
-        {/* QR Code + Digital Profile Links */}
-        <div className="bg-gray-50 rounded-xl p-3 mb-4">
-          <div className="grid grid-cols-3 gap-3">
-            {/* QR Code */}
-            <div className="flex flex-col items-center">
-              <div
-                className="w-20 h-20 bg-white rounded-lg border border-gray-200 p-1 flex items-center justify-center [&_canvas]:!w-full [&_canvas]:!h-full"
-                ref={qrContainerRef}
-              />
-              <p className="text-[10px] text-gray-500 font-semibold mt-1.5 text-center">QR Code</p>
-            </div>
-
-            {/* Profile Links */}
-            <div className="flex flex-col justify-center gap-1.5">
-              <a
-                href={profileUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-white border border-gray-200 text-[11px] font-bold text-gray-600 hover:bg-gray-100 transition-colors text-center justify-center"
-              >
-                <span>🏢</span>
-                <span className="hidden sm:inline">Profile</span>
-              </a>
-              {biolinkUrl && (
-                <a
-                  href={biolinkUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-white border border-gray-200 text-[11px] font-bold text-gray-600 hover:bg-gray-100 transition-colors text-center justify-center"
-                >
-                  <span>🔗</span>
-                  <span className="hidden sm:inline">Biolink</span>
-                </a>
-              )}
-            </div>
-
-            {/* Analytics Summary */}
-            <div className="flex flex-col justify-center gap-1">
-              <div className="text-center bg-white rounded-lg p-1.5 border border-gray-200">
-                <div className="text-base font-extrabold text-gray-900">{profile.totalScans ?? 0}</div>
-                <div className="text-[10px] text-gray-500 font-semibold">Scans</div>
-              </div>
-              <div className="text-center bg-white rounded-lg p-1.5 border border-gray-200">
-                <div className="text-base font-extrabold text-gray-900">{profile.totalCalls ?? 0}</div>
-                <div className="text-[10px] text-gray-500 font-semibold">Calls</div>
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* Extended Stats */}
         <div className="grid grid-cols-3 gap-2 mb-4">
@@ -183,7 +143,10 @@ export default function ProfileCard({ profile, onDelete }) {
         ) : (
           <div className="flex gap-2">
             <button
-              onClick={() => setShowConfirm(false)}
+              onClick={() => {
+                setShowConfirm(false);
+                setError(null);
+              }}
               className="flex-1 py-2 rounded-xl bg-gray-100 text-xs font-bold text-gray-600 hover:bg-gray-200 transition-colors"
             >
               Cancel

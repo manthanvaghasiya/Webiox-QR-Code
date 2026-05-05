@@ -24,6 +24,7 @@ export async function GET(request) {
       profileCount,
       totalScans,
       nfcOrderCount,
+      totalProfileVisits,
       recentQrs,
       recentProfiles,
     ] = await Promise.all([
@@ -51,6 +52,16 @@ export async function GET(request) {
       db
         .collection('nfc_orders')
         .countDocuments({ userId }),
+
+      // Sum total profile visits from ALL active profiles
+      db
+        .collection('business_profiles')
+        .aggregate([
+          { $match: { userId, isActive: true } },
+          { $group: { _id: null, total: { $sum: '$totalScans' } } }
+        ])
+        .toArray()
+        .then((r) => r[0]?.total || 0),
 
       // Get recent QR codes (last 5)
       db
@@ -85,11 +96,6 @@ export async function GET(request) {
         .toArray(),
     ]);
 
-    // Calculate total profile visits (sum of totalScans from all profiles)
-    const profileVisits = recentProfiles.reduce(
-      (sum, p) => sum + (p.totalScans || 0),
-      0
-    );
 
     return NextResponse.json({
       success: true,
@@ -97,7 +103,7 @@ export async function GET(request) {
         qrCodes: qrCodeCount,
         profiles: profileCount,
         totalScans,
-        profileVisits,
+        profileVisits: totalProfileVisits,
         nfcOrders: nfcOrderCount,
       },
       recent: {

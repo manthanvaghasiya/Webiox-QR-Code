@@ -1,6 +1,7 @@
   "use client";
 
 import { useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import WizardProgressBar from "./wizard/WizardProgressBar";
 import WizardStepBasic from "./wizard/WizardStepBasic";
@@ -44,6 +45,7 @@ const INITIAL_DATA = {
 };
 
 export default function ProfileWizard({ mode = "create", initialData = null }) {
+  const router = useRouter();
   const [step, setStep] = useState(1);
   const [dir, setDir] = useState(1);
   const [data, setData] = useState(initialData || INITIAL_DATA);
@@ -51,6 +53,7 @@ export default function ProfileWizard({ mode = "create", initialData = null }) {
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState(null);
   const [result, setResult] = useState(null);
+  const [showSavedBanner, setShowSavedBanner] = useState(false);
 
   const update = useCallback((patch) => {
     setData((prev) => ({ ...prev, ...patch }));
@@ -130,7 +133,17 @@ export default function ProfileWizard({ mode = "create", initialData = null }) {
       }
 
       const json = await res.json();
-      setResult(json);
+
+      // Edit mode: redirect back to profiles page
+      if (isEdit) {
+        setShowSavedBanner(true);
+        setTimeout(() => {
+          router.push('/dashboard/profiles');
+        }, 800);
+      } else {
+        // Create mode: show full success screen
+        setResult(json);
+      }
     } catch (e) {
       setError(e.message);
     } finally {
@@ -138,8 +151,8 @@ export default function ProfileWizard({ mode = "create", initialData = null }) {
     }
   };
 
-  // Success screen
-  if (result) {
+  // Success screen — only for create mode
+  if (result && mode === "create") {
     return <ProfileSuccessScreen result={result} businessName={data.businessName} />;
   }
 
@@ -191,8 +204,16 @@ export default function ProfileWizard({ mode = "create", initialData = null }) {
             </AnimatePresence>
           </div>
 
+          {/* Saved banner */}
+          {showSavedBanner && (
+            <div className="mt-4 px-4 py-3 rounded-xl bg-green-50 border border-green-200 text-green-700 text-sm font-medium flex items-center gap-2 animate-pulse">
+              <span>✓</span>
+              Changes saved! Redirecting...
+            </div>
+          )}
+
           {/* Error */}
-          {error && (
+          {error && !showSavedBanner && (
             <div className="mt-4 px-4 py-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm font-medium flex items-start gap-2">
               <span className="mt-0.5">⚠️</span>
               {error}

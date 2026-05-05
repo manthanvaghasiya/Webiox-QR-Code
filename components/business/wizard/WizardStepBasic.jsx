@@ -88,6 +88,12 @@ export default function WizardStepBasic({ data, onChange }) {
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             onKeyDown={addKeyword}
+            onBlur={() => {
+              if (keyword.trim()) {
+                const event = { key: 'Enter' };
+                addKeyword(event);
+              }
+            }}
           />
         </div>
         <p className="text-xs text-gray-400 mt-2">
