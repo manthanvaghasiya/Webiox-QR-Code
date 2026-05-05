@@ -16,14 +16,14 @@ const TIERS = [
     price: "₹0",
     period: "/month",
     description:
-      "Get started with core features. Perfect for individuals and small projects.",
+      "Try Webiox with essential features. Perfect for testing the platform.",
     bullets: [
       "1 business profile",
-      "3 QR codes",
-      "10 bio-link blocks",
-      "Basic analytics",
-      "Standard designs",
+      "3 QR codes (5 types)",
+      "Basic bio-link (5 blocks)",
+      "Standard profile designs",
       "Community support",
+      "Limited profile customization",
     ],
     cta: "Get Started",
     ctaHref: "/auth/signup",
@@ -37,16 +37,16 @@ const TIERS = [
     price: "₹499",
     period: "/month",
     description:
-      "Unlimited profiles and QR codes with AI-powered insights and advanced features.",
+      "Unlimited business profiles with all QR code types and custom design options.",
     bullets: [
-      "Unlimited profiles",
+      "Unlimited business profiles",
       "Unlimited QR codes (25+ types)",
       "Unlimited bio-link blocks",
-      "AI-powered insights",
-      "Advanced analytics",
       "Custom designs & themes",
-      "Priority support",
+      "Advanced profile customization",
       "NFC card ordering",
+      "Priority email support",
+      "AI profile suggestions",
     ],
     cta: "Start Free Trial",
     ctaHref: "/auth/signup?plan=pro",
@@ -56,19 +56,21 @@ const TIERS = [
     id: "business",
     icon: Building2,
     name: "Business",
-    tagline: "For enterprises",
+    tagline: "Full power + Analytics",
     price: "₹1,499",
     period: "/month",
     description:
-      "Everything you need for teams. White-label, API access, and dedicated support.",
+      "Everything in Pro plus advanced analytics, team features, and dedicated support.",
     bullets: [
       "Everything in Pro",
+      "Advanced analytics & insights",
+      "AI-powered recommendations",
       "Team collaboration (5+ members)",
       "REST API access",
       "White-label solutions",
       "Custom domain support",
-      "Advanced security",
       "Dedicated account manager",
+      "Priority phone & chat support",
       "Custom integrations",
     ],
     cta: "Contact Sales",
@@ -80,15 +82,19 @@ const TIERS = [
 const FAQS = [
   {
     q: "Can I try Pro for free?",
-    a: "Yes! All Pro plan features come with a 14-day free trial. No credit card required to start.",
+    a: "Yes! All Pro plan features come with a 14-day free trial. No credit card required to start. Perfect for testing unlimited profiles and QR codes.",
   },
   {
-    q: "What's the Free plan good for?",
-    a: "The Free plan is perfect for trying out Webiox. You get 1 business profile, 3 QR codes, and basic analytics. Upgrade to Pro anytime for unlimited everything.",
+    q: "What's included in each plan?",
+    a: "Free: 1 profile, 3 QR codes, basic features. Pro: Unlimited profiles & QR codes, NFC ordering, NO analytics. Business: Everything in Pro PLUS advanced analytics, team features, and dedicated support.",
+  },
+  {
+    q: "When do I get analytics?",
+    a: "Analytics and insights are available in the Business plan (₹1,499/month). This includes AI-powered recommendations and detailed performance metrics for all your profiles.",
   },
   {
     q: "Can I upgrade or downgrade anytime?",
-    a: "Absolutely. Change plans anytime and we'll prorate your subscription. Downgrade and your extra profiles stay active until the end of your billing cycle.",
+    a: "Absolutely. Change plans anytime and we'll prorate your subscription. Upgrading from Pro to Business instantly unlocks analytics for all your profiles.",
   },
   {
     q: "What are NFC cards?",
@@ -97,10 +103,6 @@ const FAQS = [
   {
     q: "How much do NFC cards cost?",
     a: "NFC cards are available to Pro and Business plan users. Pricing: PVC ₹50/card, Metal ₹150/card, Wood ₹200/card. Volume discounts: 5% at 25+, 10% at 50+, 15% at 100+ cards.",
-  },
-  {
-    q: "Is there a contract or setup fee?",
-    a: "No contracts, no setup fees. Pay monthly and cancel anytime. Business plan customers get a dedicated account manager and can negotiate custom pricing.",
   },
 ];
 
