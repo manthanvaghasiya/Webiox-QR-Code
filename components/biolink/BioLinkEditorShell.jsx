@@ -1,3 +1,13 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// BioLinkEditorShell — bio-link editor page
+//
+// Two-pane editor: left side has profile info, theme colors, and a list of
+// link blocks (with BlockEditor for add/edit modal); right side shows a
+// sticky BioLinkPreview and BioLinkQRCard. Saves via PUT /api/biolinks/[id]
+// and offers a vCard download link.
+// Used in: app/dashboard/biolinks/[id]/edit/page.js.
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 import { useState, useCallback } from "react";

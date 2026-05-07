@@ -1,3 +1,12 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// BreakdownTable — top-N analytics breakdown card
+//
+// Generic ranked list (#, label, scan count, % bar) used for OS, device,
+// browser, country, and city breakdowns. Caps at 10 rows and shows an
+// italic "No data yet" empty state.
+// Used in: components/dashboard/analytics/QrDetailShell.jsx.
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 export default function BreakdownTable({ title, rows, columnLabel = "Item" }) {

@@ -1,3 +1,11 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// USER PASSWORD — Change the authenticated user's password.
+//
+// POST /api/user/password — Verify currentPassword, then update to newPassword
+//   (8+ chars). Rejects OAuth-only accounts.
+// (Auth required: yes  ·  Admin only: no)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { auth } from "@/auth";

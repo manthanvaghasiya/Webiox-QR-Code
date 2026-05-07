@@ -1,3 +1,11 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// FOLDERS COLLECTION — List and create QR-organizing folders.
+//
+// GET  /api/folders — List the current user's folders.
+// POST /api/folders — Create a new folder (name required, optional color).
+// (Auth required: yes  ·  Admin only: no)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
 import { auth } from '@/auth';

@@ -1,3 +1,12 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// QrListShell — main "My QR Codes" page
+//
+// Renders the folder sidebar, search/status/type/sort toolbar, grid/list view
+// toggle, bulk-action bar (pause/resume/delete), and grid of QrCodeCards.
+// Owns filter state, debounced re-fetching, and all edit/delete/move modals.
+// Used in: app/dashboard/qr-codes/page.js.
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 import { useEffect, useState } from "react";

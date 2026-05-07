@@ -1,3 +1,13 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// QR CODES ITEM — Read, update, and delete a single QR code.
+//
+// GET    /api/qrcodes/:id — Fetch one QR (admins bypass owner scope).
+// PATCH  /api/qrcodes/:id — Update name/destination/isPaused/folderId/shortId/
+//   design/campaign metadata; static QR destinations are immutable.
+// DELETE /api/qrcodes/:id — Delete the QR code.
+// (Auth required: yes  ·  Admin only: no — admins have wider scope)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
 import { auth } from '@/auth';

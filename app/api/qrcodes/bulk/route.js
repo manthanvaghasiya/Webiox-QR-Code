@@ -1,3 +1,11 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// QR CODES BULK CREATE — Create many QR codes in one request.
+//
+// POST /api/qrcodes/bulk — Accepts up to 500 rows; returns per-row created/
+//   failed results.
+// (Auth required: yes  ·  Admin only: no)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
 import { auth } from '@/auth';

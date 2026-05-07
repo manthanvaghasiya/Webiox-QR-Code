@@ -1,3 +1,13 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// SimpleGenerator — Free / quick QR generator UI
+//
+// Hero, optional template gallery, scrollable type-tab bar (Simple subset of
+// QR_TABS), and a left-side accordion (content / colors / logo / design /
+// frame / quality) paired with a sticky live preview, download menu, and
+// copy/reset actions. Mobile shows a stacked preview.
+// Used in: app/generator/page.js (Free tier path).
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 import { useState, useRef } from "react";

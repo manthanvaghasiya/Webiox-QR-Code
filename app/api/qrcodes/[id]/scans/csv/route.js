@@ -1,3 +1,11 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// QR CODE SCANS CSV — Export scan events for one QR as CSV.
+//
+// GET /api/qrcodes/:id/scans/csv?start=&end= — Streams up to 50k scan events
+//   as text/csv attachment.
+// (Auth required: yes  ·  Admin only: no — admins see any QR)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 import clientPromise from '@/lib/mongodb';

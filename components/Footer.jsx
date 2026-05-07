@@ -1,3 +1,11 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Footer — global marketing-site footer
+//
+// Dark four-column footer with brand blurb, Product / Company / Legal link
+// columns, social icons, and copyright row.
+// Used in: components/NavbarFooterWrapper.jsx (public marketing routes only).
+// ─────────────────────────────────────────────────────────────────────────────
+
 import Link from "next/link";
 import { X, Code2, BriefcaseBusiness } from "lucide-react";
 import Logo from "@/components/Logo";

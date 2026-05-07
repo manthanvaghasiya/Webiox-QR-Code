@@ -1,3 +1,12 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// ContentForms — per-type input forms for the QR generator
+//
+// Big switch keyed on `activeTab` that renders the right input fields for each
+// QR type (URL, vCard Plus, meCard, WiFi, event, bitcoin, app store, file
+// uploads, social, etc.). Receives a shared state bag `s` and `set` merger.
+// Used in: components/qr/SimpleGenerator.jsx, components/qr/ProGenerator.jsx.
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 import { useState } from "react";
 import { Upload, ChevronDown, ChevronUp, User, Phone, Mail, Building, MapPin, Globe, FileText, Share2, Image, Briefcase } from "lucide-react";

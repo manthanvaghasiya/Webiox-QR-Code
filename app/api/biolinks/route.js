@@ -1,3 +1,11 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// BIOLINKS COLLECTION — Create and list bio-link landing pages.
+//
+// POST /api/biolinks — Create a new bio-link (validates title/bio/theme/blocks).
+// GET  /api/biolinks — List the current user's bio-links.
+// (Auth required: yes  ·  Admin only: no)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import clientPromise from '@/lib/mongodb';

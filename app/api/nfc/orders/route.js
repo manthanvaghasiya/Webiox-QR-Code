@@ -1,3 +1,12 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// NFC ORDERS COLLECTION — Create and list NFC card orders for a user.
+//
+// POST /api/nfc/orders — Create new NFC card order (validates cardType,
+//   quantity 1-500, design, contactInfo; verifies profile ownership).
+// GET  /api/nfc/orders — List the current user's NFC orders.
+// (Auth required: yes  ·  Admin only: no)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 import { auth } from '@/auth';

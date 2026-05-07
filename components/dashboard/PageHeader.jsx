@@ -1,3 +1,10 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// PageHeader — generic dashboard page heading row
+//
+// Title + optional description on the left, optional action slot on the right.
+// Used in: dashboard pages that need a consistent page header.
+// ─────────────────────────────────────────────────────────────────────────────
+
 export default function PageHeader({ title, description, action }) {
   return (
     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-8">

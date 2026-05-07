@@ -1,3 +1,11 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// BlockEditor — add/edit form for a single bio-link button
+//
+// Inputs for label, URL, optional icon (from a curated emoji list), and
+// optional per-button color override. Calls onSave with the form data.
+// Used in: components/biolink/BioLinkEditorShell.jsx (inline + modal).
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 import { useState } from "react";

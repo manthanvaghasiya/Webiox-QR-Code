@@ -1,3 +1,10 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// QR TEMPLATES ITEM — Delete a saved QR design template.
+//
+// DELETE /api/templates/:id — Remove the template (owner only).
+// (Auth required: yes  ·  Admin only: no)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 import clientPromise from '@/lib/mongodb';

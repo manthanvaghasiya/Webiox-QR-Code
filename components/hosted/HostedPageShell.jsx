@@ -1,3 +1,11 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// HostedPageShell — chrome for /p/[shortId] hosted landing pages
+//
+// Themed wrapper (bg color or animated gradient mesh), optional logo+title
+// header, ShareButton, content slot, and a "Powered by Webiox" footer.
+// Used in: hosted-page templates rendered under /p/[shortId].
+// ─────────────────────────────────────────────────────────────────────────────
+
 import Link from "next/link";
 import ShareButton from "./ShareButton";
 

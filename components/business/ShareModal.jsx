@@ -1,3 +1,12 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// ShareModal — bottom-sheet share dialog for a business profile
+//
+// Renders a QRCodeSVG, copyable URL, and WhatsApp / native-share / download-QR
+// buttons. Locks body scroll while open and falls back to execCommand("copy")
+// on browsers without clipboard API.
+// Used in: components/business/ProfileActionBar.jsx.
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 import { useState, useEffect } from "react";

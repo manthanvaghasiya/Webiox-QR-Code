@@ -1,3 +1,12 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// DashboardShell — authenticated /dashboard chrome
+//
+// App-layout shell with desktop sidebar, mobile drawer, sticky topbar (page
+// title, search, notifications, user menu with plan badge + sign-out), and an
+// animated page-transition main area. Renders nav links and free-plan upsell.
+// Used in: app/dashboard/layout.js.
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 import { useState, useRef, useEffect } from "react";

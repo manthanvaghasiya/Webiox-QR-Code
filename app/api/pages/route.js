@@ -1,3 +1,11 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// PAGES COLLECTION — Create token-protected dynamic landing pages.
+//
+// POST /api/pages — Validate input, create page, return shortId+editToken plus
+//   public pageUrl and editUrl.
+// (Auth required: no — token-gated  ·  Admin only: no)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from 'next/server';
 import { createPage } from '@/lib/db/pages';
 import { readJsonBodyWithLimit, validatePageInput } from '@/lib/validation/pages';

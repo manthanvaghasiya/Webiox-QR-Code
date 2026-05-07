@@ -1,3 +1,12 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Navbar — top marketing-site navigation bar
+//
+// Floating glass nav bar with logo, route pills (Home / QR Studio / Business /
+// NFC / Pricing), Log in / Sign up CTAs, and a mobile drawer. Hides on scroll
+// styling shifts and uses Framer Motion for the active-pill indicator.
+// Used in: components/NavbarFooterWrapper.jsx (public marketing routes only).
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 import Link from "next/link";

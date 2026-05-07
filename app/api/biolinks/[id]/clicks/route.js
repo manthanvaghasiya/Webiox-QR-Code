@@ -1,3 +1,10 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// BIOLINK CLICKS — Per-block click analytics for a bio-link.
+//
+// GET /api/biolinks/:id/clicks — Return total clicks plus per-block breakdown.
+// (Auth required: yes  ·  Admin only: no)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 import { auth } from '@/auth';

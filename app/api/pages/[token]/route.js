@@ -1,3 +1,12 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// PAGES ITEM — Read and partially update a page via its edit token.
+//
+// GET   /api/pages/:token — Fetch page by edit token (404 on bad token).
+// PATCH /api/pages/:token — Partial update; type immutable, type-specific
+//   config validated against existing type.
+// (Auth required: edit token in URL  ·  Admin only: no)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from 'next/server';
 import { getPageByEditToken, updatePage } from '@/lib/db/pages';
 import { readJsonBodyWithLimit, validatePageInput } from '@/lib/validation/pages';

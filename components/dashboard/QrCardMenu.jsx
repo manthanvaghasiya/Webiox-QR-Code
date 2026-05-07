@@ -1,3 +1,12 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// QrCardMenu — kebab dropdown for a QR code row
+//
+// Click-outside-aware popover that exposes Download, Details, Edit content,
+// Edit short URL, Move to folder, Pause/Resume, and Delete actions. Items
+// adapt to whether the QR is dynamic vs static.
+// Used in: components/dashboard/QrCodeCard.jsx.
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 import { useState, useRef, useEffect } from "react";

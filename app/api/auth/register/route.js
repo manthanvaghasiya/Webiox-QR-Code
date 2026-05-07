@@ -1,3 +1,11 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// AUTH REGISTER — Create a new user account with email + password.
+//
+// POST /api/auth/register — Validate name/email/password, hash password, store
+//   user. Returns 409 if email already in use.
+// (Auth required: no  ·  Admin only: no)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { hashPassword } from "@/lib/auth/password";

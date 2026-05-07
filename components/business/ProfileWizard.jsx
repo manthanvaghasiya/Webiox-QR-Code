@@ -1,4 +1,14 @@
-  "use client";
+// ─────────────────────────────────────────────────────────────────────────────
+// ProfileWizard — 6-step business-profile create/edit wizard
+//
+// Steps: 1 basics, 2 AI-generated tagline/about/services, 3 contact + address,
+// 4 social, 5 services, 6 template pick. Animated slide transitions, calls
+// /api/business-profiles/generate for AI and POST/PUT for save. Branches into
+// ProfileSuccessScreen on create, redirects on edit.
+// Used in: /business-profile, app/dashboard/profiles/[id]/edit/page.js.
+// ─────────────────────────────────────────────────────────────────────────────
+
+"use client";
 
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";

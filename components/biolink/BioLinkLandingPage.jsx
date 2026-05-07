@@ -1,3 +1,11 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// BioLinkLandingPage — public /link/[slug] bio-link renderer
+//
+// Picks a bio-link template (currently feature-rich for all keys) from
+// biolink.theme.template, injects optional Google Font, and renders it.
+// Used in: app/link/[slug]/page.js (public bio-link route).
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 import BioLinkTemplateFeatureRich from './templates/BioLinkTemplateFeatureRich';

@@ -1,3 +1,10 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// BIOLINK VCARD — Download a .vcf contact card for the bio-link.
+//
+// GET /api/biolinks/:id/vcard — Stream a vCard file as text/vcard attachment.
+// (Auth required: no  ·  Admin only: no)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 import clientPromise from '@/lib/mongodb';

@@ -1,3 +1,12 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// ProfileSuccessScreen — celebration screen after profile creation
+//
+// Confetti, success check, profile URL with copy/preview, downloadable
+// QRCodeSVG, WhatsApp share + NFC card CTA, edit-profile / dashboard links,
+// and an NFC upsell card.
+// Used in: components/business/ProfileWizard.jsx (create mode only).
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 import { useState, useEffect, useRef } from "react";

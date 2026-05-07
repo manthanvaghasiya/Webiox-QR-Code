@@ -1,3 +1,10 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// BIOLINK TRACK CLICK — Record a click on a single bio-link block.
+//
+// POST /api/biolinks/:id/track-click — Increment click count for given blockId.
+// (Auth required: no — public tracking endpoint  ·  Admin only: no)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 import clientPromise from '@/lib/mongodb';

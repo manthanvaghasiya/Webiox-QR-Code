@@ -1,3 +1,11 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// AUTH RESET PASSWORD — Complete password reset using a one-time token.
+//
+// POST /api/auth/reset-password — Verify+consume reset token, then update the
+//   user's password hash.
+// (Auth required: reset token in body  ·  Admin only: no)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { hashPassword } from "@/lib/auth/password";

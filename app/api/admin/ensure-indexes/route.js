@@ -1,3 +1,10 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// ADMIN ENSURE INDEXES — Create/verify all required MongoDB indexes.
+//
+// POST /api/admin/ensure-indexes — Run ensureIndexes() across all collections.
+// (Auth required: yes — Bearer ADMIN_SECRET header)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
 import { ensureIndexes } from '@/lib/models/index';

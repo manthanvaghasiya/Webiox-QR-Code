@@ -1,3 +1,10 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// ADMIN DB STATS — Inspect MongoDB collections and document counts.
+//
+// POST /api/admin/db-stats — List all collections in DB with document counts.
+// (Auth required: yes  ·  Admin only: yes)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import clientPromise from "@/lib/mongodb";

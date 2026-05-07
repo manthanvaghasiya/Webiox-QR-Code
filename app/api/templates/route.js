@@ -1,3 +1,11 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// QR TEMPLATES COLLECTION — List and create reusable QR design templates.
+//
+// GET  /api/templates — List the current user's saved templates.
+// POST /api/templates — Save a new template (design object required).
+// (Auth required: yes  ·  Admin only: no)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
 import { auth } from '@/auth';

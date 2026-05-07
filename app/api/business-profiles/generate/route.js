@@ -1,3 +1,11 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// BUSINESS PROFILE AI GENERATE — Use Claude to draft profile copy.
+//
+// POST /api/business-profiles/generate — Given businessName/category/keywords,
+//   return AI-generated tagline/about/services suggestions.
+// (Auth required: yes  ·  Admin only: no)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { generateProfileContentAI } from '@/lib/ai/client';

@@ -1,3 +1,11 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// USER DASHBOARD STATS — Aggregated metrics for the dashboard home.
+//
+// GET /api/user/dashboard-stats — Returns QR/profile/scan/NFC counts plus the
+//   5 most recent QR codes and business profiles.
+// (Auth required: yes  ·  Admin only: no)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 import { auth } from '@/auth';

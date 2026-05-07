@@ -1,3 +1,12 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// ScansChart — 30-day scans-over-time bar chart
+//
+// SVG bar chart that fills missing days with zeros and overlays unique scans
+// (green) on total scans (brand). Hover reveals a tooltip; x-axis labels
+// auto-thin to ~8 ticks.
+// Used in: components/dashboard/analytics/QrDetailShell.jsx.
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 import { useMemo, useState } from "react";

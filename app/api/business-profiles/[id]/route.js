@@ -1,3 +1,12 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// BUSINESS PROFILE ITEM — Read, update, and soft-delete a business profile.
+//
+// GET    /api/business-profiles/:id — Fetch one profile (owner only).
+// PUT    /api/business-profiles/:id — Update profile (slug is immutable).
+// DELETE /api/business-profiles/:id — Soft-delete (isActive=false) + audit log.
+// (Auth required: yes  ·  Admin only: no)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import clientPromise from '@/lib/mongodb';

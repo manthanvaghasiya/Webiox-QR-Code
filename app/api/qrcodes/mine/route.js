@@ -1,3 +1,11 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// QR CODES MINE — Paginated, filtered list of the current user's QR codes.
+//
+// GET /api/qrcodes/mine — Supports limit/skip + folderId/status/search/sort/
+//   type filters. Returns rows + total.
+// (Auth required: yes  ·  Admin only: no)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
 import { auth } from '@/auth';

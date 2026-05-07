@@ -1,3 +1,10 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// QR CODE SCANS RESET — Reset scan count and delete all scan events for a QR.
+//
+// POST /api/qrcodes/:id/scans/reset — Zero out scanCount and clear scan_events.
+// (Auth required: yes  ·  Admin only: no — admins can reset any QR)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 import clientPromise from '@/lib/mongodb';

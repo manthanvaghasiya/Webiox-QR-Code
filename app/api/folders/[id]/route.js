@@ -1,3 +1,11 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// FOLDERS ITEM — Update or delete a single folder.
+//
+// DELETE /api/folders/:id — Delete folder; unsets folderId on contained QRs.
+// PATCH  /api/folders/:id — Rename/recolor folder.
+// (Auth required: yes  ·  Admin only: no)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
 import { auth } from '@/auth';

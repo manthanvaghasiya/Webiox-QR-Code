@@ -1,3 +1,11 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// BUSINESS PROFILE UPLOAD — Upload an image asset (logo/cover) to Vercel Blob.
+//
+// POST /api/business-profiles/:id/upload — Multipart upload; validates MIME +
+//   size (max 5MB; jpg/png/webp), returns public blob URL.
+// (Auth required: yes  ·  Admin only: no)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { put } from '@vercel/blob';

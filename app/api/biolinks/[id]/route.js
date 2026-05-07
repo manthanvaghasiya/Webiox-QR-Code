@@ -1,3 +1,12 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// BIOLINKS ITEM — Read, update, and soft-delete a single bio-link.
+//
+// GET    /api/biolinks/:id — Fetch one bio-link (public if published).
+// PUT    /api/biolinks/:id — Update title/bio/theme/blocks/published state.
+// DELETE /api/biolinks/:id — Soft-delete the bio-link.
+// (Auth required: PUT/DELETE yes; GET no  ·  Admin only: no)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 import { auth } from '@/auth';

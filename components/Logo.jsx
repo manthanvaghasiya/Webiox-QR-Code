@@ -1,3 +1,11 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Logo — Webiox QR Studio brand mark
+//
+// Renders the gradient QR-ring SVG with optional wordmark. Supports `mark` vs
+// `full` variants, sm/md/lg sizes, and a `light` flag for dark backgrounds.
+// Used in: Navbar, Footer, DashboardShell, AdminSidebar, auth pages.
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 import { useId } from "react";

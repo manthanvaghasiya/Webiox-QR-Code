@@ -1,3 +1,12 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// ProfileCard — business-profile tile in the dashboard list
+//
+// Renders the profile's color bar, logo/initial, business name, tagline,
+// /b/<slug> URL, scan/call/direction stats, and View / Edit / Delete (with
+// inline confirmation) actions.
+// Used in: app/dashboard/profiles/page.js.
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 import Link from "next/link";

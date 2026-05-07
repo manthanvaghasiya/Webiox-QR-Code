@@ -1,3 +1,12 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// QR CODES COLLECTION — Create and list QR codes (static or dynamic).
+//
+// POST /api/qrcodes — Create a QR code; dynamic codes require auth and get a
+//   shortId redirect (/r/:shortId).
+// GET  /api/qrcodes — List QR codes (admins see all; users see their own).
+// (Auth required: GET yes; POST yes for dynamic, no for static  ·  Admin only: no)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
 import { auth } from '@/auth';

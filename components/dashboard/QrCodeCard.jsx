@@ -1,3 +1,12 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// QrCodeCard — single QR code tile (grid or list)
+//
+// Renders a styled QR thumbnail (via qr-code-styling), name, type badge,
+// status (active/paused), short URL, scan count, copy-link, download, and
+// the kebab QrCardMenu with edit/move/pause/delete actions.
+// Used in: components/dashboard/QrListShell.jsx.
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 import { useEffect, useRef, useState } from "react";

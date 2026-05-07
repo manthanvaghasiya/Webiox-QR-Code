@@ -1,3 +1,10 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// ADMIN PROMOTE — Bootstrap-promote a user to admin role.
+//
+// POST /api/admin/promote — Promote user (by email) to admin given correct secret.
+// (Auth required: ADMIN_BOOTSTRAP_SECRET in body  ·  Admin only: bootstrap)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { findUserByEmail, updateUser } from "@/lib/models/users";

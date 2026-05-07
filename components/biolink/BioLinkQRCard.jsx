@@ -1,3 +1,12 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// BioLinkQRCard — meCard QR code panel for a bio-link
+//
+// Fetches /api/biolinks/[id]/mecard and renders the resulting MECARD string as
+// a downloadable QR code (canvas), with buttons to download the PNG or copy
+// the raw meCard text.
+// Used in: components/biolink/BioLinkEditorShell.jsx.
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 import { useEffect, useRef, useState } from "react";

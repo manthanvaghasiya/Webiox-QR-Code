@@ -1,3 +1,13 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// ProGenerator — Pro 3-step QR generator UI
+//
+// Step 1 type picker (search + category filter + live TypePickerPreview),
+// step 2 content form with a phone-frame mock preview, step 3 customize
+// (colors / logo / design / frame / quality) with sticky live QR preview,
+// download menu, copy/save-as-template/reset, and hosted-page panel.
+// Used in: app/generator/page.js (Pro tier path).
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 import { useState, useMemo } from "react";

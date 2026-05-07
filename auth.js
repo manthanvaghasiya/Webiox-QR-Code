@@ -1,3 +1,15 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// AUTH CONFIG (NextAuth v5)
+//
+// Sets up two sign-in methods:
+//   1. Google OAuth (uses GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET env vars)
+//   2. Email + Password (Credentials provider, bcrypt-hashed passwords)
+// Stores users in MongoDB via the @auth/mongodb-adapter.
+// JWT session strategy: id, role (user/admin), and plan (free/pro/business)
+// are attached to the token so dashboard/admin pages can read them quickly.
+// Exports: handlers, auth, signIn, signOut  (used everywhere via @/auth).
+// ─────────────────────────────────────────────────────────────────────────────
+
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";

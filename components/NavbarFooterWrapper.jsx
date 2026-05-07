@@ -1,3 +1,11 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// NavbarFooterWrapper — chrome gate for the marketing site
+//
+// Wraps page children with Navbar + Footer, but hides them on hosted/scan
+// routes (/p, /r, /b, /edit) and authenticated app routes (/dashboard, /admin).
+// Used in: app/layout.js (root layout).
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 import { usePathname } from "next/navigation";
 import Navbar from "./Navbar";

@@ -1,3 +1,11 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// BUSINESS PROFILE ANALYTICS — Aggregated scan-event analytics for a profile.
+//
+// GET /api/business-profiles/:id/analytics — Returns daily visits, event-type
+//   breakdown, top countries, and unique visitor count over ?days=N (max 365).
+// (Auth required: yes  ·  Admin only: no)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import clientPromise from '@/lib/mongodb';

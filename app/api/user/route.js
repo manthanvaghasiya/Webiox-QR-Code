@@ -1,3 +1,10 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// USER PROFILE — Update the authenticated user's basic profile fields.
+//
+// PATCH /api/user — Update name and/or image for the current user.
+// (Auth required: yes  ·  Admin only: no)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { auth } from "@/auth";

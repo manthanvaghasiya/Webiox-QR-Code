@@ -1,3 +1,12 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// BioLinksListShell — /dashboard/biolinks list page
+//
+// Lists the user's bio-link pages with title, slug-as-copyable-URL, click
+// count, and View / Edit / Delete actions. Empty state nudges users to create
+// their first one.
+// Used in: app/dashboard/biolinks/page.js.
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 import { useState } from "react";

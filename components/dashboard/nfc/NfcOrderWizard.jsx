@@ -1,3 +1,12 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// NfcOrderWizard — 5-step NFC card ordering flow
+//
+// Step 1 select profile, 2 choose card type + quantity (with live price from
+// lib/nfc-pricing), 3 design (color + logo position + preview), 4 contact /
+// shipping info, 5 review + submit to /api/nfc/orders.
+// Used in: app/dashboard/nfc/page.js.
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 import { useState } from "react";

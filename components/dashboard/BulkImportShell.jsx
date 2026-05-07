@@ -1,3 +1,12 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// BulkImportShell — CSV bulk-create page for QR codes
+//
+// Drag-and-drop / paste CSV, parses rows client-side, shows a preview table,
+// posts to /api/qrcodes/bulk, and renders a success summary with per-row
+// failures. Caps imports at 500 rows.
+// Used in: app/dashboard/qr-codes/bulk/page.js.
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 import { useState } from "react";

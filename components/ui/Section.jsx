@@ -1,3 +1,7 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Section — primitive layout wrapper with max-width and horizontal padding.
+// ─────────────────────────────────────────────────────────────────────────────
+
 export default function Section({
   children,
   className = "",

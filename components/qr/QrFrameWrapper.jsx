@@ -1,3 +1,12 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// QrFrameWrapper — decorative frame around the QR canvas
+//
+// Forward-ref wrapper that draws one of ~13 frame styles (rounded box, banner,
+// speech bubble, scan corners, ticket, gradient, shadow, dotted, etc.) so the
+// frame is captured in html2canvas exports as well as the live preview.
+// Used in: components/qr/SimpleGenerator.jsx, components/qr/ProGenerator.jsx.
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 import { forwardRef } from "react";

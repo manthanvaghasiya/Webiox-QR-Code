@@ -1,3 +1,12 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// QrSidebarPanel — left rail on the QR Codes page
+//
+// Shows weekly-scans widget, the user's folders (with create-new and
+// All / No-folder filters), and a plan-overview block with dynamic-QR usage
+// progress and an Upgrade CTA for free-plan users.
+// Used in: components/dashboard/QrListShell.jsx.
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 import { useState } from "react";

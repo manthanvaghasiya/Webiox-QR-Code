@@ -1,3 +1,11 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// BioLinkPreview — iPhone-framed live preview of a bio-link
+//
+// Renders the avatar, title, bio, and ordered link buttons inside a fake
+// device bezel using the bio-link's theme colors / background image.
+// Used in: components/biolink/BioLinkEditorShell.jsx (sticky right column).
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 function getIconEmoji(iconName) {

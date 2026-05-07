@@ -1,3 +1,12 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// BUSINESS PROFILES COLLECTION — Create and list business profiles.
+//
+// POST /api/business-profiles — Create a profile, auto-generate QR code +
+//   biolink, with retry on slug collision.
+// GET  /api/business-profiles — List the current user's profiles.
+// (Auth required: yes  ·  Admin only: no)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import clientPromise from '@/lib/mongodb';

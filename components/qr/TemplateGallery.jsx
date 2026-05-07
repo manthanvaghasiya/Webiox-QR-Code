@@ -1,3 +1,12 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// TemplateGallery — built-in + user QR design templates strip
+//
+// Loads user templates from /api/templates, plus the static QR_TEMPLATES list,
+// and renders horizontally scrolling cards with miniature SVG QR previews.
+// Clicking applies the template's design; user templates can be deleted inline.
+// Used in: components/qr/SimpleGenerator.jsx, components/qr/ProGenerator.jsx.
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 import React, { useEffect, useState } from "react";

@@ -1,3 +1,12 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// BusinessLandingPage — public /b/[slug] landing renderer
+//
+// Picks the right template component (starter/bold/elegant/modern/storefront/
+// professional) from profile.theme.template, injects an optional Google Font,
+// and overlays the sticky mobile ProfileActionBar.
+// Used in: app/b/[slug]/page.js (public business profile route).
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 import { useState } from "react";

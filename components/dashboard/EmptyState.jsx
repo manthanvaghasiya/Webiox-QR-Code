@@ -1,3 +1,11 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// EmptyState — generic empty-list placeholder
+//
+// Centered icon-in-gradient-tile + title + description + optional CTA link.
+// Used in: QrListShell, dashboard list pages, anywhere a "nothing here" state
+// is needed.
+// ─────────────────────────────────────────────────────────────────────────────
+
 import Link from "next/link";
 
 export default function EmptyState({ icon: Icon, title, description, cta, ctaHref }) {

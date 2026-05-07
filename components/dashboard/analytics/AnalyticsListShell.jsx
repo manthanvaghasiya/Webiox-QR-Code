@@ -1,3 +1,12 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// AnalyticsListShell — main /dashboard/analytics page
+//
+// Shows totals (scans, unique visitors, active QRs), the AIInsightsPanel,
+// search/sort controls, and a clickable list of QR codes. Selecting one
+// fetches detailed analytics and swaps in QrDetailShell.
+// Used in: app/dashboard/analytics/page.js.
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 import { useState, useEffect } from "react";

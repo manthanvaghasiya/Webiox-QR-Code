@@ -1,3 +1,12 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// ProfileActionBar — sticky mobile call-to-action bar
+//
+// Fixed bottom bar (mobile only) with Call / WhatsApp / Directions / Share
+// buttons. Pings /b/[slug]/event for call & direction analytics, opens
+// ShareModal for sharing. Hidden on desktop and when no actions are available.
+// Used in: components/business/BusinessLandingPage.jsx.
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 import { useState } from "react";

@@ -1,3 +1,10 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// BIOLINK MECARD — Get MECARD-formatted string for QR encoding.
+//
+// GET /api/biolinks/:id/mecard — Return MECARD string + title/slug.
+// (Auth required: no  ·  Admin only: no)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 import clientPromise from '@/lib/mongodb';

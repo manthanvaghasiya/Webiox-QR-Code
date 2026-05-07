@@ -1,3 +1,11 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// QR CODE ANALYTICS — Aggregated scan analytics for one QR code.
+//
+// GET /api/qrcodes/:id/analytics?start=&end=&days= — Returns by-day plus
+//   OS/device/browser/country/city breakdowns and total/unique scan counts.
+// (Auth required: yes  ·  Admin only: no — admins see any QR)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 import clientPromise from '@/lib/mongodb';

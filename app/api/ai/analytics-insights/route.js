@@ -1,3 +1,11 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// AI ANALYTICS INSIGHTS — Generate Claude-powered insights from user analytics.
+//
+// POST /api/ai/analytics-insights — Aggregate QR/profile/biolink stats and ask
+//   the AI for insights; results cached for 6h per user.
+// (Auth required: yes  ·  Admin only: no)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 import { auth } from '@/auth';
@@ -10,17 +18,10 @@ const INSIGHTS_CACHE_TTL = 6 * 60 * 60 * 1000; // 6 hours in milliseconds
  * POST /api/ai/analytics-insights
  * Generate AI insights from user's analytics data
  */
-export async function POST(request) {
+export async function POST() {
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  let body;
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
   }
 
   try {

@@ -1,3 +1,12 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// AUTH FORGOT PASSWORD — Begin password-reset flow by issuing a token.
+//
+// POST /api/auth/forgot-password — Create reset token for given email and log
+//   reset link to console (email send is stubbed). Returns success regardless
+//   of whether the email exists, to prevent enumeration.
+// (Auth required: no  ·  Admin only: no)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { findUserByEmail } from "@/lib/models/users";

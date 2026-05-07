@@ -1,3 +1,13 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// QrDetailShell — single-QR analytics + management page
+//
+// Renders QR preview, name, short URL, campaign meta, stat cards (scans,
+// uniques, days active, avg/day), the ScansChart, OS/device/browser/country/
+// city BreakdownTables, edit/pause/download/reset/delete actions, and the
+// danger-zone delete card. Pulls live analytics from the API.
+// Used in: components/dashboard/analytics/AnalyticsListShell.jsx, /dashboard/qr/[id].
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 import { useEffect, useRef, useState } from "react";

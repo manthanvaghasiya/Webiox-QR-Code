@@ -1,3 +1,7 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Button — primitive button / link with variants, sizes, and loading state.
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 import Link from "next/link";

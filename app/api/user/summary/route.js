@@ -1,3 +1,11 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// USER SUMMARY — Plan-aware sidebar widget counts for the current user.
+//
+// GET /api/user/summary — Returns QR count, dynamic count, weekly scans, and
+//   plan info (label + dynamicLimit) for the current user.
+// (Auth required: yes  ·  Admin only: no)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 import clientPromise from '@/lib/mongodb';

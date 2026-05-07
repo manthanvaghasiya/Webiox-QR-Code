@@ -1,3 +1,12 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// AdminSidebar — fixed left rail for /admin
+//
+// Red/orange-branded admin nav with Overview, Users, QR Codes, Profiles,
+// NFC Orders, Broadcast, System links, plus an admin user footer with
+// sign-out.
+// Used in: app/admin/layout.js.
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 import Link from "next/link";

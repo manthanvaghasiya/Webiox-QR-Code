@@ -1,3 +1,11 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// QR CODES CHECK SLUG — Check whether a custom shortId is available.
+//
+// GET /api/qrcodes/check-slug?slug=...&exceptId=... — Returns {available} after
+//   validating slug format and checking uniqueness (optionally excluding one id).
+// (Auth required: yes  ·  Admin only: no)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
 import { auth } from '@/auth';

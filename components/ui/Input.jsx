@@ -1,3 +1,7 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Input — labeled text input primitive with hint and error states.
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 export default function Input({

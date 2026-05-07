@@ -1,3 +1,12 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// AIInsightsPanel — AI-generated analytics insights card
+//
+// Calls /api/ai/analytics-insights on mount and renders prioritized
+// recommendations (high/medium/low) with a summary header and a "keep growing"
+// footer. Shows a skeleton while loading and a friendly empty state.
+// Used in: components/dashboard/analytics/AnalyticsListShell.jsx.
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 import { useEffect, useState } from "react";

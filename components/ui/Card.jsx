@@ -1,3 +1,7 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Card — primitive surface with optional padding, elevation, and hover lift.
+// ─────────────────────────────────────────────────────────────────────────────
+
 "use client";
 
 import { motion } from "framer-motion";
