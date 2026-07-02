@@ -9,7 +9,7 @@
 
 "use client";
 import { useState } from "react";
-import { Upload, ChevronDown, ChevronUp, User, Phone, Mail, Building, MapPin, Globe, FileText, Share2, Image, Briefcase } from "lucide-react";
+import { Upload, ChevronDown, ChevronUp, User, Phone, Mail, Building, MapPin, Globe, FileText, Share2, Image, Briefcase, Contact } from "lucide-react";
 
 const C = "w-full p-3.5 bg-white/50 backdrop-blur-sm border border-gray-200/50 rounded-2xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none text-gray-800 placeholder-gray-400 shadow-sm hover:shadow-md text-sm";
 

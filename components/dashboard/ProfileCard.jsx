@@ -21,39 +21,6 @@ export default function ProfileCard({ profile, onDelete }) {
   const [showConfirm, setShowConfirm] = useState(false);
   const [error, setError] = useState(null);
 
-  // Generate QR code visualization
-  useEffect(() => {
-    const container = qrContainerRef.current;
-    if (!container || !profile.qrCodeId) return;
-
-    try {
-      const baseUrl = typeof window !== 'undefined' ? window.location.origin : process.env.NEXT_PUBLIC_BASE_URL || 'https://webiox.in';
-      const qrCode = buildQrCodeStyling(
-        {
-          _id: profile.qrCodeId,
-          destination: `${baseUrl}/b/${profile.slug}`,
-          type: 'business-profile',
-          isDynamic: true,
-          design: {
-            fgColor: profile.theme?.primaryColor || '#000000',
-            bgColor: '#ffffff',
-          },
-        },
-        150
-      );
-      // Clear previous content safely
-      container.replaceChildren();
-      qrCode.append(container);
-    } catch (e) {
-      console.error("Failed to render QR code:", e);
-      setError("QR code generation failed");
-    }
-
-    // Cleanup: clear container on unmount
-    return () => {
-      if (container) container.replaceChildren();
-    };
-  }, [profile.qrCodeId, profile.slug, profile.theme?.primaryColor]);
 
   const handleDelete = async () => {
     setDeleting(true);

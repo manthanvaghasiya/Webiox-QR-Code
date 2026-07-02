@@ -149,7 +149,7 @@ export async function POST(request) {
         sanitized.userId = session.user.id;
 
         // Generate a new slug with forced random suffix
-        const newSlug = generateSlugCandidate(sanitized.businessName);
+        const newSlug = generateSlugCandidate(sanitized.businessName, true);
         sanitized.slug = newSlug;
 
         const destination = `${baseUrl}/b/${newSlug}`;
