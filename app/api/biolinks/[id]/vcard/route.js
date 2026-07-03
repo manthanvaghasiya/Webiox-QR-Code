@@ -9,7 +9,7 @@ import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 import clientPromise from '@/lib/mongodb';
 import { findBiolinkById } from '@/lib/models/biolinks';
-import { generateVCardFromBiolink, getVCardFilename } from '@/lib/vcard-biolink';
+import { generateVCardFromBiolink, getVCardFilename } from '@/lib/vcardBiolink';
 
 /**
  * GET /api/biolinks/:id/vcard — Download .vcf contact file

@@ -26,7 +26,7 @@ import QualitySection from "./QualitySection";
 import LogoSection from "./LogoSection";
 import FrameSection from "./FrameSection";
 import DownloadMenu from "./DownloadMenu";
-import TemplateGallery from "./TemplateGallery";
+
 import PageCreatedPanel from "./PageCreatedPanel";
 import QrFrameWrapper from "./QrFrameWrapper";
 
@@ -34,7 +34,7 @@ export default function SimpleGenerator({ qr, qrContainerRef }) {
   const [openSections, setOpenSections] = useState({
     content: true, colors: false, logo: false, design: false, frame: false, quality: false,
   });
-  const [showTemplates, setShowTemplates] = useState(false);
+
   const toggle = (k) => setOpenSections((p) => ({ ...p, [k]: !p[k] }));
 
   const copyQrData = async () => {
@@ -60,20 +60,9 @@ export default function SimpleGenerator({ qr, qrContainerRef }) {
             Generator
           </span>
         </motion.h1>
-        <button
-          onClick={() => setShowTemplates((v) => !v)}
-          className="text-sm font-bold text-blue-600 hover:text-blue-700 transition-colors"
-        >
-          {showTemplates ? "Hide Templates ▲" : "Browse Templates ▼"}
-        </button>
+
       </div>
 
-      {/* Templates */}
-      {showTemplates && (
-        <div className="max-w-7xl w-full mb-6">
-          <TemplateGallery onApply={qr.applyTemplate} />
-        </div>
-      )}
 
       {/* Tab bar: all 22 tabs */}
       <div className="max-w-7xl w-full mb-4">

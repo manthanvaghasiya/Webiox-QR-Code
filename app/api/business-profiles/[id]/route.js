@@ -16,7 +16,7 @@ import {
   deleteProfile,
 } from '@/lib/models/businessProfiles';
 import { sanitizeProfileData } from '@/lib/sanitize';
-import { logAuditEvent, getAuditContext, AUDIT_ACTIONS } from '@/lib/audit-log';
+import { logAuditEvent, getAuditContext, AUDIT_ACTIONS } from '@/lib/auditLog';
 
 /**
  * GET /api/business-profiles/:id — Fetch single profile (owner only)

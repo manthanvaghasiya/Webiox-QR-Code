@@ -24,7 +24,7 @@ import CreateFolderModal from "./modals/CreateFolderModal";
 import QrSidebarPanel from "./QrSidebarPanel";
 import EmptyState from "./EmptyState";
 import { downloadQrCode } from "@/lib/qrDownload";
-import { getQrTypesByCategory, getAllQrTypes } from "@/lib/qr-types";
+import { getQrTypesByCategory, getAllQrTypes } from "@/lib/qrTypes";
 
 const SORTS = [
   { value: "recent", label: "Last created" },

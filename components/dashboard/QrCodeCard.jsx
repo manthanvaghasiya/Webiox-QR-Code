@@ -13,7 +13,7 @@ import { useEffect, useRef, useState } from "react";
 import { Copy, Check, BarChart2, ExternalLink, PauseCircle } from "lucide-react";
 import Link from "next/link";
 import { buildQrCodeStyling } from "@/lib/qrDownload";
-import { getQrTypeMetadata } from "@/lib/qr-types";
+import { getQrTypeMetadata } from "@/lib/qrTypes";
 import QrCardMenu from "./QrCardMenu";
 
 function typeLabel(t) {

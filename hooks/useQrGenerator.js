@@ -412,25 +412,6 @@ export default function useQrGenerator(qrCodeRef, qrCodeInstanceRef) {
     if (f) setLogoAndUpdateEcc(URL.createObjectURL(f));
   };
 
-  // ── Apply template (bulk set style state) ──
-  const applyTemplate = useCallback((t) => {
-    if (t.dotPattern !== undefined) setDotPattern(t.dotPattern);
-    if (t.cornerStyle !== undefined) setCornerStyle(t.cornerStyle);
-    if (t.eyeBallStyle !== undefined) setEyeBallStyle(t.eyeBallStyle);
-    if (t.fgColor !== undefined) setFgColor(t.fgColor);
-    if (t.bgColor !== undefined) setBgColor(t.bgColor);
-    if (t.useGradient !== undefined) setUseGradient(t.useGradient);
-    if (t.gradientColor1 !== undefined) setGradientColor1(t.gradientColor1);
-    if (t.gradientColor2 !== undefined) setGradientColor2(t.gradientColor2);
-    if (t.gradientType !== undefined) setGradientType(t.gradientType);
-    if (t.frameStyle !== undefined) setFrameStyle(t.frameStyle);
-    if (t.frameText !== undefined) setFrameText(t.frameText);
-    if (t.frameTextColor !== undefined) setFrameTextColor(t.frameTextColor);
-    if (t.frameFillColor !== undefined) setFrameFillColor(t.frameFillColor);
-    if (t.useCustomEyeColor !== undefined) setUseCustomEyeColor(t.useCustomEyeColor);
-    if (t.eyeFrameColor !== undefined) setEyeFrameColor(t.eyeFrameColor);
-    if (t.eyeBallColor !== undefined) setEyeBallColor(t.eyeBallColor);
-  }, []);
 
   // ── Reset all ──
   const resetAll = useCallback(() => {
@@ -507,8 +488,7 @@ export default function useQrGenerator(qrCodeRef, qrCodeInstanceRef) {
     transparentBg, setTransparentBg,
     // Download
     lastFormat, setLastFormat,
-    // Template
-    applyTemplate,
+
     // Reset
     resetAll,
   };

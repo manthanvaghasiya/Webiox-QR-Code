@@ -28,7 +28,7 @@ import QualitySection from "./QualitySection";
 import LogoSection from "./LogoSection";
 import FrameSection from "./FrameSection";
 import DownloadMenu from "./DownloadMenu";
-import TemplateGallery from "./TemplateGallery";
+
 import PageCreatedPanel from "./PageCreatedPanel";
 import QrFrameWrapper from "./QrFrameWrapper";
 import TypePickerPreview from "./TypePickerPreview";
@@ -591,15 +591,6 @@ export default function ProGenerator({ qr, qrContainerRef }) {
             {/* Two-column: cards + live preview */}
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10">
             <div className="min-w-0">
-            {/* Quick Templates */}
-            <div className="mb-8">
-              <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2">
-                <Zap className="w-3.5 h-3.5 text-amber-500" />
-                Quick Templates
-              </p>
-              <TemplateGallery onApply={(settings) => { qr.applyTemplate(settings); }} />
-            </div>
-
             {/* Cards grouped by category */}
             {(activeCategory === "all" ? CATEGORIES : CATEGORIES.filter(c => c.id === activeCategory)).map((cat) => {
               const tabs = grouped[cat.id];

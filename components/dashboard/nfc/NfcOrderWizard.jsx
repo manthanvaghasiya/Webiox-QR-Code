@@ -2,7 +2,7 @@
 // NfcOrderWizard — 5-step NFC card ordering flow
 //
 // Step 1 select profile, 2 choose card type + quantity (with live price from
-// lib/nfc-pricing), 3 design (color + logo position + preview), 4 contact /
+// lib/nfcPricing), 3 design (color + logo position + preview), 4 contact /
 // shipping info, 5 review + submit to /api/nfc/orders.
 // Used in: app/dashboard/nfc/page.js.
 // ─────────────────────────────────────────────────────────────────────────────
@@ -11,7 +11,7 @@
 
 import { useState } from "react";
 import { ChevronRight, ChevronLeft, Zap, AlertCircle } from "lucide-react";
-import { CARD_TYPE_INFO, calculatePrice } from "@/lib/nfc-pricing";
+import { CARD_TYPE_INFO, calculatePrice } from "@/lib/nfcPricing";
 
 export default function NfcOrderWizard({ profiles, onSuccess }) {
   const [step, setStep] = useState(1);
