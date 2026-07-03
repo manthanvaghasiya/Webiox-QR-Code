@@ -35,12 +35,12 @@ export default function NFCCardsPage() {
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
+            {/* <Link
               href="/pricing"
               className="flex items-center gap-2 px-8 py-4 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-lg shadow-xl shadow-indigo-600/20 transition-all hover:scale-105"
             >
               Order Your NFC Card <ArrowRight className="w-5 h-5" />
-            </Link>
+            </Link> */}
           </div>
         </div>
       </section>
@@ -99,12 +99,12 @@ export default function NFCCardsPage() {
             </p>
             
             <div className="relative z-10">
-              <Link
+              {/* <Link
                 href="/pricing"
                 className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white text-gray-900 font-bold text-lg hover:scale-105 transition-transform"
               >
                 View Pricing <ArrowRight className="w-5 h-5" />
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>

@@ -21,7 +21,7 @@ const NAV_LINKS = [
   { href: "/generator", label: "QR Studio" },
   { href: "/business-profile", label: "Business Profile" },
   { href: "/nfc-card",  label: "NFC Cards" },
-  { href: "/pricing",   label: "Pricing" },
+  // { href: "/pricing",   label: "Pricing" },
 ];
 
 export default function Navbar() {

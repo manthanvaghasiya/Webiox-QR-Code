@@ -161,7 +161,7 @@ export default function QrSidebarPanel({
           )}
         </div>
 
-        {summary?.plan === "free" && (
+        {/* {summary?.plan === "free" && (
           <Link
             href="/pricing"
             className="flex items-center justify-center gap-1.5 w-full h-10 rounded-full border-2 border-brand-500 text-sm font-bold text-brand-600 hover:bg-brand-50 transition-colors cursor-pointer"
@@ -169,7 +169,7 @@ export default function QrSidebarPanel({
             <Sparkles className="w-3.5 h-3.5" />
             Upgrade
           </Link>
-        )}
+        )} */}
       </div>
     </aside>
   );

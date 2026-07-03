@@ -129,7 +129,7 @@ function SidebarContent({ user, pathname, onClose }) {
       </nav>
 
       {/* Upgrade card — free plan only */}
-      {user?.plan === "free" && (
+      {/* {user?.plan === "free" && (
         <div className="p-3 flex-shrink-0">
           <div className="p-4 rounded-2xl bg-gradient-to-br from-brand-600 via-purple-600 to-pink-600 text-white">
             <div className="flex items-center gap-1.5 mb-1.5">
@@ -148,7 +148,7 @@ function SidebarContent({ user, pathname, onClose }) {
             </Link>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 }
@@ -216,14 +216,14 @@ function UserMenu({ user }) {
                 <User className="w-4 h-4 text-ink-400" />
                 Profile settings
               </Link>
-              <Link
+              {/* <Link
                 href="/pricing"
                 onClick={() => setOpen(false)}
                 className="flex items-center gap-2.5 px-4 py-2 text-sm text-ink-700 hover:bg-ink-50 transition-colors cursor-pointer"
               >
                 <Receipt className="w-4 h-4 text-ink-400" />
                 Billing
-              </Link>
+              </Link> */}
             </div>
 
             <div className="border-t border-ink-100 py-1">

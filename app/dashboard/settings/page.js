@@ -277,12 +277,12 @@ function PlanTab() {
           <p className="text-xs text-white/80 mb-4 leading-relaxed">
             Dynamic QR codes, advanced analytics, NFC tap cards, and much more.
           </p>
-          <a
+          {/* <a
             href="/pricing"
             className="inline-block px-5 py-2 rounded-full bg-white text-brand-700 text-sm font-bold hover:opacity-90 transition-opacity cursor-pointer"
           >
             See pricing
-          </a>
+          </a> */}
         </div>
       )}
     </div>
